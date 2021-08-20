@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <cmath> // pow
+#include <memory>
 class Node {
 public:
     void computeBel(){
@@ -54,16 +55,25 @@ public:
         delete [] _priorTable;
     }
 
-    void addParent(Node& p){
+    void addParent(std::shared_ptr<Node> p){
         parents.push_back(p);
     }
-    void addChild(Node& c){
+    void addChild(std::shared_ptr<Node> c){
         children.push_back(c);
     }
 
+    float** getPriorTable(){
+        return _priorTable;
+    }
+
+
+    int getId() const {
+        return _id;
+    }
+
 private:
-    std::vector<Node> parents;
-    std::vector<Node> children;
+    std::vector<std::shared_ptr<Node>> parents;
+    std::vector<std::shared_ptr<Node>> children;
     std::string _label;
     int _id;
     int _nChildren;

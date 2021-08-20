@@ -225,10 +225,16 @@ int main()
     float v2[2] = {0.2,0.9};
     float v3[4] = {1,0,0.2,0.8};
     float v4[8] = {1,0,0.9,0.1,1,0,0,1};
-    std::vector<Node> vertex_array =
+    std::vector<std::shared_ptr<Node>> vertex_array =
             {
-                    Node(S, "S", 1, 0, v1), Node(R, "R", 2, 0, v2), Node(W, "W", 0, 1, v3), Node(H, "H", 0, 2, v4),
+                    std::shared_ptr<Node>(new Node(R, "R", 2, 0, v2)),
+                    std::shared_ptr<Node>(new Node(S, "S", 1, 0, v1)),
+                    std::shared_ptr<Node>(new Node(H, "H", 0, 2, v4)),
+                    std::shared_ptr<Node>(new Node(W, "W", 0, 1, v3))
             };
+
+
+
 
     // writing out the edges in the graph
 
@@ -267,17 +273,19 @@ int main()
             add_vertex(graph);
             num_vertices++;
             name.append(1,std::tolower(name[source(e,graph)]));
-            vertex_array.push_back(Node(num_vertices,std::to_string(std::tolower(name[source(e,graph)])),0,1,vertex_array[source(e,graph)].getPriorTable()[0]));
+            vertex_array.push_back(std::shared_ptr<Node>(new Node(num_vertices,std::to_string(std::tolower(name[source(e,graph)])),0,1,vertex_array[source(e,graph)]->getPriorTable()[0])));
             add_edge(num_vertices-1,target(e,graph),graph);
             remove_edge(source(e,graph),target(e,graph),graph);
         }
 
-    auto vs = boost::vertices(g);
+    printNodes(graph,name);
+
+    auto vs = boost::vertices(graph);
     for (auto vit = vs.first; vit != vs.second; ++vit) {
-        auto neighbors = boost::adjacent_vertices(*vit, g);
+        auto neighbors = boost::adjacent_vertices(*vit, graph);
         for (auto nit = neighbors.first; nit != neighbors.second; ++nit){
-            vertex_array[*vit].addChild(vertex_array[*nit]);
-            vertex_array[*nit].addParent(vertex_array[*vit]);
+            vertex_array[*vit]->addChild(vertex_array[*nit]);
+            vertex_array[*nit]->addParent(vertex_array[*vit]);
         }
     }
 
