@@ -16,7 +16,7 @@
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/pending/indirect_cmp.hpp>
 
-#define PATH "."
+#define PATH "./.."
 
 
 using namespace boost;
