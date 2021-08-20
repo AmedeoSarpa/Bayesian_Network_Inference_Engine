@@ -10,6 +10,8 @@
 #include <cmath> // pow
 #include <memory>
 class Node {
+
+
 public:
     void computeBel(){
         if (_pi.first ==-1  || _pi.second ==-1   ){
@@ -23,9 +25,7 @@ public:
     }
     void computePi(){
         float productValue = 1;
-        for (int i = 0 ; i < parents ; i++){
 
-        }
 
 
 
@@ -39,17 +39,23 @@ public:
 
     };
 
-    Node(int id,std::string label , int nChildren, int nParents):  _id(id),_label(label), _pi({-1,-1}), _lambda({-1,-1}) , _bel({-1,-1}) , _nChildren(nChildren), _nParents(nParents){
-        priorTable = new float*[pow(2,nChildren)];
-        for (int i = 0; i < pow(2,nChildren); i++)
-            priorTable[i] = new float[2];
+    Node(int id,std::string label , int nChildren, int nParents, float * values):  _id(id),_label(label), _pi({-1,-1}), _lambda({-1,-1}) , _bel({-1,-1}) , _nChildren(nChildren), _nParents(nParents){
+        _priorTable = new float*[static_cast<int>(pow(2,nChildren))];
+        for (int i = 0; i < pow(2,_nChildren); i++)
+            _priorTable[i] = new float[2];
+
+        int j = 0;
+        for (int i = 0 ; i  < pow(2,_nChildren); i++){
+            _priorTable[i][0] = values[j++];
+            _priorTable[i][1] = values[j++];
+        }
     };
 
     bool operator< (const Node &rhs) const { return _id <  rhs._id; }
     bool operator==(const Node &rhs) const { return _id == rhs._id; }
     bool operator!=(const Node &rhs) const { return _id != rhs._id; }
     ~Node() {
-        for (int i = 0 ; i < pow(2,nChildren) ; i++){
+        for (int i = 0 ; i < pow(2,_nChildren) ; i++){
             delete [] _priorTable[i];
         }
         delete [] _priorTable;
