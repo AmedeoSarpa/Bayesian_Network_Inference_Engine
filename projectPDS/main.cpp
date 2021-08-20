@@ -188,34 +188,55 @@ std::vector<E> edgesToModify(std::vector<E> edgesBack,std::vector<E> edgesTree,G
         std::cout << "(" << name[source(edgesBack[i],g)] << ", " << name[target(edgesBack[i],g)] <<")\n";
     std::cout << "\n";
 */
-/*
-    std::cout << "Edges to delete: \n";
+
+    std::cout << "Edges to delete:\n";
     for (int i = 0; i < finalEdges.size(); ++i)
         std::cout << "(" << name[source(finalEdges[i],g)] << ", " << name[target(finalEdges[i],g)] <<")\n";
     std::cout << "\n";
 
     return finalEdges;
 }
-*/
+
 int main()
 {
     // Make convenient labels for the vertices
-    enum { A, B, C, D, E, F, G, H, N };
+    //enum { A, B, C, D, E, F, G, H, N };
+    enum {R , S , H , W, N};
+//    int num_vertices = N;
+//    std::string name = "ABCDEFGH";
+//    std::vector<Node> vertex_array =
+//            {
+//            Node(A,"A",2,0), Node(B,"B",1,1), Node(C,"C",2,0), Node(D,"D",1,1),
+//            Node(E,"E",1,1), Node(F,"F",2,2), Node(G,"G",0,2), Node(H,"H",0,1)
+//            };
+//
+//    // writing out the edges in the graph
+//
+//    typedef std::pair<int, int> Edge;
+//    std::vector<Edge> edge_array =
+//            { Edge(A,B), Edge(A,C), Edge(B,G), Edge(C,D),
+//              Edge(C,E), Edge(D,F), Edge(E,F), Edge(F,G), Edge(F,H) };
+//    const int num_edges = sizeof(edge_array)/sizeof(edge_array[0]);
+
     int num_vertices = N;
-    std::string name = "ABCDEFGH";
+    std::string name = "RSHW";
+
+    float v1[2] = {0.1,0.9};
+    float v2[2] = {0.2,0.9};
+    float v3[4] = {1,0,0.2,0.8};
+    float v4[8] = {1,0,0.9,0.1,1,0,0,1};
     std::vector<Node> vertex_array =
             {
-            Node(A,"A",2,0), Node(B,"B",1,1), Node(C,"C",2,0), Node(D,"D",1,1),
-            Node(E,"E",1,1), Node(F,"F",2,2), Node(G,"G",0,2), Node(H,"H",0,1)
+                    Node(S, "S", 1, 0, v1), Node(R, "R", 2, 0, v2), Node(W, "W", 0, 1, v3), Node(H, "H", 0, 2, v4),
             };
 
     // writing out the edges in the graph
 
     typedef std::pair<int, int> Edge;
-    std::vector<Edge> edge_array =
-            { Edge(A,B), Edge(A,C), Edge(B,G), Edge(C,D),
-              Edge(C,E), Edge(D,F), Edge(E,F), Edge(F,G), Edge(F,H) };
+    Edge edge_array[]=
+            { Edge(S,H), Edge(R,H), Edge(R,W) };
     const int num_edges = sizeof(edge_array)/sizeof(edge_array[0]);
+
 
 //    // declare a graph object
 //    Graph g(num_vertices);
@@ -241,21 +262,23 @@ int main()
 
     std::vector<EdgeUndir> finalEdges = edgesToModify(edgesBack, edgesTree,g,  name);
 
-    for(auto& e : finalEdges){
-        add_vertex(graph);
-        num_vertices++;
-        name.append(1,std::tolower(name[source(e,graph)]));
-        vertex_array.push_back(Node(num_vertices,std::tolower(name[source(e,graph)]),0,1));
-        add_edge(num_vertices-1,target(e,graph),graph);
-        remove_edge(source(e,graph),target(e,graph),graph);
-    }
+    if(!finalEdges.empty())
+        for(auto& e : finalEdges){
+            add_vertex(graph);
+            num_vertices++;
+            name.append(1,std::tolower(name[source(e,graph)]));
+            vertex_array.push_back(Node(num_vertices,std::to_string(std::tolower(name[source(e,graph)])),0,1,vertex_array[source(e,graph)].getPriorTable()[0]));
+            add_edge(num_vertices-1,target(e,graph),graph);
+            remove_edge(source(e,graph),target(e,graph),graph);
+        }
 
     auto vs = boost::vertices(g);
     for (auto vit = vs.first; vit != vs.second; ++vit) {
         auto neighbors = boost::adjacent_vertices(*vit, g);
-        for (auto nit = neighbors.first; nit != neighbors.second; ++nit)
-            *vit.addChild(*nit);
-            *nit.addParents(*vit);
+        for (auto nit = neighbors.first; nit != neighbors.second; ++nit){
+            vertex_array[*vit].addChild(vertex_array[*nit]);
+            vertex_array[*nit].addParent(vertex_array[*vit]);
+        }
     }
 
     printGraph(graph,name.c_str(),"associated_tree");

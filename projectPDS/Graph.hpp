@@ -1,3 +1,4 @@
+
 #define BOOST_DISABLE_PRAGMA_MESSAGE //to disable some warning at compile time
 
 #include <iostream>                  // for std::cout

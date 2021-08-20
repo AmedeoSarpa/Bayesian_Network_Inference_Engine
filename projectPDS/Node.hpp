@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-#include <math.h> // pow
+#include <cmath> // pow
 class Node {
 public:
     void computeBel(){
@@ -17,8 +17,8 @@ public:
         if (_lambda.first ==-1  || _lambda.second ==-1   ){
             this->computeLambda();
         }
-        _bel.first = (_lambda.first * _pi.first) * _alpha;
-        _bel.second = (_lambda.second * _pi.second) * _alpha;
+        _bel.first = (_lambda.first * _pi.first) ;
+        _bel.second = (_lambda.second * _pi.second);
     }
     void computePi(){
         float productValue = 1;
@@ -43,6 +43,7 @@ public:
         for (int i = 0; i < pow(2,nChildren); i++)
             priorTable[i] = new float[2];
     };
+
     bool operator< (const Node &rhs) const { return _id <  rhs._id; }
     bool operator==(const Node &rhs) const { return _id == rhs._id; }
     bool operator!=(const Node &rhs) const { return _id != rhs._id; }
@@ -52,11 +53,11 @@ public:
         }
         delete [] _priorTable;
     }
-    static float _alpha ;
-    void addParent(Node p){
+
+    void addParent(Node& p){
         parents.push_back(p);
     }
-    void addChild(Node c){
+    void addChild(Node& c){
         children.push_back(c);
     }
 
@@ -72,7 +73,5 @@ private:
     std::pair<float,float> _bel;
     float** _priorTable;
 };
-
-Node::_alpha = 1;
 
 #endif //PDS_NODE_HPP
