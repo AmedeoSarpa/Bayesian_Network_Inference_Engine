@@ -25,12 +25,30 @@ public:
     }
     void computePi(){
         float productValue = 1;
-
+        //vector = product by product computePi_i(children of this node).       iterare con un for sui figli ed invocare tale funzione
+        // product vector per matrix (_priorTable,vector)
 
 
 
 
     };
+
+    void computePi_i(Node yj,Node x) //dove se invocata dal calcolo di pi , x è il nodo corrente mentre yj è il padre
+    {
+        //
+
+
+        //valore finale è pi di x per computeLambda_i di tutti i figli k di node yj escluso il nodo corrente, fare anche qui un for
+
+    };
+
+    void computeLambda_i(Node yj,Node x){ //se invoacata dal calcolo di pi_i , x è  è il padre corrente  (yj di pi_i) mentre yj è il fratello k del nodo corrente
+
+        //lamda di yj per la prior table di yj
+
+
+
+    }
 
     void computeLambda(){
 
