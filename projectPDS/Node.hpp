@@ -7,105 +7,344 @@
 
 #include <string>
 #include <vector>
-#include <cmath> // pow
 #include <memory>
+#include "RealVector.hpp"
+#include "Matrix.hpp"
 class Node {
-
+private:
+    std::string _label;
+    int id;
+    std::vector<std::string> valueLabes;
+    RealVector bel,pi,lambda;
+    std::vector<Node*> parents,children;
+    Matrix _priorTable;
+    std::map<int,RealVector> pi_zi_x;
+    std::map<int,RealVector> lambda_x_wi;
 
 public:
-    void computeBel(){
-        if (_pi.first ==-1  || _pi.second ==-1   ){
-            this->computePi();
+
+    PearlNode() {};
+
+
+    PearlNode(const PearlNode& source){
+        id = source.id;
+        label = source.label;
+        valueLabes = source.valueLabes;
+        bel = source.bel;
+        lambda = source.lambda;
+        pi = source.pi;
+        parents = source.parents;
+        children = source.children;
+        _priorTable = source.priorTable;
+        pi_zi_x = source.pi_zi_x;
+        lambda_x_wi = source.lambda_x_wi;
+    }
+
+    PearlNode(std::string label,int id, int states, std::vector<std::string> labels) : id(id){
+            bel(states);
+            pi(states);
+            lambda(states);
+            lambda.toAllOnes();
+            for (int i = 0; i < states; i++) {
+                valueLabes.push_back(labels.at(i));
+            }
+            _priorTable();
+            this->label = label;
+            bel.setLabels(label,labels);
+            pi.setLabels(label,labels);
+            lambda.setLabels(label,labels);
+    }
+
+    RealVector* getBel() {
+        return &bel;
+    }
+
+    RealVector* getPi() {
+        return &pi;
+    }
+
+
+
+    RealVector* getLambda() {
+        return &lambda;
+    }
+
+    void setPi(RealVector v){
+        pi = v;
+    }
+
+    void setLambda(RealVector v){
+        lambda = v;
+    }
+
+    void setBel(RealVector v){
+        bel = v;
+    }
+
+    std::string getLabel(){
+        return label;
+    }
+
+    std::vector<PearlNode*> getChildren() { return children; }
+
+    std::vector<PearlNode*> getParents() { return parents; }
+
+    Matrix* getMx_wAll() {
+        return &_priorTable;
+    }
+
+    void setMx_wAll(Matrix m) {
+        _priorTable = m;
+    }
+
+    bool isParent(PearlNode node) {
+        for (int i = 0; i < parents.size(); i++) {
+            if (parents.at(i)->id == node.id) return true;
         }
-        if (_lambda.first ==-1  || _lambda.second ==-1   ){
-            this->computeLambda();
+        return false;
+    }
+
+
+    bool isChild(PearlNode node) {
+        for (int i = 0; i < children.size(); i++) {
+            if (children.at(i)->id == node.id) return true;
         }
-        _bel.first = (_lambda.first * _pi.first) ;
-        _bel.second = (_lambda.second * _pi.second);
-    }
-    void computePi(){
-        float productValue = 1;
-        //vector = product by product computePi_i(children of this node).       iterare con un for sui figli ed invocare tale funzione
-        // product vector per matrix (_priorTable,vector)
-
-
-
-
-    };
-
-    void computePi_i(Node yj,Node x) //dove se invocata dal calcolo di pi , x è il nodo corrente mentre yj è il padre
-    {
-        //
-
-
-        //valore finale è pi di x per computeLambda_i di tutti i figli k di node yj escluso il nodo corrente, fare anche qui un for
-
-    };
-
-    void computeLambda_i(Node yj,Node x){ //se invoacata dal calcolo di pi_i , x è  è il padre corrente  (yj di pi_i) mentre yj è il fratello k del nodo corrente
-
-        //lamda di yj per la prior table di yj
-
-
-
+        return false;
     }
 
-    void computeLambda(){
 
 
+    bool operator< (const Node &rhs) const { return id <  rhs.id; }
+    bool operator==(const Node &rhs) const { return id == rhs.id; }
+    bool operator!=(const Node &rhs) const { return id != rhs.id; }
 
-
-    };
-
-    Node(int id,std::string label , int nChildren, int nParents, float * values):  _id(id),_label(label), _pi({-1,-1}), _lambda({-1,-1}) , _bel({-1,-1}) , _nChildren(nChildren), _nParents(nParents){
-        _priorTable = new float*[static_cast<int>(pow(2,nChildren))];
-        for (int i = 0; i < pow(2,_nChildren); i++)
-            _priorTable[i] = new float[2];
-
-        int j = 0;
-        for (int i = 0 ; i  < pow(2,_nChildren); i++){
-            _priorTable[i][0] = values[j++];
-            _priorTable[i][1] = values[j++];
-        }
-    };
-
-    bool operator< (const Node &rhs) const { return _id <  rhs._id; }
-    bool operator==(const Node &rhs) const { return _id == rhs._id; }
-    bool operator!=(const Node &rhs) const { return _id != rhs._id; }
-    ~Node() {
-        for (int i = 0 ; i < pow(2,_nChildren) ; i++){
-            delete [] _priorTable[i];
-        }
-        delete [] _priorTable;
-    }
-
-    void addParent(std::shared_ptr<Node> p){
-        parents.push_back(p);
-    }
-    void addChild(std::shared_ptr<Node> c){
-        children.push_back(c);
-    }
-
-    float** getPriorTable(){
-        return _priorTable;
-    }
 
 
     int getId() const {
-        return _id;
+        return id;
     }
 
-private:
-    std::vector<std::shared_ptr<Node>> parents;
-    std::vector<std::shared_ptr<Node>> children;
-    std::string _label;
-    int _id;
-    int _nChildren;
-    int _nParents;
-    std::pair<float,float> _pi;
-    std::pair<float,float> _lambda;
-    std::pair<float,float> _bel;
-    float** _priorTable;
+
+    RealVector* getPi_zi_x(PearlNode child) {
+        return &pi_zi_x.at(child.id);
+    }
+
+    RealVector* getLambda_x_wi(PearlNode parent) {
+        return &lambda_x_wi.at(parent.id);
+
+    }
+
+    void addParent(PearlNode &node) {
+        if (!isParent(node)) {
+            parents.push_back(&node);
+        }
+    }
+
+    void addChild(PearlNode &node) {
+        if (!isChild(node)) {
+            children.push_back(&node);
+        }
+    }
+
+    void updateBEL() { //prodotto con normalizzazione
+        try {
+            bel.termProduct(pi, lambda);
+            bel.normalise();
+        }
+        catch(std::exception e){
+            std::cout<< "errore nell'aggiornamento BEL " << std::endl;
+        }
+    }
+
+
+    void updatePi() {
+        if (parents.size() == 0) { return; }
+        pi.toAllZeros();
+        PearlNode* parent;
+        RealVector* pi_z;
+        try {
+            for (int j = 0; j < _priorTable.getRowDimension(); j++) {
+                double *tmp = new double[_priorTable.getColDimension()];
+
+                for (int m = 0; m < _priorTable.getColDimension(); m++) {
+                    tmp[m] = _priorTable.getValue(j, m);
+                }
+
+                //fin qui mi sono calcolato P(x|w)
+                for (int i = 0; i < parents.size(); i++) { //produttoria sui padri
+                    parent = parents.at(i);
+
+                    pi_z = parent->getPi_zi_x(*this);
+                    for (int k = 0; k < pi_z->getDimension(); k++) {
+
+                        if (_priorTable.partOf(pi_z->getLabel(k), _priorTable.getRowLabels(j))) {
+                            for (int m = 0; m < _priorTable.getColDimension(); m++) {
+                                tmp[m] *= pi_z->getValue(k);
+                            }
+
+                        }
+
+                    }
+                }
+                for (int m = 0; m < _priorTable.getColDimension(); m++) {
+                    pi.setValue(m, pi.getValue(m) + tmp[m]);
+                }
+                //aggiornameto del pi
+                delete[] tmp;
+            }
+            pi.normalise();
+
+        }
+        catch (std::exception e){
+            std::cout << "errore nel calcolo del PI" << std::endl;
+        }
+    }
+
+
+    void updateLambda(){ //produttoria dei lamda_z_j (formula 1 del sito)
+
+        if (children.size() == 0) { return; }
+        lambda.setValues(children.at(0)->getLambda_x_wi(*this)->getValues());
+        try {
+            for (int i = 1; i < children.size(); i++) {
+                PearlNode* child = children.at(i);
+                lambda.termProduct(lambda, *(child->getLambda_x_wi(*this)));
+            }
+        }
+        catch(std::exception e){
+            std::cout << "errore nel calcolo dell update lambda" << std::endl;
+        }
+    }
+
+    void updatePiZ(PearlNode& child)
+    {
+        if (!isChild(child))
+        {
+            return;
+        }
+
+        RealVector pi_z ;
+
+        try {
+            if (!(pi_zi_x.contains(child.id))) {
+                pi_z = pi; //creare operatore di assegnazione
+            }
+            else{
+                pi_z = pi_zi_x.at(child.id);
+            }
+        }
+        catch(std::exception e){
+            std::cout << "bug in updatePiz 1" << std::endl;
+        }
+
+        if (children.size() == 1)
+        {
+            pi_z = pi;
+            pi_z.normalise();
+            pi_zi_x.insert_or_assign(child.id,pi_z);
+            return;
+        }
+
+        try {
+            pi_z.divide(bel, *(child.getLambda_x_wi(*this)));
+        }
+        catch(std::exception e){
+            std::cout << "errore in updatePiZ , bug 2" << std::endl ;
+        }
+        pi_z.normalise();
+        pi_zi_x.insert_or_assign(child.id, pi_z);
+    }
+
+    bool operator==(const PearlNode& sx){
+        return this->id == sx.id;
+    }
+
+
+    void updateLambdaX(PearlNode& parent)
+    {
+        if (!isParent(parent))
+        {
+            return;
+        }
+
+        RealVector lambda_wi;
+        try
+        {
+
+            if (lambda_x_wi.contains(parent.id)){
+                lambda_wi = *(getLambda_x_wi(parent));
+            }
+            else {
+                lambda_wi = RealVector(parent.getBel()->getDimension());
+                lambda_wi.setLabels(parent.bel.getLabels());
+            }
+
+        }
+        catch (std::exception e)
+        {
+            std::cout << "PearlNode.updateLambdaX: bug in here (1)!!" << "\n";
+            return;
+        }
+
+        if (lambda.isAllOnes())
+        {
+            lambda_wi.toAllOnes();
+            lambda_x_wi.insert_or_assign(parent.id, lambda_wi);
+            return;
+        }
+
+        lambda_wi.toAllZeros();
+
+        for (int i = 0; i < _priorTable.getRowDimension(); i++)
+        {
+            double tmp = 0;
+            for (int k = 0; k < _priorTable.getColDimension(); k++)
+            {
+                tmp += this->_priorTable.getValue(i, k) * lambda.getValue(k); //prima modifica
+            }
+            for (int j = 0; j < parents.size(); j++) //sommatoria Wk con k diverso da i
+            {
+                PearlNode* parent2 = parents.at(j);
+                if (parent.getId() != parent2->getId())
+                {
+                    try
+                    {
+                        RealVector* pi_z = parent2->getPi_zi_x(*this);
+                        for (int m = 0; m < pi_z->getDimension(); m++)
+                        {
+                            if (_priorTable.partOf(pi_z->getLabel(m), _priorTable.getRowLabels(i)))
+                                tmp *= pi_z->getValue(m);
+                        }
+                    }
+                    catch (std::exception e)
+                    {
+                        std::cout << "PearlNode.updateLambdaX: bug in here (2)!!" << std::endl;
+                        return;
+                    }
+                }
+            }
+
+            for (int n = 0; n < lambda_wi.getDimension(); n++)
+            {
+                if (_priorTable.partOf(lambda_wi.getLabel(n), _priorTable.getRowLabels(i)))
+                {
+                    lambda_wi.setValue(n, lambda_wi.getValue(n) + tmp);
+                    break;
+                }
+            }
+        }
+
+        try
+        {
+            lambda_x_wi.insert_or_assign(parent.id, lambda_wi);
+        }
+        catch (std::exception e)
+        {
+            std::cout << "PearlNode.updateLambdaX: bug in here!! (3)"<< std::endl;
+            return;
+        }
+
+    }
 };
 
 #endif //PDS_NODE_HPP

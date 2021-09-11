@@ -201,6 +201,7 @@ int main()
 {
     // Make convenient labels for the vertices
     //enum { A, B, C, D, E, F, G, H, N };
+    double epsilon = 0.0001;
     enum {R , S , H , W, N};
 //    int num_vertices = N;
 //    std::string name = "ABCDEFGH";
