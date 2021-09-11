@@ -202,7 +202,7 @@ int main()
     // Make convenient labels for the vertices
     //enum { A, B, C, D, E, F, G, H, N };
     double epsilon = 0.0001;
-    enum {R , S , H , W, N};
+    enum {R , S , W , H, N};
 //    int num_vertices = N;
 //    std::string name = "ABCDEFGH";
 //    std::vector<Node> vertex_array =
@@ -221,18 +221,82 @@ int main()
 
     int num_vertices = N;
     std::string name = "RSHW";
+    std::vector<std::string> yn1;
+    yn1.push_back("R=y");yn1.push_back("R=n");
+    std::vector<std::string> yn2;
+    yn2.push_back("S=y");yn2.push_back("S=n");
+    std::vector<std::string> yn3;
+    yn3.push_back("W=y");yn3.push_back("W=n");
+    std::vector<std::string> yn4;
+    yn4.push_back("H=y");yn4.push_back("H=n");
+    Node rain("R",0,2,yn1),sprinkler("S",1,2,yn2),watson("W",2,2,yn3),holmes("H",3,2,yn4);
+    double array1[8] = {1,0,0.9,0.1,1,0,0,1};
+    Matrix Mh_rs(4,2,array1);
+    std::vector<std::string> mh1;
+    mh1.push_back("R=y");mh1.push_back("S=y");
+    std::vector<std::string> mh2;
+    mh2.push_back("R=n");mh2.push_back("S=y");
+    std::vector<std::string> mh3;
+    mh3.push_back("R=y");mh3.push_back("S=n");
+    std::vector<std::string> mh4;
+    mh4.push_back("R=n");mh4.push_back("S=n");
+    std::vector<std::string> mh5;
+    mh5.push_back("H=y");
+    std::vector<std::string> mh6;
+    mh6.push_back("H=n");
 
-    float v1[2] = {0.1,0.9};
-    float v2[2] = {0.2,0.9};
-    float v3[4] = {1,0,0.2,0.8};
-    float v4[8] = {1,0,0.9,0.1,1,0,0,1};
-    std::vector<std::shared_ptr<Node>> vertex_array =
-            {
-                    std::shared_ptr<Node>(new Node(R, "R", 2, 0, v2)),
-                    std::shared_ptr<Node>(new Node(S, "S", 1, 0, v1)),
-                    std::shared_ptr<Node>(new Node(H, "H", 0, 2, v4)),
-                    std::shared_ptr<Node>(new Node(W, "W", 0, 1, v3))
-            };
+    Mh_rs.setLabel("M_H|R,S");
+    Mh_rs.setColLabels(0, mh5);
+    Mh_rs.setColLabels(1, mh6);
+    Mh_rs.setRowLabels(0, mh1);
+    Mh_rs.setRowLabels(1, mh2);
+    Mh_rs.setRowLabels(2, mh3);
+    Mh_rs.setRowLabels(3, mh4);
+    holmes.setMx_wAll(Mh_rs);
+
+    double arr2[4] = {1,0,0.2,0.8};
+    Matrix Mw_r(2,2,arr2);
+    std::vector<std::string> m1;
+    m1.push_back("W=y");
+    std::vector<std::string> m2;
+    m2.push_back("W=n");
+    std::vector<std::string> m3;
+    m3.push_back("R=y");
+    std::vector<std::string> m4;
+    m4.push_back("R=n");
+
+    Mw_r.setLabel("M_W|R");
+    Mw_r.setColLabels(0, m1);
+    Mw_r.setColLabels(1, m2);
+    Mw_r.setRowLabels(0, m3);
+    Mw_r.setRowLabels(1, m4);
+    watson.setMx_wAll(Mw_r);
+
+    watson.addParent(rain);
+    rain.addChild(watson);
+    holmes.addParent(rain);
+    rain.addChild(holmes);
+    holmes.addParent(sprinkler);
+    sprinkler.addChild(holmes);
+
+
+    double arr3[2] = {0.1,0.9};
+    Matrix sMatrix(1,2,arr3);
+    sprinkler.setMx_wAll(sMatrix);
+
+
+
+    double arr4[2] = {0.2,0.8};
+    Matrix rMatrix(1,2,arr4);
+    rain.setMx_wAll(rMatrix);
+    std::vector<Node*> vertex_array ;
+
+    vertex_array.push_back(&watson);
+    vertex_array.push_back(&holmes);
+    vertex_array.push_back(&rain);
+    vertex_array.push_back(&sprinkler);
+
+
 
 
 
@@ -271,27 +335,174 @@ int main()
 
     if(!finalEdges.empty())
         for(auto& e : finalEdges){
+            std::string yes,no;
+            std::vector<std::string> labels;
+
             add_vertex(graph);
             num_vertices++;
             name.append(1,std::tolower(name[source(e,graph)]));
-            vertex_array.push_back(std::shared_ptr<Node>(new Node(num_vertices,std::to_string(std::tolower(name[source(e,graph)])),0,1,vertex_array[source(e,graph)]->getPriorTable()[0])));
+            yes="";
+            no="";
+            no+=std::to_string(std::tolower(name[source(e,graph)]));
+            yes+=std::to_string(std::tolower(name[source(e,graph)]));
+            yes+="=y";
+            no+="n";
+            labels.clear();
+            labels.push_back(yes);labels.push_back(no);
+
+            Node newNode(std::to_string(std::tolower(name[source(e,graph)])),num_vertices,2,labels);
+            newNode.setMx_wAll(*vertex_array[source(e,graph)]->getMx_wAll());
+            //come aggiungo i figli a questo nuovo nodo?
+            vertex_array.push_back(&newNode);
             add_edge(num_vertices-1,target(e,graph),graph);
             remove_edge(source(e,graph),target(e,graph),graph);
         }
 
     printNodes(graph,name);
 
+
+        /*
+         * TOGLIERE QUESTO COMMENTO E SISTEMARE GLI ERRORI , DOVREBBE ESSERE LA APRTE DI CODICE CHE AGGIUNGE PADRI E FIGLI
     auto vs = boost::vertices(graph);
     for (auto vit = vs.first; vit != vs.second; ++vit) {
         auto neighbors = boost::adjacent_vertices(*vit, graph);
         for (auto nit = neighbors.first; nit != neighbors.second; ++nit){
-            vertex_array[*vit]->addChild(vertex_array[*nit]);
-            vertex_array[*nit]->addParent(vertex_array[*vit]);
+            vertex_array[*vit]->addChild(&vertex_array[*nit]);
+            vertex_array[*nit]->addParent(&vertex_array[*vit]);
+        }
+    }
+         */
+
+
+    printGraph(graph,name.c_str(),"associated_tree");
+    std::vector<Node> nodesCopy;
+
+
+    for (int i = 0 ; i < vertex_array.size() ; i++){
+        RealVector *v;
+        if (vertex_array.at(i)->getChildren().size() == 0){
+            v = vertex_array.at(i)->getLambda();
+            v->setValue(0,1);
+            v->setValue(1,1);
+
+        }
+        if (vertex_array.at(i)->getParents().size() == 0){
+            v = vertex_array.at(i)->getPi();
+            v->setValue(0,vertex_array.at(i)->getMx_wAll()->getValue(0,0));
+            v->setValue(1,vertex_array.at(i)->getMx_wAll()->getValue(0,1));
         }
     }
 
-    printGraph(graph,name.c_str(),"associated_tree");
+    RealVector *v;
 
+    for(int j = vertex_array.size()-1 ; j >=0 ; j--){
+        nodesCopy.push_back(*(vertex_array.at(j)));
+    }
+
+
+    int it = 0;
+    double maxDiff = -1,diff;
+    while(true ){ /* nella costruzione del grafo , i nodi fogli hanno precedenza */
+
+
+
+        for ( Node* node : vertex_array){
+            for (Node* parent : node->getParents()){
+                node->updateLambdaX(*parent);
+            }
+            for (Node* child : node->getChildren()){
+                node->updatePiZ(*child);
+            }
+        }
+
+        for ( Node* node : vertex_array){
+            node->updatePi();
+            node->updateLambda();
+        }
+
+        for ( Node* node : vertex_array) {
+            node->updateBEL();
+        }
+
+
+        for ( int i = 0 ; i < vertex_array.size() && it >=1; i++){
+
+            for (Node* child : vertex_array.at(i)->getChildren()){
+                try {
+                    diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(0) -
+                                    nodesCopy.at(i).getPi_zi_x(*child)->getValue(0));
+                }
+                catch(std::exception e){}
+                if (diff > maxDiff) maxDiff = diff;
+
+                try {
+                    diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(1) -
+                                    nodesCopy.at(i).getPi_zi_x(*child)->getValue(1));
+                }
+                catch(std::exception e){}
+
+                if (diff > maxDiff) maxDiff = diff;
+            }
+
+            for (Node* parent : vertex_array.at(i)->getParents()){
+                try {
+                    diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(0) -
+                                    nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(0));
+                }catch(std::exception e){}
+
+                if (diff > maxDiff) maxDiff = diff;
+                try {
+                    diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(1) -
+                                    nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(1));
+                }catch(std::exception e){}
+
+                if (diff > maxDiff) maxDiff = diff;
+            }
+
+        }
+
+
+
+
+        it++;
+
+
+        if (std::abs(maxDiff) < epsilon){
+            break;
+        }
+        maxDiff = -1;
+        for(int j = vertex_array.size()-1 ; j >=0 ; j--){
+            nodesCopy.push_back(*(vertex_array.at(j)));
+        }
+
+    }
+
+    std::cout << "numero iterazioni :" << it << " max Diff " << maxDiff << std::endl;
+
+
+    std::cout << "Rain: pi = " << "\n";
+    rain.getPi()->printTest();
+    std::cout << " lambda = " << "\n";
+    rain.getLambda()->printTest();
+    std::cout <<   " BEL = " << "\n" ;
+    rain.getBel()->printTest();
+    std::cout << "Sprinkler: pi = " <<  "\n" ;
+    sprinkler.getPi()->printTest();
+    std::cout <<" lambda = "<< "\n" ;
+    sprinkler.getLambda()->printTest();
+    std::cout <<    " BEL = " <<  "\n" ;
+    sprinkler.getBel()->printTest();
+    std::cout << "Watson: pi = " <<  "\n" ;
+    watson.getPi()->printTest() ;
+    std::cout <<" lambda = " << "\n" ;
+    watson.getLambda()->printTest();
+    std::cout << " BEL = "<< "\n";
+    watson.getBel()->printTest();
+    std::cout << "Holmes: pi = " << "\n" ;
+    holmes.getPi()->printTest() ; std::cout  <<" lambda = " <<  "\n" ;
+    holmes.getLambda()->printTest();
+    std::cout << " BEL = "<< "\n" ;
+    holmes.getBel()->printTest();
 
     return 0;
 }

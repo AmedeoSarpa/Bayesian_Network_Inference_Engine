@@ -8,11 +8,12 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <map>
 #include "RealVector.hpp"
 #include "Matrix.hpp"
 class Node {
 private:
-    std::string _label;
+    std::string label;
     int id;
     std::vector<std::string> valueLabes;
     RealVector bel,pi,lambda;
@@ -23,10 +24,10 @@ private:
 
 public:
 
-    PearlNode() {};
+    Node() {};
 
 
-    PearlNode(const PearlNode& source){
+    Node(const Node& source){
         id = source.id;
         label = source.label;
         valueLabes = source.valueLabes;
@@ -35,12 +36,12 @@ public:
         pi = source.pi;
         parents = source.parents;
         children = source.children;
-        _priorTable = source.priorTable;
+        _priorTable = source._priorTable;
         pi_zi_x = source.pi_zi_x;
         lambda_x_wi = source.lambda_x_wi;
     }
 
-    PearlNode(std::string label,int id, int states, std::vector<std::string> labels) : id(id){
+    Node(std::string label,int id, int states, std::vector<std::string> labels) : id(id){
             bel(states);
             pi(states);
             lambda(states);
@@ -85,9 +86,9 @@ public:
         return label;
     }
 
-    std::vector<PearlNode*> getChildren() { return children; }
+    std::vector<Node*> getChildren() { return children; }
 
-    std::vector<PearlNode*> getParents() { return parents; }
+    std::vector<Node*> getParents() { return parents; }
 
     Matrix* getMx_wAll() {
         return &_priorTable;
@@ -97,7 +98,7 @@ public:
         _priorTable = m;
     }
 
-    bool isParent(PearlNode node) {
+    bool isParent(Node node) {
         for (int i = 0; i < parents.size(); i++) {
             if (parents.at(i)->id == node.id) return true;
         }
@@ -105,7 +106,7 @@ public:
     }
 
 
-    bool isChild(PearlNode node) {
+    bool isChild(Node node) {
         for (int i = 0; i < children.size(); i++) {
             if (children.at(i)->id == node.id) return true;
         }
@@ -125,22 +126,22 @@ public:
     }
 
 
-    RealVector* getPi_zi_x(PearlNode child) {
+    RealVector* getPi_zi_x(Node child) {
         return &pi_zi_x.at(child.id);
     }
 
-    RealVector* getLambda_x_wi(PearlNode parent) {
+    RealVector* getLambda_x_wi(Node parent) {
         return &lambda_x_wi.at(parent.id);
 
     }
 
-    void addParent(PearlNode &node) {
+    void addParent(Node &node) {
         if (!isParent(node)) {
             parents.push_back(&node);
         }
     }
 
-    void addChild(PearlNode &node) {
+    void addChild(Node &node) {
         if (!isChild(node)) {
             children.push_back(&node);
         }
@@ -160,7 +161,7 @@ public:
     void updatePi() {
         if (parents.size() == 0) { return; }
         pi.toAllZeros();
-        PearlNode* parent;
+        Node* parent;
         RealVector* pi_z;
         try {
             for (int j = 0; j < _priorTable.getRowDimension(); j++) {
@@ -207,7 +208,7 @@ public:
         lambda.setValues(children.at(0)->getLambda_x_wi(*this)->getValues());
         try {
             for (int i = 1; i < children.size(); i++) {
-                PearlNode* child = children.at(i);
+                Node* child = children.at(i);
                 lambda.termProduct(lambda, *(child->getLambda_x_wi(*this)));
             }
         }
@@ -216,7 +217,7 @@ public:
         }
     }
 
-    void updatePiZ(PearlNode& child)
+    void updatePiZ(Node& child)
     {
         if (!isChild(child))
         {
@@ -255,12 +256,12 @@ public:
         pi_zi_x.insert_or_assign(child.id, pi_z);
     }
 
-    bool operator==(const PearlNode& sx){
+    bool operator==(const Node& sx){
         return this->id == sx.id;
     }
 
 
-    void updateLambdaX(PearlNode& parent)
+    void updateLambdaX(Node& parent)
     {
         if (!isParent(parent))
         {
@@ -304,7 +305,7 @@ public:
             }
             for (int j = 0; j < parents.size(); j++) //sommatoria Wk con k diverso da i
             {
-                PearlNode* parent2 = parents.at(j);
+                Node* parent2 = parents.at(j);
                 if (parent.getId() != parent2->getId())
                 {
                     try
