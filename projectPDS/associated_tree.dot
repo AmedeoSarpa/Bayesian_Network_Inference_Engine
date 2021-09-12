@@ -1,0 +1,9 @@
+digraph G {
+0[label=R];
+1[label=S];
+2[label=H];
+3[label=W];
+0->3 ;
+0->2 ;
+1->3 ;
+}

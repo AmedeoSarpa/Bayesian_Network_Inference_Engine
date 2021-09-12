@@ -78,6 +78,13 @@ public:
         lambda = v;
     }
 
+    void removeParent(int id){
+        for (int i = 0; i < parents.size(); i++){
+            if (parents.at(i)->id == id) parents.erase(i+parents.begin());
+        }
+    }
+
+
     void setBel(RealVector v){
         bel = v;
     }

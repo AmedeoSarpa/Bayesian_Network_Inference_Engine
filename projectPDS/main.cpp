@@ -272,6 +272,7 @@ int main()
     Mw_r.setRowLabels(1, m4);
     watson.setMx_wAll(Mw_r);
 
+
     watson.addParent(rain);
     rain.addChild(watson);
     holmes.addParent(rain);
@@ -350,10 +351,24 @@ int main()
             labels.clear();
             labels.push_back(yes);labels.push_back(no);
 
-            Node newNode(std::to_string(std::tolower(name[source(e,graph)])),num_vertices,2,labels);
-            newNode.setMx_wAll(*vertex_array[source(e,graph)]->getMx_wAll());
+            Node newNode(std::to_string(std::tolower(name[source(e,graph)])),num_vertices-1,2,labels);
+            Matrix m;
+            for (int i = 0; i < vertex_array.size() ; i++){
+                if (vertex_array.at(i)->getId() == source(e,graph)) { m = *vertex_array.at(i)->getMx_wAll(); }
+
+            }
+            Node node;
+            for (int i = 0; i < vertex_array.size() ; i++){
+                if (vertex_array.at(i)->getId() == target(e,graph)) { node = *vertex_array.at(i); }
+
+            }
+            newNode.setMx_wAll(m);
+            newNode.addChild(node);
+            node.addParent(newNode);
+            node.removeParent(source(e,graph));
             //come aggiungo i figli a questo nuovo nodo?
             vertex_array.push_back(&newNode);
+
             add_edge(num_vertices-1,target(e,graph),graph);
             remove_edge(source(e,graph),target(e,graph),graph);
         }
@@ -363,15 +378,19 @@ int main()
 
         /*
          * TOGLIERE QUESTO COMMENTO E SISTEMARE GLI ERRORI , DOVREBBE ESSERE LA APRTE DI CODICE CHE AGGIUNGE PADRI E FIGLI
-    auto vs = boost::vertices(graph);
+         *
+
+        auto vs = boost::vertices(graph);
+
     for (auto vit = vs.first; vit != vs.second; ++vit) {
         auto neighbors = boost::adjacent_vertices(*vit, graph);
         for (auto nit = neighbors.first; nit != neighbors.second; ++nit){
-            vertex_array[*vit]->addChild(&vertex_array[*nit]);
-            vertex_array[*nit]->addParent(&vertex_array[*vit]);
+            vertex_array[*vit]->addChild(*vertex_array.at(*nit));
+            vertex_array[*nit]->addParent(*vertex_array.at(*vit));
         }
     }
          */
+
 
 
     printGraph(graph,name.c_str(),"associated_tree");
