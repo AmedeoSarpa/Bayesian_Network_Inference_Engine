@@ -242,7 +242,7 @@ int main()
     Node nodoA("A",0,2,yn1),
     nodoS("S",1,2,yn2),nodoT("T",2,2,yn3),
     nodoL("L",3,2,yn4),nodoE("E",4,2,yn5),
-    nodoB("B",5,3,yn6),nodoX("X",5,3,yn7),nodoD("D",5,3,yn8);
+    nodoB("B",5,2,yn6),nodoX("X",6,2,yn7),nodoD("D",7,2,yn8);
 
     double arrayA[2] = {0.01,0.99};
     double arrayT[4] = {0.05,0.95,0.01,0.99};
@@ -296,6 +296,7 @@ int main()
     Me.setRowLabels(1, m2);
     Me.setRowLabels(2, m3);
     Me.setRowLabels(3, m4);
+    Me.setLabel("matriceE");
     nodoE.setMx_wAll(Me);
 
 
@@ -456,6 +457,8 @@ int main()
             name.append(1,std::tolower(name[source(e,graph)]));
 
             Node newNode(lb,num_vertices-1,2,labels);
+            lb="";
+            yes=no="";
             Matrix m;
             for (int i = 0; i < vertex_array.size() ; i++){
                 if (vertex_array.at(i)->getId() == source(e,graph)) { m = *vertex_array.at(i)->getMx_wAll(); }
