@@ -84,6 +84,12 @@ public:
         }
     }
 
+    void removeChild(int id){
+        for (int i = 0; i < children.size(); i++){
+            if (children.at(i)->id == id) children.erase(i+children.begin());
+        }
+    }
+
 
     void setBel(RealVector v){
         bel = v;
@@ -265,6 +271,16 @@ public:
 
     bool operator==(const Node& sx){
         return this->id == sx.id;
+    }
+
+    void printValues(){
+        std::cout << "nodo : " << this->label << " BEL : " << std::endl ;
+        this->bel.printTest();
+        std::cout << "nodo : " << this->label << " PI : " << std::endl ;
+        this->pi.printTest();
+        std::cout << "nodo : " << this->label << " LAMBDA : " << std::endl ;
+        this->lambda.printTest();
+        std::cout << std::endl;
     }
 
 
