@@ -208,7 +208,8 @@ public :
 
 
     void printTest(){
-        for (int i = 0 ; i < size ; i++) std::cout << values[i] << " " << std::endl;
+        for (int i = 0 ; i < size ; i++) std::cout << values[i] << " ";
+        std::cout << "\n";
     }
 
 };

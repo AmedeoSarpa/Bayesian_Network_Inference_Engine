@@ -56,6 +56,23 @@ public:
             lambda.setLabels(label,labels);
     }
 
+    Node& operator=(const Node& source){
+        if(this!= &source){
+            id = source.id;
+            label = source.label;
+            valueLabes = source.valueLabes;
+            bel = source.bel;
+            lambda = source.lambda;
+            pi = source.pi;
+            parents = source.parents;
+            children = source.children;
+            _priorTable = source._priorTable;
+            pi_zi_x = source.pi_zi_x;
+            lambda_x_wi = source.lambda_x_wi;
+        }
+        return *this;
+    }
+
     RealVector* getBel() {
         return &bel;
     }
@@ -111,7 +128,7 @@ public:
         _priorTable = m;
     }
 
-    bool isParent(Node node) {
+    bool isParent(const Node& node) {
         for (int i = 0; i < parents.size(); i++) {
             if (parents.at(i)->id == node.id) return true;
         }
@@ -274,11 +291,12 @@ public:
     }
 
     void printValues(){
-        std::cout << "nodo : " << this->label << " BEL : " << std::endl ;
+        std::cout << "nodo : " << this->label << "\n";
+        std::cout << "\tBEL : ";
         this->bel.printTest();
-        std::cout << "nodo : " << this->label << " PI : " << std::endl ;
+        std::cout << "\tPI : ";
         this->pi.printTest();
-        std::cout << "nodo : " << this->label << " LAMBDA : " << std::endl ;
+        std::cout << "\tLAMBDA : ";
         this->lambda.printTest();
         std::cout << std::endl;
     }

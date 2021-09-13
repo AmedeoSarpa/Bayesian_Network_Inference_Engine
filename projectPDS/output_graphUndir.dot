@@ -1,9 +1,18 @@
 graph G {
-0[label=R];
+0[label=A];
 1[label=S];
-2[label=H];
-3[label=W];
-1--3 ;
-0--3 ;
+2[label=T];
+3[label=L];
+4[label=E];
+5[label=B];
+6[label=X];
+7[label=D];
 0--2 ;
+2--4 ;
+1--3 ;
+3--4 ;
+1--5 ;
+5--7 ;
+4--7 ;
+4--6 ;
 }

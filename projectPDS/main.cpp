@@ -435,11 +435,14 @@ int main()
 
     std::vector<EdgeUndir> edgesBack, edgesTree;
 
+
     MyVisitor<std::vector<EdgeUndir>> vis(edgesBack, edgesTree);
 
     boost::depth_first_search(g, visitor(vis));
 
     std::vector<EdgeUndir> finalEdges = edgesToModify(edgesBack, edgesTree,g,  name);
+
+    Node nodeToPut;
 
     if(!finalEdges.empty())
         for(auto& e : finalEdges){
@@ -459,9 +462,9 @@ int main()
             Node newNode(lb,num_vertices-1,2,labels);
             lb="";
             yes=no="";
-            Matrix m;
+
             for (int i = 0; i < vertex_array.size() ; i++){
-                if (vertex_array.at(i)->getId() == source(e,graph)) { m = *vertex_array.at(i)->getMx_wAll(); }
+                if (vertex_array.at(i)->getId() == source(e,graph)) { newNode.setMx_wAll(*vertex_array.at(i)->getMx_wAll()); }
 
             }
             Node* node;
@@ -474,13 +477,17 @@ int main()
                 if (vertex_array.at(i)->getId() == source(e,graph)) { oldNode = vertex_array.at(i); }
 
             }
-            newNode.setMx_wAll(m);
+
             newNode.addChild(*node);
-            node->addParent(newNode);
+
+            nodeToPut = newNode;
+
+            node->addParent(nodeToPut);
             node->removeParent(source(e,graph));
             oldNode->removeChild(node->getId());
             //come aggiungo i figli a questo nuovo nodo?
-            vertex_array.push_back(&newNode);
+
+            vertex_array.push_back(&nodeToPut);
 
             add_edge(num_vertices-1,target(e,graph),graph);
             remove_edge(source(e,graph),target(e,graph),graph);
