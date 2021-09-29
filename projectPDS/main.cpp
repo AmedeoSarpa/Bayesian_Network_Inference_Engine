@@ -201,7 +201,7 @@ int main()
 {
     // Make convenient labels for the vertices
     enum { A, S, T, L, E , B, X ,D, N };
-    double epsilon = 0.0001;
+    double epsilon = 10e-9;
     //enum {R , S , W , H, N};
 //    int num_vertices = N;
 //    std::string name = "ABCDEFGH";
@@ -395,8 +395,8 @@ int main()
 
     vertex_array.push_back(&nodoX);
     vertex_array.push_back(&nodoD);
-    vertex_array.push_back(&nodoB);
     vertex_array.push_back(&nodoE);
+    vertex_array.push_back(&nodoB);
     vertex_array.push_back(&nodoL);
     vertex_array.push_back(&nodoT);
     vertex_array.push_back(&nodoS);
@@ -436,6 +436,7 @@ int main()
     std::vector<EdgeUndir> edgesBack, edgesTree;
 
 
+    /*
     MyVisitor<std::vector<EdgeUndir>> vis(edgesBack, edgesTree);
 
     boost::depth_first_search(g, visitor(vis));
@@ -450,14 +451,14 @@ int main()
             std::vector<std::string> labels;
             add_vertex(graph);
             num_vertices++;
-            no+=std::tolower(name[source(e,graph)]);
-            yes+=std::tolower(name[source(e,graph)]);
-            lb+=std::tolower(name[source(e,graph)]);
+            no+=(name[source(e,graph)]);
+            yes+=(name[source(e,graph)]);
+            lb+=(name[source(e,graph)]);
             yes+="=y";
             no+="=n";
             labels.clear();
             labels.push_back(yes);labels.push_back(no);
-            name.append(1,std::tolower(name[source(e,graph)]));
+            name.append(1,(name[source(e,graph)]));
 
             Node newNode(lb,num_vertices-1,2,labels);
             lb="";
@@ -492,6 +493,7 @@ int main()
             add_edge(num_vertices-1,target(e,graph),graph);
             remove_edge(source(e,graph),target(e,graph),graph);
         }
+        */
 
     printNodes(graph,name);
 
@@ -543,8 +545,9 @@ int main()
 
 
     int it = 0;
+    bool found = false;
     double maxDiff = -1,diff;
-    while(true ){ /* nella costruzione del grafo , i nodi fogli hanno precedenza */
+    while(true){ /* nella costruzione del grafo , i nodi fogli hanno precedenza */
 
 
 
@@ -566,54 +569,77 @@ int main()
             node->updateBEL();
         }
 
+        /*
+        for ( int i = 0 ; i < vertex_array.size() ; i++) {
 
-        for ( int i = 0 ; i < vertex_array.size() && it >=1; i++){
+            if (vertex_array.at(i)->getBel()->getValue(0) == 0 &&
+                vertex_array.at(i)->getBel()->getValue(1) == 0) { maxDiff = -1;found = true; }
+        }
+        for ( int i = 0 ; i < vertex_array.size() && found == false; i++) {
 
-            for (Node* child : vertex_array.at(i)->getChildren()){
+
+
+                diff = std::abs(vertex_array.at(i)->getBel()->getValue(0) - nodesCopy.at(i).getBel()->getValue(0) );
+                if (diff < std::abs(maxDiff)) maxDiff = diff;
+                std::cout << "entro all iterazione " << it  << " diff vale " << vertex_array.at(i)->getBel()->getValue(0) << " meno " << nodesCopy.at(i).getBel()->getValue(0) << std::endl;
+                diff = std::abs(vertex_array.at(i)->getBel()->getValue(1) - nodesCopy.at(i).getBel()->getValue(1));
+                if (diff < std::abs(maxDiff)) maxDiff = diff;
+            std::cout << "entro all iterazione " << it  << " diff vale " << vertex_array.at(i)->getBel()->getValue(1) << " meno " << nodesCopy.at(i).getBel()->getValue(1) << std::endl;
+            }
+
+
+        */
+
+        for ( int i = 0 ; i < vertex_array.size() ; i++) {
+
+            if (vertex_array.at(i)->getBel()->getValue(0) == 0 &&
+                vertex_array.at(i)->getBel()->getValue(1) == 0) { maxDiff = -1;found = true; }
+        }
+        for ( int i = 0 ; i < vertex_array.size() && found == false; i++) {
+
+            for (Node *child : vertex_array.at(i)->getChildren()) {
                 try {
                     diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(0) -
                                     nodesCopy.at(i).getPi_zi_x(*child)->getValue(0));
                 }
-                catch(std::exception e){}
+                catch (std::exception e) {}
                 if (diff > maxDiff) maxDiff = diff;
 
                 try {
                     diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(1) -
                                     nodesCopy.at(i).getPi_zi_x(*child)->getValue(1));
                 }
-                catch(std::exception e){}
+                catch (std::exception e) {}
 
                 if (diff > maxDiff) maxDiff = diff;
             }
 
-            for (Node* parent : vertex_array.at(i)->getParents()){
+            for (Node *parent : vertex_array.at(i)->getParents()) {
                 try {
                     diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(0) -
                                     nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(0));
-                }catch(std::exception e){}
+                } catch (std::exception e) {}
 
                 if (diff > maxDiff) maxDiff = diff;
                 try {
                     diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(1) -
                                     nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(1));
-                }catch(std::exception e){}
+                } catch (std::exception e) {}
 
                 if (diff > maxDiff) maxDiff = diff;
             }
-
         }
-
-
-
 
         it++;
-
-
-        if (std::abs(maxDiff) < epsilon){
+        if (std::abs(maxDiff) < epsilon ){
             break;
         }
+
+
         maxDiff = -1;
-        for(int j = vertex_array.size()-1 ; j >=0 ; j--){
+        found = false;
+        nodesCopy.clear();
+        for(int j = 0 ; j <= vertex_array.size()-1 ; j++){
             nodesCopy.push_back(*(vertex_array.at(j)));
         }
 
