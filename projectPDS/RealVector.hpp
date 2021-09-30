@@ -3,22 +3,23 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <memory>
 class RealVector{
 private:
     std::string label;
     std::vector<std::string> valueLabes; //etichetta (R=y, R = n)..
     bool labelsSet ;
-    double* values;  //valori
+    std::shared_ptr<double[]> values;  //valori
     int size;
 
 
 public :
-    RealVector() {values = nullptr;size = 0;label="null";};
+    RealVector() {size = 0;label="null";};
     RealVector(int size) :labelsSet(false) , size(size){
-        values = new double[size];
+        values = std::shared_ptr<double[]>(new double[size]);
     }
     RealVector(std::vector<double> input) :labelsSet(false) , size(input.size()) {
-        values = new double[input.size()];
+        values = std::shared_ptr<double[]>(new double[input.size()]);
         for (int i = 0 ; i < input.size() ; i++ ) values[i] = input.at(i);
 
     }
@@ -26,12 +27,12 @@ public :
     void operator()(int states) {
         size = states;
         labelsSet = false;
-        values = new double[size];
+        values = std::shared_ptr<double[]>(new double[size]);
     }
 
     RealVector(const RealVector& source) {
         size = source.size;
-        values = new double[size];
+        values = std::shared_ptr<double[]>(new double[size]);
         labelsSet = source.labelsSet;
         label = source.label;
         for (int i = 0; i < source.size; i++) {
@@ -45,23 +46,25 @@ public :
         labelsSet = source.labelsSet;
         values = source.values;
         label = source.label;
-        source.label = nullptr;
+        source.values.reset();
         valueLabes = source.valueLabes;
     }
 
+    /*
     ~RealVector(){
-        if (values != nullptr) delete [] values;
     }
+
+     */
 
 
     RealVector& operator=(const RealVector &source){
         if (this != &source){
-            if (values != nullptr) delete [] values;
-            values = nullptr;
+
+            values.reset();
             valueLabes.clear();
             size = source.size;
             label = source.label;
-            values = new double[size];
+            values = std::shared_ptr<double[]>(new double[size]);
             labelsSet = source.labelsSet;
             for (int i = 0; i < source.size; i++) {
                 values[i] = source.values[i];
@@ -73,14 +76,13 @@ public :
     }
     RealVector& operator=( RealVector &&source){
         if (this != &source){
-            if (values != nullptr) delete [] values;
-            values = nullptr;
+            values.reset();
             valueLabes.clear();
             size = source.size;
             label = source.label;
             labelsSet = source.labelsSet;
             values = source.values;
-            source.values = nullptr;
+            source.values.reset();
             valueLabes = source.valueLabes;
         }
         return *this;
@@ -133,13 +135,13 @@ public :
             values[index] = value;
     }
 
-    void setValues(double * input){
+    void setValues(std::shared_ptr<double[]> input){
         for (int i = 0; i < size ; i++){
             values[i] = input[i];
         }
     }
 
-    double* getValues(){
+    std::shared_ptr<double[]> getValues(){
         return values;
     }
 

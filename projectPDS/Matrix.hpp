@@ -3,23 +3,24 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <memory>
 
 class Matrix{
 private :
     std::string label; //nome della matrice
-    double **values; //matrice dei valori
+    std::shared_ptr<std::shared_ptr<double[]>[]> values; //matrice dei valori
     int nRows, nColumns;
     std::vector<std::vector<std::string>> rowLabels; //capire bene a cosa servono questi
     std::vector<std::vector<std::string>> colLabels;
     bool labelsSet,rowLabelsSet,colLabelsSet;
 
 public :
-    Matrix(){values= nullptr; nRows=0;nColumns=0;};
+    Matrix(){  nRows=0;nColumns=0;};
 
     Matrix(int rows , int col) :labelsSet(false),rowLabelsSet(false),colLabelsSet(false) , nRows(rows), nColumns(col){
-        values = new double* [rows];
+        values =  std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[rows]);
         for (int i = 0; i < rows ; i++) {
-            values[i] = new double[col];
+            values[i] = std::shared_ptr<double[]>(new double[col]);
             rowLabels.push_back(std::vector<std::string>());  //incerto
             for (int j = 0; j < col; j++) values[i][j] = -1;
         }
@@ -29,21 +30,21 @@ public :
 
     }
     void operator()(){
-        values  = nullptr;
         nRows = 0;
         nColumns = 0;
     }
 
 
 
+    /*
     ~Matrix(){
         if (values != nullptr){
             for (int i = 0 ; i < nRows ; i++) delete[] values[i];
             delete [] values;
             values = nullptr;
         }
-
     }
+    */
 
 
     Matrix (Matrix && source){
@@ -56,7 +57,11 @@ public :
         rowLabels = source.rowLabels;
         colLabels = source.colLabels;
         values = source.values;
-        source.values = nullptr;
+        source.values.reset();
+        source.nRows = 0;
+        source.nColumns = 0;
+        source.rowLabels.clear();
+        source.colLabels.clear();
     }
 
 
@@ -67,28 +72,23 @@ public :
         rowLabelsSet = source.rowLabelsSet;
         nRows = source.nRows;
         nColumns = source.nColumns;
-        values = new double* [nRows];
+        values = std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[nRows]);
         rowLabels = source.rowLabels;
         colLabels = source.colLabels;
 
         for (int i = 0; i < nRows ; i++) {
-            values[i] = new double[nColumns];
+            values[i] = std::shared_ptr<double[]> (new double[nColumns]);
             for (int j = 0 ; j < nColumns ; j++){
                 values[i][j] = source.values[i][j];
             }
         }
-
     }
 
     Matrix& operator=(const Matrix &source){
-        if (this != &source){ //mettere anche controllo chr non sia initialized
-            if (values != nullptr ) {
-                for (int i = 0 ; i < nRows ; i++) {
-                    delete[] values[i];
-                }
-                delete [] values;
-            }
-            values = nullptr;
+        if (this != &source){
+
+
+            values.reset();
             rowLabels.clear();
             colLabels.clear();
             label = source.label;
@@ -97,13 +97,12 @@ public :
             rowLabelsSet = source.rowLabelsSet;
             nRows = source.nRows;
             nColumns = source.nColumns;
-            values = new double* [nRows];
+            values = std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[nRows]);
             colLabels = source.colLabels;
             rowLabels = source.rowLabels;
-            for (int i = 0; i < nRows ; i++) {
-                values[i] = new double[nColumns];
-            }
             for (int i = 0 ; i < nRows ; i++){
+                values[i] = std::shared_ptr<double[]> (new double[nColumns]);
+
                 for (int j = 0 ; j < nColumns ; j++){
                     values[i][j] = source.values[i][j];
                 }
@@ -114,11 +113,7 @@ public :
     }
     Matrix& operator=( Matrix &&source){
         if (this != &source){
-            if (values != nullptr) {
-                for (int i = 0 ; i < nRows ; i++) delete [] values[i];
-                delete [] values;
-            }
-            values = nullptr;
+            values.reset();
             rowLabels.clear();
             colLabels.clear();
             label = source.label;
@@ -128,17 +123,19 @@ public :
             nRows = source.nRows;
             nColumns = source.nColumns;
             values = source.values;
-            source.values = nullptr;
+            source.values.reset();
             colLabels = source.colLabels;
             rowLabels = source.rowLabels;
         }
         return *this;
     }
 
-
+    //modificare questo raw pointer in base all'input
     Matrix(int rows , int col, double* input) :labelsSet(false),rowLabelsSet(false),colLabelsSet(false) , nRows(rows), nColumns(col){
-        values = new double*[rows];
-        for (int i = 0; i < rows ; i++) values[i] = new double[col];
+        values = std::shared_ptr<std::shared_ptr<double[]>[]> (new std::shared_ptr<double[]>[rows]);
+
+        for (int i = 0; i < rows ; i++) values[i] = std::shared_ptr<double[]> (new double[col]);
+
         for (int i = 0; i < rows ; i++){
             rowLabels.push_back(std::vector<std::string>());
             for (int j = 0; j < col ; j++){

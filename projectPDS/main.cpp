@@ -205,7 +205,7 @@ int main()
     //enum {R , S , W , H, N};
 //    int num_vertices = N;
 //    std::string name = "ABCDEFGH";
-    std::vector<Node*> vertex_array ;
+    std::vector<std::shared_ptr<Node>> vertex_array ;
 //            {
 //            Node(A,"A",2,0), Node(B,"B",1,1), Node(C,"C",2,0), Node(D,"D",1,1),
 //            Node(E,"E",1,1), Node(F,"F",2,2), Node(G,"G",0,2), Node(H,"H",0,1)
@@ -239,10 +239,10 @@ int main()
     std::vector<std::string> yn8;
     yn8.push_back("D=y");yn8.push_back("D=n");
 
-    Node nodoA("A",0,2,yn1),
-    nodoS("S",1,2,yn2),nodoT("T",2,2,yn3),
-    nodoL("L",3,2,yn4),nodoE("E",4,2,yn5),
-    nodoB("B",5,2,yn6),nodoX("X",6,2,yn7),nodoD("D",7,2,yn8);
+    std::shared_ptr<Node> nodoA(new Node("A",0,2,yn1)),
+    nodoS(new Node("S",1,2,yn2)),nodoT(new Node("T",2,2,yn3)),
+    nodoL(new Node("L",3,2,yn4)),nodoE(new Node("E",4,2,yn5)),
+    nodoB(new Node("B",5,2,yn6)),nodoX(new Node("X",6,2,yn7)),nodoD(new Node("D",7,2,yn8));
 
     double arrayA[2] = {0.01,0.99};
     double arrayT[4] = {0.05,0.95,0.01,0.99};
@@ -274,7 +274,7 @@ int main()
     Md.setRowLabels(1, mh2);
     Md.setRowLabels(2, mh3);
     Md.setRowLabels(3, mh4);
-    nodoD.setMx_wAll(Md);
+    nodoD->setMx_wAll(Md);
 
     Matrix Me(4,2,arrayE);
     std::vector<std::string> m1;
@@ -297,15 +297,15 @@ int main()
     Me.setRowLabels(2, m3);
     Me.setRowLabels(3, m4);
     Me.setLabel("matriceE");
-    nodoE.setMx_wAll(Me);
+    nodoE->setMx_wAll(Me);
 
 
 
 
     Matrix Ma(1,2,arrayA);
-    nodoA.setMx_wAll(Ma);
+    nodoA->setMx_wAll(Ma);
     Matrix Ms(1,2,arrayS);
-    nodoS.setMx_wAll(Ms);
+    nodoS->setMx_wAll(Ms);
 
 
 
@@ -324,7 +324,7 @@ int main()
     Mt.setColLabels(1, m2t);
     Mt.setRowLabels(0, m3t);
     Mt.setRowLabels(1, m4t);
-    nodoT.setMx_wAll(Mt);
+    nodoT->setMx_wAll(Mt);
 
     Matrix Ml(2,2,arrayL);
     std::vector<std::string> m1l;
@@ -339,7 +339,7 @@ int main()
     Ml.setColLabels(1, m2l);
     Ml.setRowLabels(0, m3l);
     Ml.setRowLabels(1, m4l);
-    nodoL.setMx_wAll(Ml);
+    nodoL->setMx_wAll(Ml);
 
 
     Matrix Mb(2,2,arrayB);
@@ -355,7 +355,7 @@ int main()
     Mb.setColLabels(1, m2b);
     Mb.setRowLabels(0, m3b);
     Mb.setRowLabels(1, m4b);
-    nodoB.setMx_wAll(Mb);
+    nodoB->setMx_wAll(Mb);
 
 
 
@@ -372,35 +372,35 @@ int main()
     Mx.setColLabels(1, m2x);
     Mx.setRowLabels(0, m3x);
     Mx.setRowLabels(1, m4x);
-    nodoX.setMx_wAll(Mx);
+    nodoX->setMx_wAll(Mx);
 
-    nodoA.addChild(nodoT);
-    nodoT.addParent(nodoA);
-    nodoS.addChild(nodoL);
-    nodoL.addParent(nodoS);
-    nodoS.addChild(nodoB);
-    nodoB.addParent(nodoS);
-    nodoT.addChild(nodoE);
-    nodoE.addParent(nodoT);
-    nodoL.addChild(nodoE);
-    nodoE.addParent(nodoL);
-    nodoB.addChild(nodoD);
-    nodoD.addParent(nodoB);
-    nodoE.addChild(nodoD);
-    nodoD.addParent(nodoE);
-    nodoE.addChild(nodoX);
-    nodoX.addParent(nodoE);
+    nodoA->addChild(nodoT);
+    nodoT->addParent(nodoA);
+    nodoS->addChild(nodoL);
+    nodoL->addParent(nodoS);
+    nodoS->addChild(nodoB);
+    nodoB->addParent(nodoS);
+    nodoT->addChild(nodoE);
+    nodoE->addParent(nodoT);
+    nodoL->addChild(nodoE);
+    nodoE->addParent(nodoL);
+    nodoB->addChild(nodoD);
+    nodoD->addParent(nodoB);
+    nodoE->addChild(nodoD);
+    nodoD->addParent(nodoE);
+    nodoE->addChild(nodoX);
+    nodoX->addParent(nodoE);
 
 
 
-    vertex_array.push_back(&nodoX);
-    vertex_array.push_back(&nodoD);
-    vertex_array.push_back(&nodoE);
-    vertex_array.push_back(&nodoB);
-    vertex_array.push_back(&nodoL);
-    vertex_array.push_back(&nodoT);
-    vertex_array.push_back(&nodoS);
-    vertex_array.push_back(&nodoA);
+    vertex_array.push_back(nodoX);
+    vertex_array.push_back((nodoD));
+    vertex_array.push_back((nodoE));
+    vertex_array.push_back((nodoB));
+    vertex_array.push_back((nodoL));
+    vertex_array.push_back((nodoT));
+    vertex_array.push_back((nodoS));
+    vertex_array.push_back((nodoA));
 
 
 
@@ -551,21 +551,21 @@ int main()
 
 
 
-        for ( Node* node : vertex_array){
-            for (Node* parent : node->getParents()){
-                node->updateLambdaX(*parent);
+        for ( std::shared_ptr<Node> node : vertex_array){
+            for (std::shared_ptr<Node> parent : node->getParents()){
+                node->updateLambdaX(*parent.get());
             }
-            for (Node* child : node->getChildren()){
-                node->updatePiZ(*child);
+            for (std::shared_ptr<Node> child : node->getChildren()){
+                node->updatePiZ(*child.get());
             }
         }
 
-        for ( Node* node : vertex_array){
+        for ( std::shared_ptr<Node> node : vertex_array){
             node->updatePi();
             node->updateLambda();
         }
 
-        for ( Node* node : vertex_array) {
+        for ( std::shared_ptr<Node> node : vertex_array) {
             node->updateBEL();
         }
 
@@ -597,33 +597,33 @@ int main()
         }
         for ( int i = 0 ; i < vertex_array.size() && found == false; i++) {
 
-            for (Node *child : vertex_array.at(i)->getChildren()) {
+            for (std::shared_ptr<Node> child : vertex_array.at(i)->getChildren()) {
                 try {
-                    diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(0) -
-                                    nodesCopy.at(i).getPi_zi_x(*child)->getValue(0));
+                    diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child).get()->getValue(0) -
+                                    nodesCopy.at(i).getPi_zi_x(*child).get()->getValue(0));
                 }
                 catch (std::exception e) {}
                 if (diff > maxDiff) maxDiff = diff;
 
                 try {
-                    diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(1) -
-                                    nodesCopy.at(i).getPi_zi_x(*child)->getValue(1));
+                    diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child).get()->getValue(1) -
+                                    nodesCopy.at(i).getPi_zi_x(*child).get()->getValue(1));
                 }
                 catch (std::exception e) {}
 
                 if (diff > maxDiff) maxDiff = diff;
             }
 
-            for (Node *parent : vertex_array.at(i)->getParents()) {
+            for (std::shared_ptr<Node> parent : vertex_array.at(i)->getParents()) {
                 try {
-                    diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(0) -
-                                    nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(0));
+                    diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent).get()->getValue(0) -
+                                    nodesCopy.at(i).getLambda_x_wi(*parent).get()->getValue(0));
                 } catch (std::exception e) {}
 
                 if (diff > maxDiff) maxDiff = diff;
                 try {
-                    diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(1) -
-                                    nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(1));
+                    diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent).get()->getValue(1) -
+                                    nodesCopy.at(i).getLambda_x_wi(*parent).get()->getValue(1));
                 } catch (std::exception e) {}
 
                 if (diff > maxDiff) maxDiff = diff;
@@ -647,9 +647,9 @@ int main()
 
     std::cout << "numero iterazioni :" << it << " max Diff " << maxDiff << std::endl;
 
-    for (Node *n : vertex_array) n->printValues();
+    for (std::shared_ptr<Node> n : vertex_array) n->printValues();
 
 
 
-    return 0;
+    return 1;
 }
