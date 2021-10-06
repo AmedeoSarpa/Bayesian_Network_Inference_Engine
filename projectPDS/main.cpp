@@ -12,7 +12,8 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphviz.hpp>
 #include <vector>
-
+#include <ctime>
+#include <algorithm>
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/pending/indirect_cmp.hpp>
 
@@ -177,17 +178,6 @@ std::vector<E> edgesToModify(std::vector<E> edgesBack,std::vector<E> edgesTree,G
         return source(a,g)!=source(b,g)||target(a,g)!=target(b,g);
     });
 
-/*
-    std::cout << "Edges tree: \n";
-    for (int i = 0; i < edgesTree.size(); ++i)
-        std::cout << "(" << name[source(edgesTree[i],g)] << ", " << name[target(edgesTree[i],g)] <<")\n";
-    std::cout << "\n";
-
-    std::cout << "Edges back: \n";
-    for (int i = 0; i < edgesBack.size(); ++i)
-        std::cout << "(" << name[source(edgesBack[i],g)] << ", " << name[target(edgesBack[i],g)] <<")\n";
-    std::cout << "\n";
-*/
 
     std::cout << "Edges to delete:\n";
     for (int i = 0; i < finalEdges.size(); ++i)
@@ -197,11 +187,16 @@ std::vector<E> edgesToModify(std::vector<E> edgesBack,std::vector<E> edgesTree,G
     return finalEdges;
 }
 
+
+void inference(std::vector<std::shared_ptr<Node>> vertex_array){
+
+}
+
 int main()
 {
     // Make convenient labels for the vertices
     enum { A, S, T, L, E , B, X ,D, N };
-    double epsilon = 10e-9;
+    double epsilon = 10e-11;
     //enum {R , S , W , H, N};
 //    int num_vertices = N;
 //    std::string name = "ABCDEFGH";
@@ -391,8 +386,6 @@ int main()
     nodoE->addChild(nodoX);
     nodoX->addParent(nodoE);
 
-
-
     vertex_array.push_back(nodoX);
     vertex_array.push_back((nodoD));
     vertex_array.push_back((nodoE));
@@ -403,6 +396,7 @@ int main()
     vertex_array.push_back((nodoA));
 
 
+    std::sort(vertex_array.begin(),vertex_array.end(),[](std::shared_ptr<Node> l,std::shared_ptr<Node> r){ return  l->getChildren().size() < r->getChildren().size();});
 
 
 
@@ -496,38 +490,18 @@ int main()
         */
 
     printNodes(graph,name);
-
-
-        /*
-         * TOGLIERE QUESTO COMMENTO E SISTEMARE GLI ERRORI , DOVREBBE ESSERE LA APRTE DI CODICE CHE AGGIUNGE PADRI E FIGLI
-         *
-         *
-
-        auto vs = boost::vertices(graph);
-
-    for (auto vit = vs.first; vit != vs.second; ++vit) {
-        auto neighbors = boost::adjacent_vertices(*vit, graph);
-        for (auto nit = neighbors.first; nit != neighbors.second; ++nit){
-            vertex_array[*vit]->addChild(*vertex_array.at(*nit));
-            vertex_array[*nit]->addParent(*vertex_array.at(*vit));
-        }
-    }
-
-         */
-
-
-
-
     printGraph(graph,name.c_str(),"associated_tree");
     std::vector<Node> nodesCopy;
 
 
+
     for (int i = 0 ; i < vertex_array.size() ; i++){
-        RealVector *v;
+        RealVector* v;
         if (vertex_array.at(i)->getChildren().size() == 0){
             v = vertex_array.at(i)->getLambda();
             v->setValue(0,1);
             v->setValue(1,1);
+
 
         }
         if (vertex_array.at(i)->getParents().size() == 0){
@@ -535,6 +509,7 @@ int main()
             v->setValue(0,vertex_array.at(i)->getMx_wAll()->getValue(0,0));
             v->setValue(1,vertex_array.at(i)->getMx_wAll()->getValue(0,1));
         }
+        v = nullptr;
     }
 
     RealVector *v;
@@ -547,8 +522,8 @@ int main()
     int it = 0;
     bool found = false;
     double maxDiff = -1,diff;
+    std::clock_t  begin = clock();
     while(true){ /* nella costruzione del grafo , i nodi fogli hanno precedenza */
-
 
 
         for ( std::shared_ptr<Node> node : vertex_array){
@@ -560,36 +535,17 @@ int main()
             }
         }
 
+
+
         for ( std::shared_ptr<Node> node : vertex_array){
             node->updatePi();
             node->updateLambda();
         }
 
+
         for ( std::shared_ptr<Node> node : vertex_array) {
-            node->updateBEL();
+                node->updateBEL();
         }
-
-        /*
-        for ( int i = 0 ; i < vertex_array.size() ; i++) {
-
-            if (vertex_array.at(i)->getBel()->getValue(0) == 0 &&
-                vertex_array.at(i)->getBel()->getValue(1) == 0) { maxDiff = -1;found = true; }
-        }
-        for ( int i = 0 ; i < vertex_array.size() && found == false; i++) {
-
-
-
-                diff = std::abs(vertex_array.at(i)->getBel()->getValue(0) - nodesCopy.at(i).getBel()->getValue(0) );
-                if (diff < std::abs(maxDiff)) maxDiff = diff;
-                std::cout << "entro all iterazione " << it  << " diff vale " << vertex_array.at(i)->getBel()->getValue(0) << " meno " << nodesCopy.at(i).getBel()->getValue(0) << std::endl;
-                diff = std::abs(vertex_array.at(i)->getBel()->getValue(1) - nodesCopy.at(i).getBel()->getValue(1));
-                if (diff < std::abs(maxDiff)) maxDiff = diff;
-            std::cout << "entro all iterazione " << it  << " diff vale " << vertex_array.at(i)->getBel()->getValue(1) << " meno " << nodesCopy.at(i).getBel()->getValue(1) << std::endl;
-            }
-
-
-        */
-
         for ( int i = 0 ; i < vertex_array.size() ; i++) {
 
             if (vertex_array.at(i)->getBel()->getValue(0) == 0 &&
@@ -634,22 +590,16 @@ int main()
         if (std::abs(maxDiff) < epsilon ){
             break;
         }
-
-
         maxDiff = -1;
         found = false;
         nodesCopy.clear();
         for(int j = 0 ; j <= vertex_array.size()-1 ; j++){
             nodesCopy.push_back(*(vertex_array.at(j)));
         }
-
     }
-
-    std::cout << "numero iterazioni :" << it << " max Diff " << maxDiff << std::endl;
-
-    for (std::shared_ptr<Node> n : vertex_array) n->printValues();
-
-
-
+    v = nullptr;
+    std::clock_t  end = clock();
+    std::cout << "numero iterazioni :" << it << " max Diff " << maxDiff <<  " tempo esecuzione (ms) " << double(end-begin) << std::endl;
+    std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node> n) {n->printValues();});
     return 1;
 }

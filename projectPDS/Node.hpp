@@ -81,8 +81,6 @@ public:
         return &pi;
     }
 
-
-
     RealVector* getLambda() {
         return &lambda;
     }
@@ -95,6 +93,7 @@ public:
         lambda = v;
     }
 
+    /*
     void removeParent(int id){
         for (int i = 0; i < parents.size(); i++){
             if (parents.at(i)->id == id) parents.erase(i+parents.begin());
@@ -106,6 +105,7 @@ public:
             if (children.at(i)->id == id) children.erase(i+children.begin());
         }
     }
+     */
 
 
     void setBel(RealVector v){
@@ -123,6 +123,7 @@ public:
     Matrix* getMx_wAll() {
         return &_priorTable;
     }
+
 
     void setMx_wAll(Matrix m) {
         _priorTable = m;
