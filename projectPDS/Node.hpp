@@ -11,6 +11,8 @@
 #include <map>
 #include "RealVector.hpp"
 #include "Matrix.hpp"
+#include <condition_variable>
+#include <mutex>
 class Node {
 private:
     std::string label;
@@ -23,7 +25,7 @@ private:
     std::map<int,RealVector> lambda_x_wi;
 
 public:
-
+    std::condition_variable cv;
     Node() {};
 
 

@@ -29,6 +29,10 @@ RealVector.hpp
 C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/BayesianNetwork/progettoPDS/projectPDS/RealVector.hpp
 Matrix.hpp
 C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/BayesianNetwork/progettoPDS/projectPDS/Matrix.hpp
+condition_variable
+-
+mutex
+-
 
 C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/BayesianNetwork/progettoPDS/projectPDS/RealVector.hpp
 string
@@ -64,6 +68,8 @@ algorithm
 boost/graph/depth_first_search.hpp
 -
 boost/pending/indirect_cmp.hpp
+-
+thread
 -
 
 C:/boost_1_76_0/boost/algorithm/string/compare.hpp

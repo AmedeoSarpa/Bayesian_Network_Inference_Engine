@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/pending/indirect_cmp.hpp>
+#include <thread>
 
 #define PATH "./.."
 
@@ -200,6 +201,7 @@ int main()
     //enum {R , S , W , H, N};
 //    int num_vertices = N;
 //    std::string name = "ABCDEFGH";
+    std::mutex mt0,mt1,mt2,mt3,mt4,mt5,mt6,mt7;
     std::vector<std::shared_ptr<Node>> vertex_array ;
 //            {
 //            Node(A,"A",2,0), Node(B,"B",1,1), Node(C,"C",2,0), Node(D,"D",1,1),
@@ -522,8 +524,9 @@ int main()
     int it = 0;
     bool found = false;
     double maxDiff = -1,diff;
-    std::clock_t  begin = clock();
-    while(true){ /* nella costruzione del grafo , i nodi fogli hanno precedenza */
+    
+
+    while(true){ // nella costruzione del grafo , i nodi fogli hanno precedenza
 
 
         for ( std::shared_ptr<Node> node : vertex_array){
@@ -598,8 +601,9 @@ int main()
         }
     }
     v = nullptr;
-    std::clock_t  end = clock();
-    std::cout << "numero iterazioni :" << it << " max Diff " << maxDiff <<  " tempo esecuzione (ms) " << double(end-begin) << std::endl;
+
+
+    //std::cout << "numero iterazioni :" << it << " max Diff " << maxDiff  << std::endl;
     std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node> n) {n->printValues();});
     return 1;
 }
