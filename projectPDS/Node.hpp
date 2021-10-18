@@ -169,8 +169,6 @@ public:
     }
 
     void updateBEL() { //prodotto con normalizzazione
-        std::cout << "sto eseguendo thread : " << std::endl;
-
         try {
             bel.termProduct(pi, lambda);
             bel.normalise();
