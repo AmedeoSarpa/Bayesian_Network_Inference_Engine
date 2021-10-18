@@ -199,7 +199,8 @@ int main()
     // Make convenient labels for the vertices
     enum { A, S, T, L, E , B, X ,D, N };
     double epsilon = 10e-11;
-    ThreadPool t;
+    std::deque<std::thread> listaThread ;
+
     //enum {R , S , W , H, N};
 //    int num_vertices = N;
 //    std::string name = "ABCDEFGH";
@@ -526,14 +527,22 @@ int main()
     double maxDiff = -1,diff;
 
 
+
     while(true){ // nella costruzione del grafo , i nodi fogli hanno precedenza
+        ThreadPool t;
+
+        for (int i = 0; i < 3 ; i++){
+            listaThread.push_back(std::thread ([&](){ t.runThread();}));
+        }
 
         //inizio calcoli (suddivisi per ogni operazione)
-        for ( std::shared_ptr<Node> node : vertex_array){
+
+         for ( std::shared_ptr<Node> node : vertex_array){
             for (std::shared_ptr<Node> parent : node->getParents()){
                 node->updateLambdaX(*parent.get());
             }
         }
+
 
         for (std::shared_ptr<Node> node : vertex_array) {
             for (std::shared_ptr<Node> child : node->getChildren()){
@@ -555,12 +564,22 @@ int main()
             node->updateLambda();
         }
 
-
+        /*versione updateBEL non parallelizzata
         for ( std::shared_ptr<Node> node : vertex_array) {
                 node->updateBEL();
         }
+         */
+        //Versione parallelizzata updateBEL
+        for ( std::shared_ptr<Node> node : vertex_array) {
+            t.submit(std::bind(&Node::updateBEL,node));
+            //node->updateBEL();
+        }
         //fine calcoli
-
+        t.quit();
+        for (int i = 0  ; i < 3 ; i++){
+            listaThread.at(i).join();
+        }
+        listaThread.clear();
         //Calcolo della differenza
 
         for ( int i = 0 ; i < vertex_array.size() ; i++) {
@@ -619,7 +638,6 @@ int main()
         //fine calcolo differenza
     }
     v = nullptr;
-
 
     //std::cout << "numero iterazioni :" << it << " max Diff " << maxDiff  << std::endl;
     std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node> n) {n->printValues();});
