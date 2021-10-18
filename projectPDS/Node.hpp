@@ -26,6 +26,7 @@ private:
 
 public:
     std::condition_variable cv;
+    std::mutex m;
     Node() {};
 
 
@@ -95,19 +96,6 @@ public:
         lambda = v;
     }
 
-    /*
-    void removeParent(int id){
-        for (int i = 0; i < parents.size(); i++){
-            if (parents.at(i)->id == id) parents.erase(i+parents.begin());
-        }
-    }
-
-    void removeChild(int id){
-        for (int i = 0; i < children.size(); i++){
-            if (children.at(i)->id == id) children.erase(i+children.begin());
-        }
-    }
-     */
 
 
     void setBel(RealVector v){

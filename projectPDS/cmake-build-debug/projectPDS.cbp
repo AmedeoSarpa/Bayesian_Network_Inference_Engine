@@ -96,6 +96,9 @@
 		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/BayesianNetwork/progettoPDS/projectPDS/RealVector.hpp">
 			<Option target="projectPDS"/>
 		</Unit>
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/BayesianNetwork/progettoPDS/projectPDS/ThreadPool.hpp">
+			<Option target="projectPDS"/>
+		</Unit>
 		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/BayesianNetwork/progettoPDS/projectPDS/main.cpp">
 			<Option target="projectPDS"/>
 		</Unit>

@@ -17,6 +17,7 @@
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/pending/indirect_cmp.hpp>
 #include <thread>
+#include "ThreadPool.hpp"
 
 #define PATH "./.."
 
@@ -198,6 +199,7 @@ int main()
     // Make convenient labels for the vertices
     enum { A, S, T, L, E , B, X ,D, N };
     double epsilon = 10e-11;
+    ThreadPool t;
     //enum {R , S , W , H, N};
 //    int num_vertices = N;
 //    std::string name = "ABCDEFGH";
@@ -400,8 +402,6 @@ int main()
 
     std::sort(vertex_array.begin(),vertex_array.end(),[](std::shared_ptr<Node> l,std::shared_ptr<Node> r){ return  l->getChildren().size() < r->getChildren().size();});
 
-
-
     // writing out the edges in the graph
     typedef std::pair<int, int> Edge;
 
@@ -491,7 +491,7 @@ int main()
         }
         */
 
-    printNodes(graph,name);
+    //printNodes(graph,name);
     printGraph(graph,name.c_str(),"associated_tree");
     std::vector<Node> nodesCopy;
 
@@ -524,24 +524,34 @@ int main()
     int it = 0;
     bool found = false;
     double maxDiff = -1,diff;
-    
+
 
     while(true){ // nella costruzione del grafo , i nodi fogli hanno precedenza
 
-
+        //inizio calcoli (suddivisi per ogni operazione)
         for ( std::shared_ptr<Node> node : vertex_array){
             for (std::shared_ptr<Node> parent : node->getParents()){
                 node->updateLambdaX(*parent.get());
             }
+        }
+
+        for (std::shared_ptr<Node> node : vertex_array) {
             for (std::shared_ptr<Node> child : node->getChildren()){
                 node->updatePiZ(*child.get());
             }
         }
 
 
-
+        /*
         for ( std::shared_ptr<Node> node : vertex_array){
             node->updatePi();
+            node->updateLambda();
+        }
+        */
+        for ( std::shared_ptr<Node> node : vertex_array){
+            node->updatePi();
+        }
+        for ( std::shared_ptr<Node> node : vertex_array){
             node->updateLambda();
         }
 
@@ -549,11 +559,17 @@ int main()
         for ( std::shared_ptr<Node> node : vertex_array) {
                 node->updateBEL();
         }
+        //fine calcoli
+
+        //Calcolo della differenza
+
         for ( int i = 0 ; i < vertex_array.size() ; i++) {
 
             if (vertex_array.at(i)->getBel()->getValue(0) == 0 &&
                 vertex_array.at(i)->getBel()->getValue(1) == 0) { maxDiff = -1;found = true; }
         }
+
+
         for ( int i = 0 ; i < vertex_array.size() && found == false; i++) {
 
             for (std::shared_ptr<Node> child : vertex_array.at(i)->getChildren()) {
@@ -592,6 +608,7 @@ int main()
         it++;
         if (std::abs(maxDiff) < epsilon ){
             break;
+            //nel thread pool sarà t.quit
         }
         maxDiff = -1;
         found = false;
@@ -599,6 +616,7 @@ int main()
         for(int j = 0 ; j <= vertex_array.size()-1 ; j++){
             nodesCopy.push_back(*(vertex_array.at(j)));
         }
+        //fine calcolo differenza
     }
     v = nullptr;
 
