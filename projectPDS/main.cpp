@@ -515,7 +515,7 @@ int main()
         v = nullptr;
     }
 
-    RealVector *v;
+    std::shared_ptr<RealVector> v;
 
     for(int j = vertex_array.size()-1 ; j >=0 ; j--){
         nodesCopy.push_back(*(vertex_array.at(j)));
@@ -526,8 +526,6 @@ int main()
     bool found = false;
     double maxDiff = -1,diff;
 
-
-
     while(true){ // nella costruzione del grafo , i nodi fogli hanno precedenza
         ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
 
@@ -536,6 +534,7 @@ int main()
         //inizio calcoli (suddivisi per ogni operazione)
 
         //Versione non parallelizzata updateLambdaX
+
         /*
          for ( std::shared_ptr<Node> node : vertex_array){
             for (std::shared_ptr<Node> parent : node->getParents()){
@@ -543,6 +542,7 @@ int main()
             }
         }
          */
+
         for (int i = 0; i < 3 ; i++){
             listaThread.push_back(std::thread ([&](){ lambdaXPool.runThread();}));
         }
@@ -554,20 +554,24 @@ int main()
 
             }}
         lambdaXPool.quit();
-        for (int i = 0  ; i < 3 ; i++){
-            listaThread.at(i).join();
+        for (std::thread &t : listaThread){
+            if (t.joinable()) t.join();
         }
         listaThread.clear();
 
 
-         /* Versione non parallelizzata updatePiZ
-        for (std::shared_ptr<Node> node : vertex_array) {
-            for (std::shared_ptr<Node> child : node->getChildren()){
-                node->updatePiZ(*child.get());
-            }
-        }
-          */
+
+
+        /* Versione non parallelizzata updatePiZ
+       for (std::shared_ptr<Node> node : vertex_array) {
+           for (std::shared_ptr<Node> child : node->getChildren()){
+               node->updatePiZ(*child.get());
+           }
+       }
+         */
+
          //versione parallelizzata updatePiZ
+
         for (int i = 0; i < 3 ; i++){
             listaThread.push_back(std::thread ([&](){ piZPool.runThread();}));
         }
@@ -579,26 +583,22 @@ int main()
 
             }}
         piZPool.quit();
-        for (int i = 0  ; i < 3 ; i++){
-            listaThread.at(i).join();
+        for (std::thread &t : listaThread){
+            if (t.joinable()) t.join();
         }
         listaThread.clear();
 
 
 
 
-        /*
-        for ( std::shared_ptr<Node> node : vertex_array){
-            node->updatePi();
-            node->updateLambda();
-        }
-        */
 
-        /*versione non parallelizzata updatePi
+        //versione non parallelizzata updatePi
+        /*
         for ( std::shared_ptr<Node> node : vertex_array){
             node->updatePi();
         }
          */
+
 
 
         //Verisone parallelizzata updatePi
@@ -611,29 +611,25 @@ int main()
             //node->updateBEL();
         }
         piPool.quit();
-        for (int i = 0  ; i < 3 ; i++){
-            listaThread.at(i).join();
+
+        for (std::thread &t : listaThread){
+            if (t.joinable()) {
+                t.join();
+            }
         }
         listaThread.clear();
 
 
-
-
-
-
-
-
-
-
-
-        /*
-         * versione update lambda non parallelizzata
+         // versione update lambda non parallelizzata
+         /*
         for ( std::shared_ptr<Node> node : vertex_array){
             node->updateLambda();
         }
-        */
+          */
+
 
         //Verisone parallelizzata updateLAMBDA
+
         for (int i = 0; i < 3 ; i++){
             listaThread.push_back(std::thread ([&](){ lambdaPool.runThread();}));
         }
@@ -642,20 +638,25 @@ int main()
             //node->updateBEL();
         }
         lambdaPool.quit();
-        for (int i = 0  ; i < 3 ; i++){
-            listaThread.at(i).join();
+
+        for (std::thread &t : listaThread){
+            if (t.joinable()) t.join();
         }
         listaThread.clear();
 
-        /*versione updateBEL non parallelizzata
+
+        //versione updateBEL non parallelizzata
+        /*
         for ( std::shared_ptr<Node> node : vertex_array) {
                 node->updateBEL();
         }
-
-
-
          */
+
+
+
+
         //Versione parallelizzata updateBEL
+
         for (int i = 0; i < 3 ; i++){
             listaThread.push_back(std::thread ([&](){ belPool.runThread();}));
         }
@@ -665,22 +666,10 @@ int main()
             //node->updateBEL();
         }
         belPool.quit();
-        for (int i = 0  ; i < 3 ; i++){
-            listaThread.at(i).join();
+        for (std::thread &t : listaThread){
+            if (t.joinable()) t.join();
         }
         listaThread.clear();
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -742,7 +731,6 @@ int main()
         }
         //fine calcolo differenza
     }
-    v = nullptr;
 
     //std::cout << "numero iterazioni :" << it << " max Diff " << maxDiff  << std::endl;
     std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node> n) {n->printValues();});

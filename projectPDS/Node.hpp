@@ -76,8 +76,8 @@ public:
         return *this;
     }
 
-    RealVector* getBel() {
-        return &bel;
+    std::shared_ptr<RealVector> getBel() {
+        return std::make_shared<RealVector>(bel);
     }
 
     RealVector* getPi() {
@@ -85,7 +85,7 @@ public:
     }
 
     RealVector* getLambda() {
-        return &lambda;
+        return &(lambda);
     }
 
     void setPi(RealVector v){
@@ -110,8 +110,8 @@ public:
 
     std::vector<std::shared_ptr<Node>> getParents() { return parents; }
 
-    Matrix* getMx_wAll() {
-        return &_priorTable;
+    std::shared_ptr<Matrix> getMx_wAll() {
+        return std::make_shared<Matrix>(_priorTable);
     }
 
 
@@ -147,12 +147,12 @@ public:
     }
 
 
-    std::shared_ptr<RealVector[]> getPi_zi_x(Node child) {
-        return std::make_shared<RealVector[]>(pi_zi_x.at(child.id));
+    std::shared_ptr<RealVector> getPi_zi_x(Node child) {
+        return std::make_shared<RealVector>(pi_zi_x.at(child.id));
     }
 
-    std::shared_ptr<RealVector[]> getLambda_x_wi(Node parent) {
-        return std::make_shared<RealVector[]>(lambda_x_wi.at(parent.id));
+    std::shared_ptr<RealVector> getLambda_x_wi(Node parent) {
+        return std::make_shared<RealVector>(lambda_x_wi.at(parent.id));
 
     }
 
@@ -168,6 +168,7 @@ public:
         }
     }
 
+    //terminated
     void updateBEL() { //prodotto con normalizzazione
         try {
             bel.termProduct(pi, lambda);
@@ -178,25 +179,23 @@ public:
         }
     }
 
-
+    //terminated
     void updatePi() {
         if (parents.size() == 0) { return; }
         pi.toAllZeros();
-        Node* parent;
-        RealVector* pi_z;
+        std::shared_ptr<Node> parent ;
+        std::shared_ptr<RealVector> pi_z;
         try {
             for (int j = 0; j < _priorTable.getRowDimension(); j++) {
                 double *tmp = new double[_priorTable.getColDimension()];
-
                 for (int m = 0; m < _priorTable.getColDimension(); m++) {
                     tmp[m] = _priorTable.getValue(j, m);
                 }
 
                 //fin qui mi sono calcolato P(x|w)
                 for (int i = 0; i < parents.size(); i++) { //produttoria sui padri
-                    parent = parents.at(i).get();
-
-                    pi_z = parent->getPi_zi_x(*this).get();
+                    parent = parents.at(i);
+                    pi_z = parent->getPi_zi_x(*this);
                     for (int k = 0; k < pi_z->getDimension(); k++) {
 
                         if (_priorTable.partOf(pi_z->getLabel(k), _priorTable.getRowLabels(j))) {
@@ -222,15 +221,15 @@ public:
         }
     }
 
-
+    //terminated
     void updateLambda(){ //produttoria dei lamda_z_j (formula 1 del sito)
 
         if (children.size() == 0) { return; }
         lambda.setValues(children.at(0)->getLambda_x_wi(*this).get()->getValues());
         try {
             for (int i = 1; i < children.size(); i++) {
-                Node* child = children.at(i).get();
-                lambda.termProduct(lambda, *(child->getLambda_x_wi(*this).get()));
+                std::shared_ptr<Node> child = children.at(i);
+                lambda.termProduct(lambda, *(child->getLambda_x_wi(*this)));
             }
         }
         catch(std::exception e){
@@ -238,6 +237,7 @@ public:
         }
     }
 
+    //terminated
     void updatePiZ(Node& child)
     {
         if (!isChild(child))
@@ -268,7 +268,7 @@ public:
         }
 
         try {
-            pi_z.divide(bel, *(child.getLambda_x_wi(*this).get()));
+            pi_z.divide(bel, *(child.getLambda_x_wi(*this)));
         }
         catch(std::exception e){
             std::cout << "errore in updatePiZ , bug 2" << std::endl ;
@@ -293,6 +293,7 @@ public:
     }
 
 
+    //terminated
     void updateLambdaX(Node& parent)
     {
         if (!isParent(parent))
@@ -305,7 +306,7 @@ public:
         {
 
             if (lambda_x_wi.contains(parent.id)){
-                lambda_wi = *(getLambda_x_wi(parent).get());
+                lambda_wi = *(getLambda_x_wi(parent));
             }
             else {
                 lambda_wi = RealVector(parent.getBel()->getDimension());
@@ -337,12 +338,12 @@ public:
             }
             for (int j = 0; j < parents.size(); j++) //sommatoria Wk con k diverso da i
             {
-                Node* parent2 = parents.at(j).get();
+                std::shared_ptr<Node> parent2 = parents.at(j);
                 if (parent.getId() != parent2->getId())
                 {
                     try
                     {
-                        RealVector* pi_z = parent2->getPi_zi_x(*this).get();
+                        std::shared_ptr<RealVector> pi_z = parent2->getPi_zi_x(*this);
                         for (int m = 0; m < pi_z->getDimension(); m++)
                         {
                             if (_priorTable.partOf(pi_z->getLabel(m), _priorTable.getRowLabels(i)))
