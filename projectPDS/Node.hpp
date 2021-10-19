@@ -21,8 +21,8 @@ private:
     RealVector bel,pi,lambda;
     std::vector<std::shared_ptr<Node>> parents,children;
     Matrix _priorTable;
-    std::map<int,RealVector> pi_zi_x;
-    std::map<int,RealVector> lambda_x_wi;
+    std::map<int,std::shared_ptr<RealVector>> pi_zi_x;
+    std::map<int,std::shared_ptr<RealVector>> lambda_x_wi;
 
 public:
     std::condition_variable cv;
@@ -148,11 +148,11 @@ public:
 
 
     std::shared_ptr<RealVector> getPi_zi_x(Node child) {
-        return std::make_shared<RealVector>(pi_zi_x.at(child.id));
+        return pi_zi_x.at(child.id);
     }
 
     std::shared_ptr<RealVector> getLambda_x_wi(Node parent) {
-        return std::make_shared<RealVector>(lambda_x_wi.at(parent.id));
+        return lambda_x_wi.at(parent.id);
 
     }
 
@@ -245,11 +245,11 @@ public:
             return;
         }
 
-        RealVector pi_z ;
+        std::shared_ptr<RealVector> pi_z ;
 
         try {
             if (!(pi_zi_x.contains(child.id))) {
-                pi_z = pi; //creare operatore di assegnazione
+                pi_z = std::make_shared<RealVector>(pi); //creare operatore di assegnazione
             }
             else{
                 pi_z = pi_zi_x.at(child.id);
@@ -261,19 +261,19 @@ public:
 
         if (children.size() == 1)
         {
-            pi_z = pi;
-            pi_z.normalise();
+            pi_z = std::make_shared<RealVector>(pi);
+            pi_z->normalise();
             pi_zi_x.insert_or_assign(child.id,pi_z);
             return;
         }
 
         try {
-            pi_z.divide(bel, *(child.getLambda_x_wi(*this)));
+            pi_z->divide(bel, *(child.getLambda_x_wi(*this)));
         }
         catch(std::exception e){
             std::cout << "errore in updatePiZ , bug 2" << std::endl ;
         }
-        pi_z.normalise();
+        pi_z->normalise();
         pi_zi_x.insert_or_assign(child.id, pi_z);
     }
 
@@ -293,7 +293,7 @@ public:
     }
 
 
-    //terminated
+    //modificare questa cosa
     void updateLambdaX(Node& parent)
     {
         if (!isParent(parent))
@@ -301,16 +301,16 @@ public:
             return;
         }
 
-        RealVector lambda_wi;
+        std::shared_ptr<RealVector> lambda_wi;
         try
         {
 
             if (lambda_x_wi.contains(parent.id)){
-                lambda_wi = *(getLambda_x_wi(parent));
+                lambda_wi = getLambda_x_wi(parent);
             }
             else {
-                lambda_wi = RealVector(parent.getBel()->getDimension());
-                lambda_wi.setLabels(parent.bel.getLabels());
+                lambda_wi = std::shared_ptr<RealVector>(new RealVector(parent.getBel()->getDimension()));
+                lambda_wi->setLabels(parent.bel.getLabels());
             }
 
         }
@@ -322,12 +322,12 @@ public:
 
         if (lambda.isAllOnes())
         {
-            lambda_wi.toAllOnes();
+            lambda_wi->toAllOnes();
             lambda_x_wi.insert_or_assign(parent.id, lambda_wi);
             return;
         }
 
-        lambda_wi.toAllZeros();
+        lambda_wi->toAllZeros();
 
         for (int i = 0; i < _priorTable.getRowDimension(); i++)
         {
@@ -358,11 +358,11 @@ public:
                 }
             }
 
-            for (int n = 0; n < lambda_wi.getDimension(); n++)
+            for (int n = 0; n < lambda_wi->getDimension(); n++)
             {
-                if (_priorTable.partOf(lambda_wi.getLabel(n), _priorTable.getRowLabels(i)))
+                if (_priorTable.partOf(lambda_wi->getLabel(n), _priorTable.getRowLabels(i)))
                 {
-                    lambda_wi.setValue(n, lambda_wi.getValue(n) + tmp);
+                    lambda_wi->setValue(n, lambda_wi->getValue(n) + tmp);
                     break;
                 }
             }
