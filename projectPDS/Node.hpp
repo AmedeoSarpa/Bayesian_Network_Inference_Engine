@@ -306,10 +306,12 @@ public:
         std::cout << "nodo : " << this->label << "\n";
         std::cout << "\tBEL : ";
         this->bel.printTest();
+        /*
         std::cout << "\tPI : ";
         this->pi.printTest();
         std::cout << "\tLAMBDA : ";
         this->lambda.printTest();
+         */
         std::cout << std::endl;
     }
 
