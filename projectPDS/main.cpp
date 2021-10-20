@@ -194,6 +194,42 @@ void inference(std::vector<std::shared_ptr<Node>> vertex_array){
 
 }
 
+void ricorsione( int nPadri,int k,std::vector<std::string> list,std::vector<std::string> parentLabels,std::shared_ptr<Matrix> m,int *j){
+    if (k == nPadri) {
+        m->setRowLabels(*j,list);
+        (*j)++;
+        //std::for_each_n(list.begin(),list.size(),[](std::string s ) { std::cout << s<< " " ;});
+        //std::cout << std::endl;
+        return;
+    }
+    for (int i=0 ; i < 2 ; i++){
+        if (i == 0) {
+            std::string s = parentLabels.at(k);
+            s+= "=y";
+            list.push_back(s);
+        }
+        else
+        {
+            std::string s = parentLabels.at(k);
+            s+= "=n";
+            list.push_back(s);
+        }
+        ricorsione(nPadri,k+1,list,parentLabels,m,j);
+        list.pop_back();
+    }
+    return ;
+}
+
+void matriceCominazioni(int nPadri,std::vector<std::string> parentLabels,std::shared_ptr<Matrix> m){
+    int nRow = 1 << nPadri;
+    std::vector<std::string> list;
+    int j = 0;
+    ricorsione(nPadri,0,list,parentLabels,m,&j);
+
+}
+
+
+
 int main()
 {
     // Make convenient labels for the vertices
@@ -219,6 +255,82 @@ int main()
 //              Edge(C,E), Edge(D,F), Edge(E,F), Edge(F,G), Edge(F,H) };
 //    const int num_edges = sizeof(edge_array)/sizeof(edge_array[0]);
 
+
+    //INIZIO PARTE INPUT AUTOMATICO
+    int num_vertices = 0;
+    const char *inputXdslPath = "./../Coma.xdsl";
+    pugi::xml_document inputXdsl;
+    pugi::xml_parse_result parse_result = inputXdsl.load_file(inputXdslPath); // parsing del file xdsl
+
+    if (!parse_result) {
+        std::cout << "XML [" << inputXdslPath << "] parsed with errors\n";
+        std::cout << "Error description: " << parse_result.description() << "\n";
+        std::cout << "Error offset: " << parse_result.offset << " (error at [..." << (inputXdslPath + parse_result.offset)
+                  << "])\n\n";
+        return -1;
+    }
+
+    pugi::xml_node xdsl_nodes = inputXdsl.child("smile").child("nodes"); //prende i nodi tramite il tag 'nodes'
+
+    for (pugi::xml_node cpt: xdsl_nodes.children("cpt")) { //iterazione su tutti i nodi
+        pugi::xml_attribute cptLabel = cpt.first_attribute(); //label del nodo
+        std::vector<std::string> state_labels;
+        std::vector<std::string> probabilities_strings;
+        std::vector<double> probabilities_double;
+        boost::split(probabilities_strings, cpt.child("probabilities").text().get(), [](char c) { //prende l'array delle probabilità da mettere nella matrice
+            return c == ' ';
+        });
+        for (const std::string &s: probabilities_strings) {
+            probabilities_double.push_back(boost::lexical_cast<double>(s));
+        }
+        std::vector<std::string> labels;
+        std::shared_ptr<Node>
+                node_to_insert(new Node(cptLabel.value(), num_vertices++,2));
+        vertex_array.push_back(node_to_insert);
+        std::string parents_string = cpt.child("parents").text().get(); //prendimao i nomi dei genitori
+        std::vector<std::string> parents_labels;
+
+        if (!parents_string.empty()) // necessary to avoid empty string in parents_labels. stateLabel and probabilities can't
+            // be empty so it is not necessary for them
+            boost::split(parents_labels, parents_string, [](char c) { return c == ' '; }); //vettore di nomi dei genitori
+
+        std::vector<std::shared_ptr<Node>> parents;
+        int num_rows = 1;
+        std::shared_ptr<Node> parent ;
+        for (const std::string &s: parents_labels) {
+            for (std::shared_ptr<Node> n : vertex_array) {
+                if (n->getLabel() == s) parent = n;
+            }
+            parent->addChild(node_to_insert);
+            node_to_insert->addParent(parent);
+
+            num_rows *= 2;
+        }
+        std::shared_ptr<Matrix> M ( new Matrix(num_rows, 2, probabilities_double));
+        matriceCominazioni(parents_labels.size(),parents_labels,M);
+        std::vector<std::string> colLabel;
+        colLabel.push_back(node_to_insert->getLabel()+"=y");
+        M->setColLabels(0,colLabel);
+        colLabel.clear();
+        colLabel.push_back(node_to_insert->getLabel()+"=n");
+        M->setColLabels(1,colLabel);
+        colLabel.clear();
+        colLabel.push_back(node_to_insert->getLabel()+"=y");
+        M->printMatrix();
+        node_to_insert->setMx_wAll(*M);
+
+
+
+
+
+    }
+
+
+
+    //FINE PARTE INPUT AUTOMATICO
+
+    //INIZIO PARTE INPUT MANUALE
+    /*
     int num_vertices = N;
     std::string name = "ASTLEBXD";
     std::vector<std::string> yn1;
@@ -400,6 +512,8 @@ int main()
     vertex_array.push_back((nodoS));
     vertex_array.push_back((nodoA));
 
+    */
+    //FINE PARTE INPUT MANUALE
 
     std::sort(vertex_array.begin(),vertex_array.end(),[](std::shared_ptr<Node> l,std::shared_ptr<Node> r){ return  l->getChildren().size() < r->getChildren().size();});
 
@@ -425,8 +539,8 @@ int main()
     Graph graph(edge_array, edge_array + sizeof(edge_array) / sizeof(Edge), num_vertices);
     GraphUndir g(edge_array, edge_array + sizeof(edge_array) / sizeof(Edge), num_vertices);
 
-    printGraph(graph,name.c_str(),"output_graph");
-    printGraph(g,name.c_str(),"output_graphUndir");
+    //printGraph(graph,name.c_str(),"output_graph");
+    //printGraph(g,name.c_str(),"output_graphUndir");
 
     //dfsTimeVisitor(g,N, num_vertices, name);
 
@@ -493,7 +607,7 @@ int main()
         */
 
     //printNodes(graph,name);
-    printGraph(graph,name.c_str(),"associated_tree");
+    //printGraph(graph,name.c_str(),"associated_tree");
     std::vector<Node> nodesCopy;
 
 

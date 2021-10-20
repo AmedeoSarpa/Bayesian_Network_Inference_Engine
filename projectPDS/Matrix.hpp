@@ -131,7 +131,7 @@ public :
     }
 
     //modificare questo raw pointer in base all'input
-    Matrix(int rows , int col, double* input) :labelsSet(false),rowLabelsSet(false),colLabelsSet(false) , nRows(rows), nColumns(col){
+    Matrix(int rows , int col, std::vector<double> input) :labelsSet(false),rowLabelsSet(false),colLabelsSet(false) , nRows(rows), nColumns(col){
         values = std::shared_ptr<std::shared_ptr<double[]>[]> (new std::shared_ptr<double[]>[rows]);
 
         for (int i = 0; i < rows ; i++) values[i] = std::shared_ptr<double[]> (new double[col]);

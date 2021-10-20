@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/projectPDS.dir/main.cpp.obj"
+  "CMakeFiles/projectPDS.dir/pugixml.cpp.obj"
   "libprojectPDS.dll.a"
   "projectPDS.exe"
   "projectPDS.exe.manifest"

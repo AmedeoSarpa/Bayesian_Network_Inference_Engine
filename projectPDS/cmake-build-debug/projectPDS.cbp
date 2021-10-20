@@ -102,6 +102,15 @@
 		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/main.cpp">
 			<Option target="projectPDS"/>
 		</Unit>
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugiconfig.hpp">
+			<Option target="projectPDS"/>
+		</Unit>
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugixml.cpp">
+			<Option target="projectPDS"/>
+		</Unit>
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugixml.hpp">
+			<Option target="projectPDS"/>
+		</Unit>
 		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

@@ -44,7 +44,7 @@ private:
 public:
     std::condition_variable cv;
     std::mutex m;
-    Node() {};
+    //Node() {};
 
 
     Node(const Node& source){
@@ -61,16 +61,20 @@ public:
         lambda_x_wi = source.lambda_x_wi;
     }
 
-    Node(std::string label,int id, int states, std::vector<std::string> labels) : id(id){
+    Node(std::string label,int id, int states) : id(id){
             bel(states);
             pi(states);
             lambda(states);
             lambda.toAllOnes();
+            this->label = label;
+            std::vector<std::string> labels ;
+            labels.push_back(label+"=y");
+            labels.push_back(label+"=n");
             for (int i = 0; i < states; i++) {
                 valueLabes.push_back(labels.at(i));
             }
             _priorTable();
-            this->label = label;
+
             bel.setLabels(label,labels);
             pi.setLabels(label,labels);
             lambda.setLabels(label,labels);
@@ -242,7 +246,7 @@ public:
     void updateLambda(){ //produttoria dei lamda_z_j (formula 1 del sito)
 
         if (children.size() == 0) { return; }
-        lambda.setValues(children.at(0)->getLambda_x_wi(*this).get()->getValues());
+        lambda.setValues(children.at(0)->getLambda_x_wi(*this)->getValues());
         try {
             for (int i = 1; i < children.size(); i++) {
                 std::shared_ptr<Node> child = children.at(i);

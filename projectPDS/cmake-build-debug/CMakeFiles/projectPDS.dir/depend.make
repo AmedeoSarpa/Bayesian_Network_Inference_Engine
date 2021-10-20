@@ -7,23 +7,46 @@ CMakeFiles/projectPDS.dir/main.cpp.obj: \
  ../RealVector.hpp \
  ../ThreadPool.hpp \
  ../main.cpp \
+ ../pugiconfig.hpp \
+ ../pugixml.hpp \
+ C:/boost_1_76_0/boost/algorithm/string.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/case_conv.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/classification.hpp \
  C:/boost_1_76_0/boost/algorithm/string/compare.hpp \
  C:/boost_1_76_0/boost/algorithm/string/concept.hpp \
  C:/boost_1_76_0/boost/algorithm/string/config.hpp \
  C:/boost_1_76_0/boost/algorithm/string/constants.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/detail/case_conv.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/detail/classification.hpp \
  C:/boost_1_76_0/boost/algorithm/string/detail/find_format.hpp \
  C:/boost_1_76_0/boost/algorithm/string/detail/find_format_all.hpp \
  C:/boost_1_76_0/boost/algorithm/string/detail/find_format_store.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/detail/find_iterator.hpp \
  C:/boost_1_76_0/boost/algorithm/string/detail/finder.hpp \
  C:/boost_1_76_0/boost/algorithm/string/detail/formatter.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/detail/predicate.hpp \
  C:/boost_1_76_0/boost/algorithm/string/detail/replace_storage.hpp \
  C:/boost_1_76_0/boost/algorithm/string/detail/sequence.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/detail/trim.hpp \
  C:/boost_1_76_0/boost/algorithm/string/detail/util.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/erase.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/find.hpp \
  C:/boost_1_76_0/boost/algorithm/string/find_format.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/find_iterator.hpp \
  C:/boost_1_76_0/boost/algorithm/string/finder.hpp \
  C:/boost_1_76_0/boost/algorithm/string/formatter.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/iter_find.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/join.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/predicate.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/predicate_facade.hpp \
  C:/boost_1_76_0/boost/algorithm/string/replace.hpp \
  C:/boost_1_76_0/boost/algorithm/string/sequence_traits.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/split.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/std/list_traits.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/std/slist_traits.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/std/string_traits.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/std_containers_traits.hpp \
+ C:/boost_1_76_0/boost/algorithm/string/trim.hpp \
  C:/boost_1_76_0/boost/algorithm/string/yes_no_type.hpp \
  C:/boost_1_76_0/boost/aligned_storage.hpp \
  C:/boost_1_76_0/boost/any.hpp \
@@ -2799,3 +2822,7 @@ CMakeFiles/projectPDS.dir/main.cpp.obj: \
  C:/boost_1_76_0/boost/xpressive/traits/detail/c_ctype.hpp \
  C:/boost_1_76_0/boost/xpressive/xpressive_fwd.hpp \
  C:/boost_1_76_0/boost/xpressive/xpressive_static.hpp
+CMakeFiles/projectPDS.dir/pugixml.cpp.obj: \
+ ../pugiconfig.hpp \
+ ../pugixml.cpp \
+ ../pugixml.hpp

@@ -152,6 +152,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+pugixml.obj: pugixml.cpp.obj
+.PHONY : pugixml.obj
+
+# target to build an object file
+pugixml.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/pugixml.cpp.obj
+.PHONY : pugixml.cpp.obj
+
+pugixml.i: pugixml.cpp.i
+.PHONY : pugixml.i
+
+# target to preprocess a source file
+pugixml.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/pugixml.cpp.i
+.PHONY : pugixml.cpp.i
+
+pugixml.s: pugixml.cpp.s
+.PHONY : pugixml.s
+
+# target to generate assembly for a file
+pugixml.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/pugixml.cpp.s
+.PHONY : pugixml.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -164,6 +188,9 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... pugixml.obj
+	@echo ... pugixml.i
+	@echo ... pugixml.s
 .PHONY : help
 
 
