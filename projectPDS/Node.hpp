@@ -5,6 +5,10 @@
 #ifndef PDS_NODE_HPP
 #define PDS_NODE_HPP
 
+
+#include <iostream>                  // for std::cout
+#include <utility>                   // for std::pair
+#include <algorithm>                 // for std::for_each
 #include <string>
 #include <vector>
 #include <memory>
@@ -13,6 +17,19 @@
 #include "Matrix.hpp"
 #include <condition_variable>
 #include <mutex>
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graphviz.hpp>
+#include <vector>
+#include <ctime>
+#include <algorithm>
+#include <boost/graph/depth_first_search.hpp>
+#include <boost/pending/indirect_cmp.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+#include "pugixml.hpp"
+#include <boost/lexical_cast.hpp>
+#define PATH "./.."
 class Node {
 private:
     std::string label;

@@ -558,7 +558,6 @@ int main()
             if (t.joinable()) t.join();
         }
         listaThread.clear();
-        std::cout <<"fermo al lambaX" << std::endl;
 
 
 
@@ -589,7 +588,6 @@ int main()
         }
         listaThread.clear();
 
-        std::cout <<"fermo al piZ" << std::endl;
 
 
 
@@ -621,7 +619,6 @@ int main()
         }
         listaThread.clear();
 
-        std::cout <<"fermo al pi" << std::endl;
 
 
          // versione update lambda non parallelizzata
@@ -648,7 +645,6 @@ int main()
         }
         listaThread.clear();
 
-        std::cout <<"fermo al lambda" << std::endl;
 
         //versione updateBEL non parallelizzata
         /*
@@ -676,7 +672,6 @@ int main()
         }
         listaThread.clear();
 
-        std::cout <<"fermo al bel" << std::endl;
 
 
 

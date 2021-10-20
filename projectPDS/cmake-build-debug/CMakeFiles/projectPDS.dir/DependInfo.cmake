@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/BayesianNetwork/progettoPDS/projectPDS/main.cpp" "C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/BayesianNetwork/progettoPDS/projectPDS/cmake-build-debug/CMakeFiles/projectPDS.dir/main.cpp.obj"
+  "C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/main.cpp" "C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/CMakeFiles/projectPDS.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
