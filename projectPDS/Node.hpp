@@ -42,10 +42,6 @@ private:
     std::map<int,std::shared_ptr<RealVector>> lambda_x_wi;
 
 public:
-    std::condition_variable cv;
-    std::mutex m;
-    //Node() {};
-
 
     Node(const Node& source){
         id = source.id;
@@ -74,7 +70,6 @@ public:
                 valueLabes.push_back(labels.at(i));
             }
             _priorTable();
-
             bel.setLabels(label,labels);
             pi.setLabels(label,labels);
             lambda.setLabels(label,labels);
@@ -101,32 +96,20 @@ public:
         return std::make_shared<RealVector>(bel);
     }
 
+    //Vedere questa cosa
     RealVector* getPi() {
         return &pi;
     }
 
+    //Vedere questa cosa
     RealVector* getLambda() {
         return &(lambda);
     }
 
-    void setPi(RealVector v){
-        pi = v;
-    }
-
-    void setLambda(RealVector v){
-        lambda = v;
-    }
-
-
-
-    void setBel(RealVector v){
-        bel = v;
-    }
 
     std::string getLabel(){
         return label;
     }
-
     std::vector<std::shared_ptr<Node>> getChildren() { return children; }
 
     std::vector<std::shared_ptr<Node>> getParents() { return parents; }
@@ -155,18 +138,13 @@ public:
         return false;
     }
 
-
-
     bool operator< (const Node &rhs) const { return id <  rhs.id; }
     bool operator==(const Node &rhs) const { return id == rhs.id; }
     bool operator!=(const Node &rhs) const { return id != rhs.id; }
 
-
-
     int getId() const {
         return id;
     }
-
 
     std::shared_ptr<RealVector> getPi_zi_x(Node child) {
         return pi_zi_x.at(child.id);
@@ -178,13 +156,13 @@ public:
     }
 
     void addParent(std::shared_ptr<Node> node) {
-        if (!isParent(*node.get())) {
+        if (!isParent(*node)) {
             parents.push_back(node);
         }
     }
 
     void addChild(std::shared_ptr<Node> node) {
-        if (!isChild(*node.get())) {
+        if (!isChild(*node)) {
             children.push_back(node);
         }
     }
@@ -196,6 +174,8 @@ public:
             bel.normalise();
         }
         catch(std::exception e){
+            bel.setValue(0,0);
+            bel.setValue(1,0);
             std::cout<< "errore nell'aggiornamento BEL " << std::endl;
         }
     }
@@ -208,7 +188,7 @@ public:
         std::shared_ptr<RealVector> pi_z;
         try {
             for (int j = 0; j < _priorTable.getRowDimension(); j++) {
-                double *tmp = new double[_priorTable.getColDimension()];
+                std::shared_ptr<double[]> tmp = std::shared_ptr<double[]>(new double[_priorTable.getColDimension()]);
                 for (int m = 0; m < _priorTable.getColDimension(); m++) {
                     tmp[m] = _priorTable.getValue(j, m);
                 }
@@ -232,13 +212,15 @@ public:
                     pi.setValue(m, pi.getValue(m) + tmp[m]);
                 }
                 //aggiornameto del pi
-                delete[] tmp;
+                tmp.reset();
             }
             pi.normalise();
 
         }
         catch (std::exception e){
-            std::cout << "errore nel calcolo del PI" << std::endl;
+            pi.setValue(0,0);
+            pi.setValue(1,0);
+            std::cout << "errore nell aggiornamento del PI" << std::endl;
         }
     }
 
@@ -254,7 +236,9 @@ public:
             }
         }
         catch(std::exception e){
-            std::cout << "errore nel calcolo dell update lambda" << std::endl;
+            lambda.setValue(0,0);
+            lambda.setValue(1,0);
+            std::cout << "errore nell  update lambda" << std::endl;
         }
     }
 
@@ -277,7 +261,8 @@ public:
             }
         }
         catch(std::exception e){
-            std::cout << "bug in updatePiz 1" << std::endl;
+            pi_z = std::make_shared<RealVector>(pi);
+            std::cout << "errore in updatePiz : non viene ritornato nessun elemento con quel child.id  " << std::endl;
         }
 
         if (children.size() == 1)
@@ -292,7 +277,9 @@ public:
             pi_z->divide(bel, *(child.getLambda_x_wi(*this)));
         }
         catch(std::exception e){
-            std::cout << "errore in updatePiZ , bug 2" << std::endl ;
+            pi_z = std::make_shared<RealVector>(pi);
+            pi_z->normalise();
+            std::cout << "errore in updatePiZ , divisione non valida" << std::endl ;
         }
         pi_z->normalise();
         pi_zi_x.insert_or_assign(child.id, pi_z);
@@ -316,7 +303,7 @@ public:
     }
 
 
-    //modificare questa cosa
+    //terminated
     void updateLambdaX(Node& parent)
     {
         if (!isParent(parent))
@@ -339,7 +326,9 @@ public:
         }
         catch (std::exception e)
         {
-            std::cout << "PearlNode.updateLambdaX: bug in here (1)!!" << "\n";
+            lambda_wi = std::shared_ptr<RealVector>(new RealVector(parent.getBel()->getDimension()));
+            lambda_wi->setLabels(parent.bel.getLabels());
+            std::cout << "errore in updateLambdaX: errore settaggio lambda_wi" << "\n";
             return;
         }
 
@@ -375,7 +364,8 @@ public:
                     }
                     catch (std::exception e)
                     {
-                        std::cout << "PearlNode.updateLambdaX: bug in here (2)!!" << std::endl;
+                        tmp*=1;
+                        std::cout << "errore in updateLambdaX: errato aggiornamento tmp" << std::endl;
                         return;
                     }
                 }
@@ -397,7 +387,8 @@ public:
         }
         catch (std::exception e)
         {
-            std::cout << "PearlNode.updateLambdaX: bug in here!! (3)"<< std::endl;
+            lambda_x_wi.insert_or_assign(parent.id,std::make_shared<RealVector>(this->lambda));
+            std::cout << "errore in updateLambdaX: errore inserimento nella mappa lambda_x_wi"<< std::endl;
             return;
         }
 

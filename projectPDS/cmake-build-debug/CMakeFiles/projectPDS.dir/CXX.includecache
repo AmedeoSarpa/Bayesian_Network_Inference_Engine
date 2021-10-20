@@ -65,6 +65,10 @@ boost/lexical_cast.hpp
 -
 
 C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.hpp
+sstream
+-
+iomanip
+-
 string
 -
 vector

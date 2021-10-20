@@ -12,12 +12,11 @@ private :
     int nRows, nColumns;
     std::vector<std::vector<std::string>> rowLabels; //capire bene a cosa servono questi
     std::vector<std::vector<std::string>> colLabels;
-    bool labelsSet,rowLabelsSet,colLabelsSet;
 
 public :
     Matrix(){  nRows=0;nColumns=0;};
 
-    Matrix(int rows , int col) :labelsSet(false),rowLabelsSet(false),colLabelsSet(false) , nRows(rows), nColumns(col){
+    Matrix(int rows , int col) : nRows(rows), nColumns(col){
         values =  std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[rows]);
         for (int i = 0; i < rows ; i++) {
             values[i] = std::shared_ptr<double[]>(new double[col]);
@@ -36,22 +35,10 @@ public :
 
 
 
-    /*
-    ~Matrix(){
-        if (values != nullptr){
-            for (int i = 0 ; i < nRows ; i++) delete[] values[i];
-            delete [] values;
-            values = nullptr;
-        }
-    }
-    */
-
 
     Matrix (Matrix && source){
         label = source.label;
-        labelsSet = source.labelsSet;
         colLabels = source.colLabels;
-        rowLabelsSet = source.rowLabelsSet;
         nRows = source.nRows;
         nColumns = source.nColumns;
         rowLabels = source.rowLabels;
@@ -67,9 +54,7 @@ public :
 
     Matrix(const Matrix& source){ //costruttore di copia
         label = source.label;
-        labelsSet = source.labelsSet;
         colLabels = source.colLabels;
-        rowLabelsSet = source.rowLabelsSet;
         nRows = source.nRows;
         nColumns = source.nColumns;
         values = std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[nRows]);
@@ -86,15 +71,11 @@ public :
 
     Matrix& operator=(const Matrix &source){
         if (this != &source){
-
-
             values.reset();
             rowLabels.clear();
             colLabels.clear();
             label = source.label;
-            labelsSet = source.labelsSet;
             colLabels = source.colLabels;
-            rowLabelsSet = source.rowLabelsSet;
             nRows = source.nRows;
             nColumns = source.nColumns;
             values = std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[nRows]);
@@ -117,9 +98,7 @@ public :
             rowLabels.clear();
             colLabels.clear();
             label = source.label;
-            labelsSet = source.labelsSet;
             colLabels = source.colLabels;
-            rowLabelsSet = source.rowLabelsSet;
             nRows = source.nRows;
             nColumns = source.nColumns;
             values = source.values;
@@ -130,8 +109,7 @@ public :
         return *this;
     }
 
-    //modificare questo raw pointer in base all'input
-    Matrix(int rows , int col, std::vector<double> input) :labelsSet(false),rowLabelsSet(false),colLabelsSet(false) , nRows(rows), nColumns(col){
+    Matrix(int rows , int col, std::vector<double> input) : nRows(rows), nColumns(col){
         values = std::shared_ptr<std::shared_ptr<double[]>[]> (new std::shared_ptr<double[]>[rows]);
 
         for (int i = 0; i < rows ; i++) values[i] = std::shared_ptr<double[]> (new double[col]);
@@ -162,19 +140,20 @@ public :
             return rowLabels.at(index);
         }
         catch (std::exception e){
-            std::cout << "fuori indice" << std::endl;
+            return std::vector<std::string>();
         }
-        return std::vector<std::string>();
-
     }
+
+
+
     std::vector<std::string> getColLabels(int index) {
         try {
             return colLabels.at(index);
         }
         catch (std::exception e){
-            std::cout << "fuori indice" << std::endl;
+            return std::vector<std::string>();
         }
-        return std::vector<std::string>();
+
     }
 
 
@@ -182,22 +161,21 @@ public :
 
         try {
             for (int i = 0; i < rowLabel.size(); i++) rowLabels.at(index).push_back(rowLabel.at(i));
-            rowLabelsSet = true;
-            if (colLabelsSet) labelsSet = true;
         }
         catch (std::exception e){
-            std::cout << "error in setRowLabels";
+            std::cout << "errore settaggio rowLabel" ;
+            rowLabels.at(index).push_back("");
         }
     }
 
     void setColLabels(int index, std::vector<std::string> colLabel){
         try {
             for (int i = 0; i < colLabel.size(); i++) colLabels.at(index).push_back(colLabel.at(i));
-            colLabelsSet = true;
-            if (rowLabelsSet) labelsSet = true;
+
         }
         catch (std::exception e){
-            std::cout << "errore" ;
+            std::cout << "errore settaggio colLabel" ;
+            colLabels.at(index).push_back("");
         }
     }
 
@@ -244,7 +222,6 @@ public :
         }
         return true;
     }
-//vectToString , toString
 
     void printMatrix(){
         std::cout << "etichette colonne " << std::endl;

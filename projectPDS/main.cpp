@@ -128,37 +128,33 @@ int main()
 
     std::vector<Node> nodesCopy;
 
-    //Inizializzazioni
-    // MODIFICARE : cercare di togliere il raw pointer
+    //inizializzazioni
     for (int i = 0 ; i < vertex_array.size() ; i++){
-        RealVector* v;
+        //RealVector* v;
         if (vertex_array.at(i)->getChildren().size() == 0){
-            v = vertex_array.at(i)->getLambda();
-            v->setValue(0,1);
-            v->setValue(1,1);
-
+            vertex_array.at(i)->getLambda()->setValue(0,1);
+            vertex_array.at(i)->getLambda()->setValue(1,1);
 
         }
         if (vertex_array.at(i)->getParents().size() == 0){
-            v = vertex_array.at(i)->getPi();
-            v->setValue(0,vertex_array.at(i)->getMx_wAll()->getValue(0,0));
-            v->setValue(1,vertex_array.at(i)->getMx_wAll()->getValue(0,1));
+            vertex_array.at(i)->getPi()->setValue(0,vertex_array.at(i)->getMx_wAll()->getValue(0,0));
+            vertex_array.at(i)->getPi()->setValue(1,vertex_array.at(i)->getMx_wAll()->getValue(0,1));
+
         }
-        v = nullptr;
     }
 
-    //copia del vettore , per fare calcolo differenza MODIFICARE
-    //.........................................................
-    for(int j = vertex_array.size()-1 ; j >=0 ; j--){
-        nodesCopy.push_back(*(vertex_array.at(j)));
-    }
+
+    for (std::shared_ptr<Node> node : vertex_array) nodesCopy.push_back(*node);
+
     int it = 0;
     bool found = false;
     double maxDiff = -1,diff;
 
+
     //ciclo dei calcoli
     while(true){ // nella costruzione del grafo , i nodi fogli hanno precedenza
         ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
+
 
         //inizio calcoli (suddivisi per ogni operazione)
 
@@ -169,7 +165,6 @@ int main()
             for (std::shared_ptr<Node> parent : node->getParents()){
 
                 lambdaXPool.submit(std::bind(&Node::updateLambdaX,node,*parent.get()));
-                //node->updateBEL();
 
             }}
         lambdaXPool.quit();
@@ -272,14 +267,14 @@ int main()
                     diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child).get()->getValue(0) -
                                     nodesCopy.at(i).getPi_zi_x(*child).get()->getValue(0));
                 }
-                catch (std::exception e) {}
+                catch (std::exception e) {diff=-1;}
                 if (diff > maxDiff) maxDiff = diff;
 
                 try {
                     diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child).get()->getValue(1) -
                                     nodesCopy.at(i).getPi_zi_x(*child).get()->getValue(1));
                 }
-                catch (std::exception e) {}
+                catch (std::exception e) {diff=-1;}
 
                 if (diff > maxDiff) maxDiff = diff;
             }
@@ -288,13 +283,13 @@ int main()
                 try {
                     diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent).get()->getValue(0) -
                                     nodesCopy.at(i).getLambda_x_wi(*parent).get()->getValue(0));
-                } catch (std::exception e) {}
+                } catch (std::exception e) {diff=-1;}
 
                 if (diff > maxDiff) maxDiff = diff;
                 try {
                     diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent).get()->getValue(1) -
                                     nodesCopy.at(i).getLambda_x_wi(*parent).get()->getValue(1));
-                } catch (std::exception e) {}
+                } catch (std::exception e) {diff=-1;}
 
                 if (diff > maxDiff) maxDiff = diff;
             }
@@ -307,9 +302,8 @@ int main()
         maxDiff = -1;
         found = false;
         nodesCopy.clear();
-        for(int j = 0 ; j <= vertex_array.size()-1 ; j++){
-            nodesCopy.push_back(*(vertex_array.at(j)));
-        }
+
+        for (std::shared_ptr<Node> node : vertex_array) nodesCopy.push_back(*node);
         //fine calcolo differenza
     }
     std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node> n) {n->printValues();});

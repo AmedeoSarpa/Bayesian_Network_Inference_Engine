@@ -1,5 +1,7 @@
 #ifndef RV
 #define RV
+#include <sstream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -101,9 +103,8 @@ public :
             return valueLabes[index];
         }
         catch(std::exception e){
-            std::cout << "nessun  valore";
+            return "";
         }
-        return "null";
     }
     std::vector<std::string> getLabels() {return valueLabes;}
 
@@ -210,8 +211,12 @@ public :
 
 
     void printTest(){
-        for (int i = 0 ; i < size ; i++) std::cout << values[i] << " ";
-        std::cout << "\n";
+        double val;
+        for (int i = 0 ; i < size ; i++) {
+            val = values[i] * 100;
+            std::cout <<  std::setprecision(2) << std::fixed << val << "%" <<  " ";
+        }
+        std::cout << std::endl;
     }
 
 };
