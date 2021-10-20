@@ -316,7 +316,6 @@ int main()
         M->setColLabels(1,colLabel);
         colLabel.clear();
         colLabel.push_back(node_to_insert->getLabel()+"=y");
-        M->printMatrix();
         node_to_insert->setMx_wAll(*M);
 
 
