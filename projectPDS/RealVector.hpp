@@ -316,5 +316,13 @@ public :
         std::cout << std::endl;
     }
 
+    std::string GetValuesString() const {
+        std::stringstream values_string;
+        for (int i = 0; i < rv_data->size; i++) {
+            values_string << " " << rv_data->values[i];
+        }
+        return values_string.str();
+    }
+
 };
 #endif

@@ -7,8 +7,6 @@
 #include "ThreadPool.hpp"
 
 
-
-
 template <typename T> class BayesianNetwork{
 public:
 
@@ -16,7 +14,7 @@ public:
         double epsilon = 10e-11;
         std::deque<std::thread> listaThread ;
         std::mutex mt0,mt1,mt2,mt3,mt4,mt5,mt6,mt7;
-        std::vector<std::shared_ptr<Node<T>>> vertex_array ;
+        std::vector<std::shared_ptr<Node<T>>> vertex_array,original_vertex_array ;
 
         //INIZIO PARTE INPUT AUTOMATICO
         int num_vertices = 0;
@@ -86,6 +84,7 @@ public:
 
 
         //ordinamento nei nodi in modo che i nodi foglia vengano prima
+        original_vertex_array = vertex_array;
         std::sort(vertex_array.begin(),vertex_array.end(),[](std::shared_ptr<Node<T>> l,std::shared_ptr<Node<T>> r){ return  l->getChildren().size() < r->getChildren().size();});
 
         std::vector<Node<T>> nodesCopy;
@@ -269,6 +268,18 @@ public:
             //fine calcolo differenza
         }
         std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node<T>> n) {n->printValues();});
+
+        //XDSL output
+        int i = 0;
+        for (pugi::xml_node cpt: xdsl_nodes.children("cpt")) {
+            std::string beliefs_string = original_vertex_array[i++]->getBel()->GetValuesString(); // extract beliefs from the
+
+            cpt.child("probabilities").text().set(beliefs_string.c_str());
+        }
+        inputXdsl.save_file("./../outputAsia.xdsl");
+
+        //Fine output XDSL
+
         return ;
 
     }
