@@ -6,6 +6,22 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/BayesianNetwork.hpp
+iostream
+-
+algorithm
+-
+Node.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Node.hpp
+vector
+-
+ctime
+-
+thread
+-
+ThreadPool.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/ThreadPool.hpp
+
 C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.hpp
 vector
 -
@@ -99,20 +115,8 @@ future
 -
 
 C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/main.cpp
-iostream
--
-algorithm
--
-Node.hpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Node.hpp
-vector
--
-ctime
--
-thread
--
-ThreadPool.hpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/ThreadPool.hpp
+BayesianNetwork.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/BayesianNetwork.hpp
 
 C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugiconfig.hpp
 

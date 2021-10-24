@@ -33,16 +33,17 @@
 
 
 
-class Node {
+template <typename T> class Node {
     struct  NodeData{
+
         std::string label;
-        int id;
+        T id;
         std::vector<std::string> valueLabes;
         RealVector bel,pi,lambda;
         std::vector<std::shared_ptr<Node>> parents,children;
         Matrix _priorTable;
-        std::map<int,std::shared_ptr<RealVector>> pi_zi_x;
-        std::map<int,std::shared_ptr<RealVector>> lambda_x_wi;
+        std::map<T,std::shared_ptr<RealVector>> pi_zi_x;
+        std::map<T,std::shared_ptr<RealVector>> lambda_x_wi;
 
     };
 private:
@@ -79,7 +80,7 @@ public:
         nData = source.nData;
     }
 
-    Node(std::string label,int id, int states) {
+    Node(std::string label,T id, int states) {
             nData = std::make_shared<NodeData>();
             nData->id = id;
             nData->bel(states);
@@ -169,7 +170,7 @@ public:
     bool operator==(const Node &rhs) const { return nData->id == rhs.nData->id; }
     bool operator!=(const Node &rhs) const { return nData->id != rhs.nData->id; }
 
-    int getId() const {
+    T getId() const {
         return nData->id;
     }
 
