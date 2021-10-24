@@ -1,10 +1,13 @@
+
+#define BOOST_DISABLE_PRAGMA_MESSAGE //to disable some warning at compile time
+
 #include <iostream>                  // for std::cout
 #include <algorithm>                 // for std::for_each
 #include "Node.hpp"
 #include <vector>
 #include <ctime>
 #include <thread>
-#include "ThreadPool.hpp"
+#include "ThreadPool.cpp"
 
 
 template <typename T> class BayesianNetwork{
@@ -45,7 +48,7 @@ public:
             }
             std::vector<std::string> labels;
             std::shared_ptr<Node<T>>
-                    node_to_insert(new Node(cptLabel.value(), num_vertices++,2));
+                    node_to_insert(new Node<T>(cptLabel.value(), num_vertices++,2));
             vertex_array.push_back(node_to_insert);
             std::string parents_string = cpt.child("parents").text().get(); //prendimao i nomi dei genitori
             std::vector<std::string> parents_labels;
