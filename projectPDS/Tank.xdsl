@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="Tank" numsamples="1000" discsamples="10000">
+	<nodes>
+		<cpt id="Oxigen">
+			<state id="present" />
+			<state id="absent" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="Hydrogen">
+			<state id="presen" />
+			<state id="absent" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="ReacO">
+			<state id="yes" />
+			<state id="no" />
+			<parents>Oxigen</parents>
+			<probabilities>0.1 0.9 0 1</probabilities>
+		</cpt>
+		<cpt id="ReacH">
+			<state id="yes" />
+			<state id="no" />
+			<parents>Hydrogen</parents>
+			<probabilities>0.1 0.9 0 1</probabilities>
+		</cpt>
+		<cpt id="Sensor1">
+			<state id="on" />
+			<state id="off" />
+			<parents>Oxigen Hydrogen</parents>
+			<probabilities>0.9 0.1 0.1 0.9 0.1 0.9 0.9 0.1</probabilities>
+		</cpt>
+		<cpt id="Explosion">
+			<state id="yes" />
+			<state id="no" />
+			<parents>Oxigen Hydrogen</parents>
+			<probabilities>0.9 0.1 0 1 0 1 0 1</probabilities>
+		</cpt>
+		<cpt id="Sensor2">
+			<state id="on" />
+			<state id="off" />
+			<parents>Oxigen</parents>
+			<probabilities>0.9 0.1 0.1 0.9</probabilities>
+		</cpt>
+		<cpt id="C_Oxigen">
+			<state id="present" />
+			<state id="absent" />
+			<parents>Oxigen Explosion ReacO</parents>
+			<probabilities>0 1 0 1 0 1 1 0 0 1 0 1 0 1 0 1</probabilities>
+		</cpt>
+		<cpt id="C_Hydrogen">
+			<state id="present" />
+			<state id="absent" />
+			<parents>Hydrogen ReacH Explosion</parents>
+			<probabilities>0 1 0 1 0 1 1 0 0 1 0 1 0 1 0 1</probabilities>
+		</cpt>
+		<cpt id="C_ReacO">
+			<state id="yes" />
+			<state id="no" />
+			<parents>C_Oxigen</parents>
+			<probabilities>0.1 0.9 0 1</probabilities>
+		</cpt>
+		<cpt id="C_ReacH">
+			<state id="yes" />
+			<state id="no" />
+			<parents>C_Hydrogen</parents>
+			<probabilities>0.1 0.9 0 1</probabilities>
+		</cpt>
+		<cpt id="C_Sensor1">
+			<state id="on" />
+			<state id="off" />
+			<parents>C_Oxigen C_Hydrogen</parents>
+			<probabilities>0.9 0.1 0.1 0.9 0.1 0.9 0.9 0.1</probabilities>
+		</cpt>
+		<cpt id="C_Sensor2">
+			<state id="on" />
+			<state id="off" />
+			<parents>C_Oxigen</parents>
+			<probabilities>0.9 0.1 0.1 0.9</probabilities>
+		</cpt>
+		<cpt id="C_Explosion">
+			<state id="yes" />
+			<state id="no" />
+			<parents>C_Oxigen C_Hydrogen</parents>
+			<probabilities>0.9 0.1 0 1 0 1 0 1</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 2.2.2626.2 1d3af2fc8bc8c80" name="Tank Explosion Diagnosis Model Developed by Gerardina Hernandez" faultnameformat="nodestate">
+			<comment>A simple network for diagnosing possible explosion in a tank.\nReference:\nDeveloped by Gerardina Hernandez as a class homework at the University of Pittsburgh.</comment>
+			<node id="Oxigen">
+				<name>Oxigen</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>57 17 127 47</position>
+			</node>
+			<node id="Hydrogen">
+				<name>Hydrogen</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>146 18 238 48</position>
+			</node>
+			<node id="ReacO">
+				<name>ReacO</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>199 114 269 144</position>
+			</node>
+			<node id="ReacH">
+				<name>ReacH</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>324 65 394 95</position>
+			</node>
+			<node id="Sensor1">
+				<name>Sensor1</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>129 135 199 165</position>
+			</node>
+			<node id="Explosion">
+				<name>Explosion</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>294 126 382 156</position>
+			</node>
+			<node id="Sensor2">
+				<name>Sensor2</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>58 102 128 132</position>
+			</node>
+			<node id="C_Oxigen">
+				<name>C_Oxigen</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>222 187 312 217</position>
+			</node>
+			<node id="C_Hydrogen">
+				<name>C_Hydrogen</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>398 145 509 175</position>
+			</node>
+			<node id="C_ReacO">
+				<name>C_ReacO</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>242 256 320 286</position>
+			</node>
+			<node id="C_ReacH">
+				<name>C_ReacH</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>471 226 555 256</position>
+			</node>
+			<node id="C_Sensor1">
+				<name>C_Sensor1</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>346 211 437 241</position>
+			</node>
+			<node id="C_Sensor2">
+				<name>C_Sensor2</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>324 272 421 302</position>
+			</node>
+			<node id="C_Explosion">
+				<name>C_Explosion</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" bold="true" />
+				<position>430 281 532 311</position>
+			</node>
+			<textbox>
+				<caption>A simple network for diagnosing possible explosion in a tank, developed by Gerardina Hernandez as a class homework at the University of Pittsburgh.</caption>
+				<font color="000080" name="Arial" size="12" bold="true" />
+				<position>31 173 239 306</position>
+			</textbox>
+		</genie>
+	</extensions>
+</smile>

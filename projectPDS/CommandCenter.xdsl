@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="CommandCenter" numsamples="1000" discsamples="10000">
+	<nodes>
+		<cpt id="Antenna_Structure">
+			<state id="Intact" />
+			<state id="Damaged" />
+			<probabilities>0.9 0.09999999999999998</probabilities>
+		</cpt>
+		<cpt id="Fuel_Supply">
+			<state id="Present" />
+			<state id="Absent" />
+			<probabilities>0.9 0.09999999999999998</probabilities>
+		</cpt>
+		<cpt id="Generator">
+			<state id="Working" />
+			<state id="Dead" />
+			<parents>Fuel_Supply</parents>
+			<probabilities>0.95 0.05000000000000004 0 1</probabilities>
+		</cpt>
+		<cpt id="Radar">
+			<state id="Working" />
+			<state id="Dead" />
+			<parents>Antenna_Structure Generator</parents>
+			<probabilities>0.99 0.01000000000000001 0.1 0.9 0.1 0.9 0 1</probabilities>
+		</cpt>
+		<cpt id="Communications">
+			<state id="Present" />
+			<state id="Absent" />
+			<parents>Generator</parents>
+			<probabilities>0.95 0.05000000000000004 0.2 0.8</probabilities>
+		</cpt>
+		<cpt id="Command_Center">
+			<state id="Operational" />
+			<state id="Dead" />
+			<parents>Radar Communications</parents>
+			<probabilities>0.99 0.01000000000000001 0.9 0.09999999999999998 0.95 0.05000000000000004 0.2 0.8</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 2.2.2626.2 1d3af2fc8bc8c80" name="Command Center" faultnameformat="nodestate">
+			<comment>A simple network demonstrating the idea of causal manipulation.\nReference:\nTsai-Ching Lu and Marek J. Druzdzel. Mechanism-based causal models for adaptive decision support. In Challenges to Decision Support in a Changing World, Papers from the 2005 AAAI Spring Symposium, Marek J. Druzdzel and Tze-Yun Leong (eds.), Technical Report SS-05-02, pages 73-79, Menlo Park, CA: AAAI Press, 2005.</comment>
+			<node id="Antenna_Structure">
+				<name>Antenna Structure</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>31 108 126 153</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="Radar">
+				<name>Radar</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>132 204 199 244</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="Fuel_Supply">
+				<name>Fuel Supply</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>224 22 300 69</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="Generator">
+				<name>Generator</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>226 108 299 152</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="Communications">
+				<name>Communications</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>308 203 439 245</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="Command_Center">
+				<name>Command Center</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>217 290 308 345</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<textbox>
+				<caption>A simple network demonstrating the idea of causal manipulation.\nReference:\nTsai-Ching Lu and Marek J. Druzdzel. Mechanism-based causal models for adaptive decision support. In Challenges to Decision Support in a Changing World, Papers from the 2005 AAAI Spring Symposium, Marek J. Druzdzel and Tze-Yun Leong (eds.), Technical Report SS-05-02, pages 73-79, Menlo Park, CA: AAAI Press, 2005.</caption>
+				<font color="000080" name="Arial" size="12" bold="true" />
+				<position>453 18 768 246</position>
+			</textbox>
+		</genie>
+	</extensions>
+</smile>
