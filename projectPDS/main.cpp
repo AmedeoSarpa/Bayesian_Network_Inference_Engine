@@ -5,11 +5,18 @@
 int main()
 {
     BayesianNetwork<int> bn;
-    bn.input("./../NoisyOR.xdsl");
+    bn.input("./../EngineFuelSystem.xdsl");
     bn.start();
-    bn.inference("FuelPressHigh",0);
+    bn.inference("LoadTest",0);
+    //bn.inference("Radar",1);
     //bn.inference("Coma",0);
     //bn.inference("W",0);
-    //bn.print();
     bn.output();
 }
+
+/*COMMENTI INFERENZA
+ * - nodo foglia errato se c'è un graph not singly connected (es. Asia)
+ * - da implementare: doppia (o più) inferenza contemporanea
+ * - errori printati
+ * - a volte il run fallisce proprio
+ */

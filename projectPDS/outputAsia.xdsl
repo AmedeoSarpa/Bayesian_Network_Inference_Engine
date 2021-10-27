@@ -1,82 +1,171 @@
 <?xml version="1.0"?>
-<smile version="1.0" id="NoisyMAX_AND" numsamples="1000" discsamples="10000">
+<smile version="1.0" id="EngineFuelProblems" numsamples="1000" discsamples="10000">
 	<nodes>
-		<cpt id="LiverCancer">
-			<state id="Present" />
-			<state id="Absent" />
-			<probabilities>0.1 0.9</probabilities>
+		<cpt id="FuelFilters" diagtype="target" ranked="true">
+			<state id="Defective" fault="true" />
+			<state id="Correct" />
+			<probabilities>0.005 0.995</probabilities>
 		</cpt>
-		<cpt id="HepatitisB">
-			<state id="Present" />
-			<state id="Absent" />
-			<probabilities>0.05 0.95</probabilities>
-		</cpt>
-		<cpt id="Hepatitis_A">
-			<state id="Present" />
-			<state id="Absent" />
+		<cpt id="FuelDelivSys" diagtype="target" ranked="true">
+			<state id="Defective" fault="true" />
+			<state id="Correct" />
 			<probabilities>0.01 0.99</probabilities>
 		</cpt>
-		<cpt id="Hepatitis_C">
+		<cpt id="FuelPressLow" diagtype="observation">
 			<state id="Present" />
-			<state id="Absent" />
-			<probabilities>0.01 0.99</probabilities>
+			<state id="Absent" default="true" />
+			<parents>FuelFilters FuelDelivSys</parents>
+			<strengths>0 1 0 1</strengths>
+			<probabilities>0.7979798 0.2020202 0 1 0.29292929 0.70707071 0 1 0.01 0.99</probabilities>
 		</cpt>
-		<cpt id="Jaundice">
+		<cpt id="FuelPressHigh" diagtype="observation">
 			<state id="Present" />
-			<state id="Absent" />
-			<parents>LiverCancer HepatitisB Hepatitis_A Hepatitis_C</parents>
-			<strengths>0 1 0 1 0 1 0 1</strengths>
-			<probabilities>0.3 0.7 0 1 0.09999999999999998 0.9 0 1 0.1000000000000001 0.8999999999999999 0 1 0.1999999999999998 0.8000000000000002 0 1 0.01000000000000001 0.99</probabilities>
+			<state id="Absent" default="true" />
+			<parents>FuelDelivSys</parents>
+			<strengths>0 1</strengths>
+			<probabilities>0.04040404 0.95959596 0 1 0.01 0.99</probabilities>
+		</cpt>
+		<cpt id="FuelPressDrop" diagtype="observation">
+			<state id="Present" />
+			<state id="Absent" default="true" />
+			<parents>FuelFilters</parents>
+			<strengths>0 1</strengths>
+			<probabilities>0.8989899 0.1010101 0 1 0.01 0.99</probabilities>
+		</cpt>
+		<cpt id="FuelSightGlass" diagtype="observation" ranked="true">
+			<state id="Fail" />
+			<state id="Pass" />
+			<parents>FuelFilters FuelDelivSys</parents>
+			<strengths>0 1 0 1</strengths>
+			<probabilities>0.7979798 0.2020202 0 1 0.09090909 0.90909091 0 1 0.01 0.99</probabilities>
+		</cpt>
+		<cpt id="Visual" diagtype="observation" ranked="true">
+			<state id="Fail" />
+			<state id="Pass" />
+			<parents>FuelDelivSys</parents>
+			<strengths>0 1</strengths>
+			<probabilities>0.19191919 0.80808081 0 1 0.01 0.99</probabilities>
+		</cpt>
+		<cpt id="PressGauge" diagtype="observation" ranked="true">
+			<state id="Fail" />
+			<state id="Pass" />
+			<parents>FuelFilters FuelDelivSys</parents>
+			<strengths>0 1 0 1</strengths>
+			<probabilities>0.6969697 0.3030303 0 1 0.19191919 0.80808081 0 1 0.01 0.99</probabilities>
+		</cpt>
+		<cpt id="LoadTest" diagtype="observation" ranked="true">
+			<state id="Fail" />
+			<state id="Pass" />
+			<parents>FuelFilters FuelDelivSys</parents>
+			<strengths>0 1 0 1</strengths>
+			<probabilities>0.7979798 0.2020202 0 1 0.29292929 0.70707071 0 1 0.01 0.99</probabilities>
 		</cpt>
 	</nodes>
 	<extensions>
-		<genie version="1.0" app="GeNIe 3.0.6003.8 1d6c9905dc9fb00" name="Example Models for Noisy MAX and Noisy AND Gates">
-			<comment>A simple network demonstrating the Noisy MAX and Noisy AND gates.\nReference:\nBayesFusion, LLC</comment>
+		<genie version="1.0" app="GeNIe 2.2.2626.2 1d3af2fc8bc8c80" name="Engine Fuel Problems" faultnameformat="nodestate">
+			<comment>A simple diagnostic model of a vehicle fuel system.\nReference:\nBayesFusion, LLC</comment>
+			<node id="FuelFilters" faultnameformat="nodestate">
+				<name>Fuel Filters and Bypass Valves</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>89 15 221 63</position>
+				<state id="Defective" faultname="F40. Fuel Filters and Bypass Valves" />
+				<state id="Correct" faultname="OK" />
+				<barchart active="true" width="214" height="64" />
+			</node>
+			<node id="FuelDelivSys" faultnameformat="nodestate">
+				<name>Fuel Delivery System</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>322 13 424 66</position>
+				<state id="Defective" faultname="F41. Fuel Delivery System" />
+				<state id="Correct" faultname="OK" />
+				<barchart active="true" width="169" height="64" />
+			</node>
+			<node id="FuelPressLow" faultnameformat="nodestate">
+				<name>Fuel Pressure Low</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>53 247 145 313</position>
+				<comment>50 PID\tFuel Pressure engine in, FMI  Below RangeEM2000 messages are #1475, #1476. There are two states: present and Not present.References: DTS pp. 14-17, ETS p. 4.  \tSTATES: absent/present; present means SID 50 with FMI Below Range  present in archive over 20 times or active\t\t\t\t</comment>
+				<state id="Present" faultname="absent" />
+				<state id="Absent" faultname="present" />
+				<barchart active="true" width="134" height="64" />
+			</node>
+			<node id="FuelPressHigh" faultnameformat="nodestate">
+				<name>Fuel Pressure High</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>491 164 585 227</position>
+				<comment>50 PID\tFuel Pressure engine in, FMI  Above RangeReferences: ETrG p. 69  \tSTATES: absent/present; present means SID 50 with FMI Above Range   present in archive over 20 times or active\t\t\t\t</comment>
+				<state id="Present" faultname="absent" />
+				<state id="Absent" faultname="present" />
+				<barchart active="true" width="144" height="60" />
+			</node>
+			<node id="FuelPressDrop" faultnameformat="nodestate">
+				<name>Fuel Pressure Drop</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>49 116 142 180</position>
+				<comment>53 PID\tFuel Pressure drop primary filter , FMI: Health Low/Health Critical\tSTATES: absent/present; present means SID 53 with  : FMI: Health Low/Health Critical present in archive over 20 times or active\t\t\t</comment>
+				<state id="Present" faultname="absent" />
+				<state id="Absent" faultname="present" />
+				<barchart active="true" width="161" height="64" />
+			</node>
+			<node id="FuelSightGlass" faultnameformat="nodestate">
+				<name>Inspection Fuel Sight Glasses</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>165 334 277 398</position>
+				<comment>References: DTS p. 14, ETrG p. 69, ETS p. 4.STATES: pass/fail; fail means that primary sight glass is not full and/or contains bubbles (suction leak) and/or secondary glass contains fuel (fuel bypassing filter).</comment>
+				<state id="Fail" faultname="pass" />
+				<state id="Pass" faultname="fail" />
+				<barchart active="true" width="196" height="64" />
+			</node>
+			<node id="Visual" faultnameformat="nodestate">
+				<name>Visual Inspection of the Fuel System</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>491 75 627 132</position>
+				<comment>STATES: pass/fail; fail means that visual inspection has detected leaks or other damage in the fuel system</comment>
+				<state id="Fail" faultname="pass" />
+				<state id="Pass" faultname="fail" />
+				<barchart active="true" width="143" height="80" />
+			</node>
+			<node id="PressGauge" faultnameformat="nodestate">
+				<name>Pressure Gauge Test of Fuel System</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>442 251 586 317</position>
+				<comment>References: DTS p. 14, TEG p. 69, ETS p. 4.STATES: pass/fail; fail means that pressure in the fuel system is outside of  the norm\t\t</comment>
+				<state id="Fail" faultname="pass" />
+				<state id="Pass" faultname="fail" />
+				<barchart active="true" width="145" height="76" />
+			</node>
+			<node id="LoadTest" faultnameformat="nodestate">
+				<name>Load Test Fuel Pressure</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000080" name="Arial" size="10" />
+				<position>366 339 477 395</position>
+				<comment>Load test performed at throttle 8 with fuel pressure checked. References: DTS p. 14, ETrG p. 69, ETS p. 4.STATES: pass/fail; fail means that pressure in the fuel system is lower than 60 psi .</comment>
+				<state id="Fail" faultname="pass" />
+				<state id="Pass" faultname="fail" />
+				<barchart active="true" width="177" height="64" />
+			</node>
 			<textbox>
-				<caption>This is a simple model demonstrating the use of Noisy OR nodes in GeNIe.</caption>
+				<caption>A simple diagnostic model of a vehicle fuel system.</caption>
 				<font color="000080" name="Arial" size="12" bold="true" />
-				<position>460 27 656 84</position>
+				<position>82 419 467 438</position>
 			</textbox>
-			<node id="LiverCancer">
-				<name>Liver Cancer</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000080" name="Arial" size="10" bold="true" />
-				<position>47 110 122 156</position>
-				<barchart active="true" width="128" height="64" />
-			</node>
-			<node id="HepatitisB">
-				<name>Hepatitis B</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000080" name="Arial" size="10" bold="true" />
-				<position>84 28 163 68</position>
-				<barchart active="true" width="128" height="64" />
-			</node>
-			<node id="Jaundice">
-				<name>Jaundice</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000080" name="Arial" size="10" bold="true" />
-				<position>200 207 272 242</position>
-				<barchart active="true" width="128" height="72" />
-			</node>
-			<node id="Hepatitis_A">
-				<name>Hepatitis A</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000080" name="Arial" size="10" bold="true" />
-				<position>246 26 327 67</position>
-				<barchart active="true" width="128" height="64" />
-			</node>
-			<node id="Hepatitis_C">
-				<name>Hepatitis C</name>
-				<interior color="e5f6f7" />
-				<outline color="000080" />
-				<font color="000080" name="Arial" size="10" bold="true" />
-				<position>335 110 414 150</position>
-				<barchart active="true" width="128" height="64" />
-			</node>
 		</genie>
 	</extensions>
 </smile>

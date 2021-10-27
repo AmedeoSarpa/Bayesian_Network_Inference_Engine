@@ -20,7 +20,7 @@ private :
 
 public:
 
-    void input(char *path){
+    void input(const char *path){
         //INIZIO PARTE INPUT AUTOMATICO
         int num_vertices = 0;
         const char *inputXdslPath = path;
