@@ -381,6 +381,7 @@ public:
                     }
 
                 }
+
                 nodeInf->getBel()->setValue(evidence,1);
                 nodeInf->getBel()->setValue(std::abs(evidence-1),0);
             }
