@@ -1,11 +1,5 @@
-//
-// Created by proto on 13/08/2021.
-//
-
 #ifndef PDS_NODE_HPP
 #define PDS_NODE_HPP
-
-
 #include <iostream>                  // for std::cout
 #include <utility>                   // for std::pair
 #include <algorithm>                 // for std::for_each
@@ -47,36 +41,12 @@ template <typename T> class Node {
 
     };
 private:
-    /*
-    std::string label;
-    int id;
-    std::vector<std::string> valueLabes;
-    RealVector bel,pi,lambda;
-    std::vector<std::shared_ptr<Node>> parents,children;
-    Matrix _priorTable;
-    std::map<int,std::shared_ptr<RealVector>> pi_zi_x;
-    std::map<int,std::shared_ptr<RealVector>> lambda_x_wi;
-    */
-
-    std::shared_ptr<NodeData> nData;
+   std::shared_ptr<NodeData> nData;
 
 
 public:
 
     Node(const Node& source){
-        /*
-        id = source.id;
-        label = source.label;
-        valueLabes = source.valueLabes;
-        bel = source.bel;
-        lambda = source.lambda;
-        pi = source.pi;
-        parents = source.parents;
-        children = source.children;
-        _priorTable = source._priorTable;
-        pi_zi_x = source.pi_zi_x;
-        lambda_x_wi = source.lambda_x_wi;
-         */
         nData = source.nData;
     }
 

@@ -97,17 +97,11 @@ memory
 C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/ThreadPool.cpp
 memory
 -
-thread
--
 mutex
 -
 condition_variable
 -
-vector
--
 deque
--
-iostream
 -
 functional
 -

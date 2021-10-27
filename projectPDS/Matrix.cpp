@@ -9,9 +9,8 @@ struct MatrixData {
     std::string label; //nome della matrice
     std::shared_ptr<std::shared_ptr<double[]>[]> values; //matrice dei valori
     int nRows, nColumns;
-    std::vector<std::vector<std::string>> rowLabels; //capire bene a cosa servono questi
+    std::vector<std::vector<std::string>> rowLabels; //etichette tabelle e colonne
     std::vector<std::vector<std::string>> colLabels;
-
 };
 
 
@@ -19,13 +18,7 @@ struct MatrixData {
 class Matrix{
 private :
     std::shared_ptr<MatrixData> m_data;
-    /*
-    std::string label; //nome della matrice
-    std::shared_ptr<std::shared_ptr<double[]>[]> values; //matrice dei valori
-    int nRows, nColumns;
-    std::vector<std::vector<std::string>> rowLabels; //capire bene a cosa servono questi
-    std::vector<std::vector<std::string>> colLabels;
-     */
+
 
 public :
     Matrix(){ m_data = std::make_shared<MatrixData>(); m_data->nRows=0;m_data->nColumns=0;};
@@ -39,12 +32,15 @@ public :
         m_data->values =  std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[rows]);
         for (int i = 0; i < rows ; i++) {
             m_data->values[i] = std::shared_ptr<double[]>(new double[col]);
-            m_data->rowLabels.push_back(std::vector<std::string>());  //incerto
+            m_data->rowLabels.push_back(std::vector<std::string>());
             for (int j = 0; j < col; j++) m_data->values[i][j] = -1;
         }
+
+
         for (int i = 0; i < col ; i++) {
-            m_data->colLabels.push_back(std::vector<std::string>()); //incerto
+            m_data->colLabels.push_back(std::vector<std::string>());
         }
+
 
     }
 
@@ -53,84 +49,26 @@ public :
 
     Matrix (Matrix && source){
         m_data = source.m_data;
-        /*
-        m_data->label = source.m_data->label;
-        colLabels = source.colLabels;
-        nRows = source.nRows;
-        nColumns = source.nColumns;
-        rowLabels = source.rowLabels;
-        colLabels = source.colLabels;
-        values = source.values;
-        source.values.reset();
-        source.nRows = 0;
-        source.nColumns = 0;
-        source.rowLabels.clear();
-        source.colLabels.clear();
-        */
+
     }
 
 
-    Matrix(const Matrix& source){ //costruttore di copia
-        /*
-        label = source.label;
-        colLabels = source.colLabels;
-        nRows = source.nRows;
-        nColumns = source.nColumns;
-        values = std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[nRows]);
-        rowLabels = source.rowLabels;
-        colLabels = source.colLabels;
+    Matrix(const Matrix& source){
 
-        for (int i = 0; i < nRows ; i++) {
-            values[i] = std::shared_ptr<double[]> (new double[nColumns]);
-            for (int j = 0 ; j < nColumns ; j++){
-                values[i][j] = source.values[i][j];
-            }
-        }
-         */
         m_data = source.m_data;
     }
 
     Matrix& operator=(const Matrix &source){
         if (this != &source){
             m_data = source.m_data;
-            /*
-            values.reset();
-            rowLabels.clear();
-            colLabels.clear();
-            label = source.label;
-            colLabels = source.colLabels;
-            nRows = source.nRows;
-            nColumns = source.nColumns;
-            values = std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[nRows]);
-            colLabels = source.colLabels;
-            rowLabels = source.rowLabels;
-            for (int i = 0 ; i < nRows ; i++){
-                values[i] = std::shared_ptr<double[]> (new double[nColumns]);
 
-                for (int j = 0 ; j < nColumns ; j++){
-                    values[i][j] = source.values[i][j];
-                }
-            }
-            */
         }
         return *this;
     }
     Matrix& operator=( Matrix &&source){
         if (this != &source){
             m_data = source.m_data;
-            /*
-            values.reset();
-            rowLabels.clear();
-            colLabels.clear();
-            label = source.label;
-            colLabels = source.colLabels;
-            nRows = source.nRows;
-            nColumns = source.nColumns;
-            values = source.values;
-            source.values.reset();
-            colLabels = source.colLabels;
-            rowLabels = source.rowLabels;
-            */
+
         }
         return *this;
     }
@@ -151,9 +89,11 @@ public :
                 m_data->values[i][j] = input[i*col + j];
             }
         }
+
         for (int i = 0; i < col ; i++) {
             m_data->colLabels.push_back(std::vector<std::string>());
         }
+
 
     }
 
@@ -207,7 +147,7 @@ public :
             for (int i = 0; i < rowLabel.size(); i++) m_data->rowLabels.at(index).push_back(rowLabel.at(i));
         }
         catch (std::exception e){
-            std::cout << "errore settaggio rowLabel" ;
+            std::cout << "error during set rowLabel" ;
             m_data->rowLabels.at(index).push_back("");
         }
     }
@@ -234,7 +174,7 @@ public :
 
         }
         catch (std::exception e){
-            std::cout << "errore settaggio colLabel" ;
+            std::cout << "error during  set colLabel" ;
             m_data->colLabels.at(index).push_back("");
         }
     }
@@ -282,10 +222,12 @@ public :
 
 
     static bool partOf(std::string str, std::vector<std::string> vec){
-        for (int i = 0; i < vec.size(); i++) {
-            if (vec.at(i).compare(str)==0) { return true; }
+
+        for (std::string s : vec){
+            if (s.compare(str)==0) return  true;
         }
         return false;
+
     }
 
     static bool partOf(std::vector<std::string> str, std::vector<std::string> vec){
@@ -299,6 +241,7 @@ public :
         }
         return true;
     }
+
 
     void printMatrix(){
         std::cout << "etichette colonne " << std::endl;

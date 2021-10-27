@@ -1,10 +1,7 @@
 #include <memory>
-#include <thread>
 #include <mutex>
 #include <condition_variable>
-#include <vector>
 #include <deque>
-#include <iostream>
 #include <functional>
 #include <future>
 

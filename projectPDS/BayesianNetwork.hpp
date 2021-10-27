@@ -11,18 +11,19 @@
 
 
 template <typename T> class BayesianNetwork{
+private :
+    double epsilon = 10e-11;
+    pugi::xml_document inputXdsl;
+    pugi::xml_node xdsl_nodes;
+    std::deque<std::thread> listaThread ;
+    std::vector<std::shared_ptr<Node<T>>> vertex_array,original_vertex_array ;
+
 public:
 
-    void start(char *path){
-        double epsilon = 10e-11;
-        std::deque<std::thread> listaThread ;
-        std::mutex mt0,mt1,mt2,mt3,mt4,mt5,mt6,mt7;
-        std::vector<std::shared_ptr<Node<T>>> vertex_array,original_vertex_array ;
-
+    void input(char *path){
         //INIZIO PARTE INPUT AUTOMATICO
         int num_vertices = 0;
         const char *inputXdslPath = path;
-        pugi::xml_document inputXdsl;
         pugi::xml_parse_result parse_result = inputXdsl.load_file(inputXdslPath); // parsing del file xdsl
 
         if (!parse_result) {
@@ -89,9 +90,6 @@ public:
         //ordinamento nei nodi in modo che i nodi foglia vengano prima
         original_vertex_array = vertex_array;
         std::sort(vertex_array.begin(),vertex_array.end(),[](std::shared_ptr<Node<T>> l,std::shared_ptr<Node<T>> r){ return  l->getChildren().size() < r->getChildren().size();});
-
-        std::vector<Node<T>> nodesCopy;
-
         //inizializzazioni
         for (int i = 0 ; i < vertex_array.size() ; i++){
             //RealVector* v;
@@ -106,19 +104,33 @@ public:
 
             }
         }
+    }
+    void output(){
+        std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node<T>> n) {n->printValues();});
 
+        //XDSL output
+        int i = 0;
+        for (pugi::xml_node cpt: xdsl_nodes.children("cpt")) {
+            std::string beliefs_string = original_vertex_array[i++]->getBel()->GetValuesString(); // extract beliefs from the
 
+            cpt.child("BEL").text().set(beliefs_string.c_str());
+        }
+        inputXdsl.save_file("./../outputAsia.xdsl");
+
+        //Fine output XDSL
+
+    }
+
+    void start(){
+
+        std::vector<Node<T>> nodesCopy;
         for (std::shared_ptr<Node<T>> node : vertex_array) nodesCopy.push_back(*node);
-
-        int it = 0;
         bool found = false;
         double maxDiff = -1,diff;
-
 
         //ciclo dei calcoli
         while(true){ // nella costruzione del grafo , i nodi fogli hanno precedenza
             ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
-
 
             //inizio calcoli (suddivisi per ogni operazione)
 
@@ -137,8 +149,6 @@ public:
             }
             listaThread.clear();
 
-
-
             //versione parallelizzata updatePiZ
 
             for (int i = 0; i < 3 ; i++){
@@ -155,9 +165,6 @@ public:
                 if (t.joinable()) t.join();
             }
             listaThread.clear();
-
-
-
 
 
             //Verisone parallelizzata updatePi
@@ -259,7 +266,6 @@ public:
                 }
             }
 
-            it++;
             if (std::abs(maxDiff) < epsilon ){
                 break;
             }
@@ -270,26 +276,116 @@ public:
             for (std::shared_ptr<Node<T>> node : vertex_array) nodesCopy.push_back(*node);
             //fine calcolo differenza
         }
-        std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node<T>> n) {n->printValues();});
+        //output();
 
-        //XDSL output
-        int i = 0;
-        for (pugi::xml_node cpt: xdsl_nodes.children("cpt")) {
-            std::string beliefs_string = original_vertex_array[i++]->getBel()->GetValuesString(); // extract beliefs from the
 
-            cpt.child("probabilities").text().set(beliefs_string.c_str());
-        }
-        inputXdsl.save_file("./../outputAsia.xdsl");
-
-        //Fine output XDSL
 
         return ;
 
     }
 
 
-    void inference(std::vector<std::shared_ptr<Node<T>>> vertex_array){
+    void inference(std::string str, int evidence){
+        for (std::shared_ptr<Node<T>> nodeInf : vertex_array){
+            if (nodeInf->getLabel().compare(str)==0){
+                nodeInf->getLambda()->setValue(evidence,1);
+                nodeInf->getLambda()->setValue(std::abs(evidence-1),0);
+                for (int j = 0 ; j < 5  ; j++){
+                    ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
 
+                    for (int i = 0; i < 3 ; i++){
+                        listaThread.push_back(std::thread ([&](){ lambdaXPool.runThread();}));
+                    }
+                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
+                        for (std::shared_ptr<Node<T>> parent : node->getParents()){
+                                lambdaXPool.submit(std::bind(&Node<T>::updateLambdaX,node,*parent.get()));
+                        }
+                    }
+
+                    lambdaXPool.quit();
+                    for (std::thread &t : listaThread){
+                        if (t.joinable()) t.join();
+                    }
+                    listaThread.clear();
+
+                    //versione parallelizzata updatePiZ
+
+                    for (int i = 0; i < 3 ; i++){
+                        listaThread.push_back(std::thread ([&](){ piZPool.runThread();}));
+                    }
+                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
+                        for (std::shared_ptr<Node<T>> child : node->getChildren()){
+
+                            piZPool.submit(std::bind(&Node<T>::updatePiZ,node,*child.get()));
+
+                        }}
+                    piZPool.quit();
+                    for (std::thread &t : listaThread){
+                        if (t.joinable()) t.join();
+                    }
+                    listaThread.clear();
+
+
+                    //Verisone parallelizzata updatePi
+
+                    for (int i = 0; i < 3 ; i++){
+                        listaThread.push_back(std::thread ([&](){ piPool.runThread();}));
+                    }
+                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
+
+                            piPool.submit(std::bind(&Node<T>::updatePi,node));
+                        //node->updateBEL();
+                    }
+                    piPool.quit();
+
+                    for (std::thread &t : listaThread){
+                        if (t.joinable()) {
+                            t.join();
+                        }
+                    }
+                    listaThread.clear();
+
+
+                    //Verisone parallelizzata updateLAMBDA
+
+                    for (int i = 0; i < 3 ; i++){
+                        listaThread.push_back(std::thread ([&](){ lambdaPool.runThread();}));
+                    }
+
+                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
+
+                            lambdaPool.submit(std::bind(&Node<T>::updateLambda, node));
+
+                        //node->updateBEL();
+                    }
+                    lambdaPool.quit();
+
+                    for (std::thread &t : listaThread){
+                        if (t.joinable()) t.join();
+                    }
+                    listaThread.clear();
+
+                    //Versione parallelizzata updateBEL
+
+                    for (int i = 0; i < 3 ; i++){
+                        listaThread.push_back(std::thread ([&](){ belPool.runThread();}));
+                    }
+
+                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
+                        belPool.submit(std::bind(&Node<T>::updateBEL,node));
+                        //node->updateBEL();
+                    }
+                    belPool.quit();
+                    for (std::thread &t : listaThread){
+                        if (t.joinable()) t.join();
+                    }
+
+                }
+                nodeInf->getBel()->setValue(evidence,1);
+                nodeInf->getBel()->setValue(std::abs(evidence-1),0);
+            }
+        }
+        return ;
     }
 
 //usata da funzione per settare etichette riche
@@ -325,7 +421,6 @@ public:
         std::vector<std::string> list;
         int j = 0;
         ricorsione(nPadri,0,list,parentLabels,m,&j);
-
     }
 
 
