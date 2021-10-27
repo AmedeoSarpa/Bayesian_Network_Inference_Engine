@@ -290,8 +290,12 @@ public:
             if (nodeInf->getLabel().compare(str)==0){
                 nodeInf->getLambda()->setValue(evidence,1);
                 nodeInf->getLambda()->setValue(std::abs(evidence-1),0);
-                for (int j = 0 ; j < 5  ; j++){
+                for (int j = 0 ; j < 100  ; j++){
+
+
                     ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
+
+
 
                     for (int i = 0; i < 3 ; i++){
                         listaThread.push_back(std::thread ([&](){ lambdaXPool.runThread();}));
@@ -332,8 +336,9 @@ public:
                         listaThread.push_back(std::thread ([&](){ piPool.runThread();}));
                     }
                     for ( std::shared_ptr<Node<T>> node : vertex_array) {
-
-                            piPool.submit(std::bind(&Node<T>::updatePi,node));
+                            //if (nodeInf->getLabel().compare(node->getLabel())!=0) {
+                                piPool.submit(std::bind(&Node<T>::updatePi, node));
+                            //}
                         //node->updateBEL();
                     }
                     piPool.quit();
@@ -353,9 +358,9 @@ public:
                     }
 
                     for ( std::shared_ptr<Node<T>> node : vertex_array) {
-
+                        if (nodeInf->getLabel().compare(node->getLabel())!=0) {
                             lambdaPool.submit(std::bind(&Node<T>::updateLambda, node));
-
+                        }
                         //node->updateBEL();
                     }
                     lambdaPool.quit();
@@ -382,8 +387,6 @@ public:
 
                 }
 
-                nodeInf->getBel()->setValue(evidence,1);
-                nodeInf->getBel()->setValue(std::abs(evidence-1),0);
             }
         }
         return ;
