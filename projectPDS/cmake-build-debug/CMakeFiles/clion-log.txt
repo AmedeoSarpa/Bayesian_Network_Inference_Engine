@@ -1,4 +1,4 @@
-"C:\Program Files\JetBrains\CLion 2020.3.2\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "C:\Users\proto\Desktop\PdS\Progetto\Progetto GIT\progettoPDS\projectPDS"
+"C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - MinGW Makefiles" "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\myBranchBN\progettoPDS\projectPDS"
 -- The C compiler identification is GNU 10.3.0
 -- The CXX compiler identification is GNU 10.3.0
 -- Detecting C compiler ABI info
@@ -11,7 +11,7 @@
 -- Check for working CXX compiler: C:/msys64/mingw64/bin/g++.exe - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Found Boost: C:/Program Files/boost/boost_1_76_0 (found suitable version "1.76.0", minimum required is "1.76.0")  
+-- Found Boost: C:/boost_1_76_0 (found suitable version "1.76.0", minimum required is "1.76.0")  
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/Users/proto/Desktop/PdS/Progetto/Progetto GIT/progettoPDS/projectPDS/cmake-build-debug
+-- Build files have been written to: C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug

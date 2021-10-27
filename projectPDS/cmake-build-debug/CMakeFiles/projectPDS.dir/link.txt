@@ -1,3 +1,3 @@
-"C:\Program Files\JetBrains\CLion 2020.3.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\projectPDS.dir/objects.a
+"C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\projectPDS.dir/objects.a
 C:\msys64\mingw64\bin\ar.exe cr CMakeFiles\projectPDS.dir/objects.a @CMakeFiles\projectPDS.dir\objects1.rsp
 C:\msys64\mingw64\bin\g++.exe -pthread -g -Wl,--whole-archive CMakeFiles\projectPDS.dir/objects.a -Wl,--no-whole-archive -o projectPDS.exe -Wl,--out-implib,libprojectPDS.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\projectPDS.dir\linklibs.rsp
