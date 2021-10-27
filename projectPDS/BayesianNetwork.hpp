@@ -10,17 +10,20 @@
 #include "ThreadPool.cpp"
 
 
-template <typename T> class BayesianNetwork{
+class BayesianNetwork{
 private :
-    double epsilon = 10e-11;
+    double epsilon ;
     pugi::xml_document inputXdsl;
     pugi::xml_node xdsl_nodes;
     std::deque<std::thread> listaThread ;
-    std::vector<std::shared_ptr<Node<T>>> vertex_array,original_vertex_array ;
+    std::vector<std::shared_ptr<Node>> vertex_array,original_vertex_array ;
 
 public:
 
-    void input(char *path){
+    BayesianNetwork() {
+        epsilon = 10e-12;
+    }
+    void input(const char *path){
         //INIZIO PARTE INPUT AUTOMATICO
         int num_vertices = 0;
         const char *inputXdslPath = path;
@@ -34,7 +37,7 @@ public:
             return ;
         }
 
-        pugi::xml_node xdsl_nodes = inputXdsl.child("smile").child("nodes"); //prende i nodi tramite il tag 'nodes'
+        xdsl_nodes = inputXdsl.child("smile").child("nodes"); //prende i nodi tramite il tag 'nodes'
 
         for (pugi::xml_node cpt: xdsl_nodes.children("cpt")) { //iterazione su tutti i nodi
             pugi::xml_attribute cptLabel = cpt.first_attribute(); //label del nodo
@@ -48,8 +51,8 @@ public:
                 probabilities_double.push_back(boost::lexical_cast<double>(s));
             }
             std::vector<std::string> labels;
-            std::shared_ptr<Node<T>>
-                    node_to_insert(new Node<T>(cptLabel.value(), num_vertices++,2));
+            std::shared_ptr<Node>
+                    node_to_insert(new Node(cptLabel.value(), num_vertices++,2));
             vertex_array.push_back(node_to_insert);
             std::string parents_string = cpt.child("parents").text().get(); //prendimao i nomi dei genitori
             std::vector<std::string> parents_labels;
@@ -58,11 +61,11 @@ public:
                 // be empty so it is not necessary for them
                 boost::split(parents_labels, parents_string, [](char c) { return c == ' '; }); //vettore di nomi dei genitori
 
-            std::vector<std::shared_ptr<Node<T>>> parents;
+            std::vector<std::shared_ptr<Node>> parents;
             int num_rows = 1;
-            std::shared_ptr<Node<T>> parent ;
+            std::shared_ptr<Node> parent ;
             for (const std::string &s: parents_labels) {
-                for (std::shared_ptr<Node<T>> n : vertex_array) {
+                for (std::shared_ptr<Node> n : vertex_array) {
                     if (n->getLabel() == s) parent = n;
                 }
                 parent->addChild(node_to_insert);
@@ -70,8 +73,8 @@ public:
 
                 num_rows *= 2;
             }
-            std::shared_ptr<Matrix> M ( new Matrix(num_rows, 2, probabilities_double));
-            matriceCominazioni(parents_labels.size(),parents_labels,M);
+            std::shared_ptr<Matrix<double>> M ( new Matrix<double>(num_rows, 2, probabilities_double));
+            createMatrix(parents_labels.size(),parents_labels,M);
             std::vector<std::string> colLabel;
             colLabel.push_back(node_to_insert->getLabel()+"=y");
             M->setColLabels(0,colLabel);
@@ -89,24 +92,24 @@ public:
 
         //ordinamento nei nodi in modo che i nodi foglia vengano prima
         original_vertex_array = vertex_array;
-        std::sort(vertex_array.begin(),vertex_array.end(),[](std::shared_ptr<Node<T>> l,std::shared_ptr<Node<T>> r){ return  l->getChildren().size() < r->getChildren().size();});
+        std::sort(vertex_array.begin(),vertex_array.end(),[](std::shared_ptr<Node> l,std::shared_ptr<Node> r){ return  l->getChildren().size() < r->getChildren().size();});
         //inizializzazioni
-        for (int i = 0 ; i < vertex_array.size() ; i++){
+        for (std::shared_ptr<Node> node : vertex_array){
             //RealVector* v;
-            if (vertex_array.at(i)->getChildren().size() == 0){
-                vertex_array.at(i)->getLambda()->setValue(0,1);
-                vertex_array.at(i)->getLambda()->setValue(1,1);
+            if (node->getChildren().size() == 0){
+                node->getLambda()->setValue(0,1);
+                node->getLambda()->setValue(1,1);
 
             }
-            if (vertex_array.at(i)->getParents().size() == 0){
-                vertex_array.at(i)->getPi()->setValue(0,vertex_array.at(i)->getMx_wAll()->getValue(0,0));
-                vertex_array.at(i)->getPi()->setValue(1,vertex_array.at(i)->getMx_wAll()->getValue(0,1));
+            if (node->getParents().size() == 0){
+                node->getPi()->setValue(0,node->getMx_wAll()->getValue(0,0));
+                node->getPi()->setValue(1,node->getMx_wAll()->getValue(0,1));
 
             }
         }
     }
     void output(){
-        std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node<T>> n) {n->printValues();});
+        std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node> n) {n->printValues();});
 
         //XDSL output
         int i = 0;
@@ -115,7 +118,7 @@ public:
 
             cpt.child("BEL").text().set(beliefs_string.c_str());
         }
-        inputXdsl.save_file("./../outputAsia.xdsl");
+        inputXdsl.save_file("./../output.xdsl");
 
         //Fine output XDSL
 
@@ -123,8 +126,8 @@ public:
 
     void start(){
 
-        std::vector<Node<T>> nodesCopy;
-        for (std::shared_ptr<Node<T>> node : vertex_array) nodesCopy.push_back(*node);
+        std::vector<Node> nodesCopy;
+        for (std::shared_ptr<Node> node : vertex_array) nodesCopy.push_back(*node);
         bool found = false;
         double maxDiff = -1,diff;
 
@@ -137,10 +140,10 @@ public:
             for (int i = 0; i < 3 ; i++){
                 listaThread.push_back(std::thread ([&](){ lambdaXPool.runThread();}));
             }
-            for ( std::shared_ptr<Node<T>> node : vertex_array) {
-                for (std::shared_ptr<Node<T>> parent : node->getParents()){
+            for ( std::shared_ptr<Node> node : vertex_array) {
+                for (std::shared_ptr<Node> parent : node->getParents()){
 
-                    lambdaXPool.submit(std::bind(&Node<T>::updateLambdaX,node,*parent.get()));
+                    lambdaXPool.submit(std::bind(&Node::updateLambdaX,node,*parent));
 
                 }}
             lambdaXPool.quit();
@@ -154,10 +157,10 @@ public:
             for (int i = 0; i < 3 ; i++){
                 listaThread.push_back(std::thread ([&](){ piZPool.runThread();}));
             }
-            for ( std::shared_ptr<Node<T>> node : vertex_array) {
-                for (std::shared_ptr<Node<T>> child : node->getChildren()){
+            for ( std::shared_ptr<Node> node : vertex_array) {
+                for (std::shared_ptr<Node> child : node->getChildren()){
 
-                    piZPool.submit(std::bind(&Node<T>::updatePiZ,node,*child.get()));
+                    piZPool.submit(std::bind(&Node::updatePiZ,node,*child));
 
                 }}
             piZPool.quit();
@@ -172,8 +175,8 @@ public:
             for (int i = 0; i < 3 ; i++){
                 listaThread.push_back(std::thread ([&](){ piPool.runThread();}));
             }
-            for ( std::shared_ptr<Node<T>> node : vertex_array) {
-                piPool.submit(std::bind(&Node<T>::updatePi,node));
+            for ( std::shared_ptr<Node> node : vertex_array) {
+                piPool.submit(std::bind(&Node::updatePi,node));
                 //node->updateBEL();
             }
             piPool.quit();
@@ -191,8 +194,8 @@ public:
             for (int i = 0; i < 3 ; i++){
                 listaThread.push_back(std::thread ([&](){ lambdaPool.runThread();}));
             }
-            for ( std::shared_ptr<Node<T>> node : vertex_array) {
-                lambdaPool.submit(std::bind(&Node<T>::updateLambda,node));
+            for ( std::shared_ptr<Node> node : vertex_array) {
+                lambdaPool.submit(std::bind(&Node::updateLambda,node));
                 //node->updateBEL();
             }
             lambdaPool.quit();
@@ -208,8 +211,8 @@ public:
                 listaThread.push_back(std::thread ([&](){ belPool.runThread();}));
             }
 
-            for ( std::shared_ptr<Node<T>> node : vertex_array) {
-                belPool.submit(std::bind(&Node<T>::updateBEL,node));
+            for ( std::shared_ptr<Node> node : vertex_array) {
+                belPool.submit(std::bind(&Node::updateBEL,node));
                 //node->updateBEL();
             }
             belPool.quit();
@@ -224,43 +227,43 @@ public:
 
             //Calcolo della differenza
 
-            for ( int i = 0 ; i < vertex_array.size() ; i++) {
+            for ( std::shared_ptr<Node> node : vertex_array) {
 
-                if (vertex_array.at(i)->getBel()->getValue(0) == 0 &&
-                    vertex_array.at(i)->getBel()->getValue(1) == 0) { maxDiff = -1;found = true; }
+                if (node->getBel()->getValue(0) == 0 &&
+                    node->getBel()->getValue(1) == 0) { maxDiff = -1;found = true; }
             }
 
 
             for ( int i = 0 ; i < vertex_array.size() && found == false; i++) {
 
-                for (std::shared_ptr<Node<T>> child : vertex_array.at(i)->getChildren()) {
+                for (std::shared_ptr<Node> child : vertex_array.at(i)->getChildren()) {
                     try {
-                        diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child).get()->getValue(0) -
-                                        nodesCopy.at(i).getPi_zi_x(*child).get()->getValue(0));
+                        diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(0) -
+                                        nodesCopy.at(i).getPi_zi_x(*child)->getValue(0));
                     }
-                    catch (std::exception e) {diff=-1;}
+                    catch (std::exception& e) {diff=-1;}
                     if (diff > maxDiff) maxDiff = diff;
 
                     try {
-                        diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child).get()->getValue(1) -
-                                        nodesCopy.at(i).getPi_zi_x(*child).get()->getValue(1));
+                        diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(1) -
+                                        nodesCopy.at(i).getPi_zi_x(*child)->getValue(1));
                     }
-                    catch (std::exception e) {diff=-1;}
+                    catch (std::exception& e) {diff=-1;}
 
                     if (diff > maxDiff) maxDiff = diff;
                 }
 
-                for (std::shared_ptr<Node<T>> parent : vertex_array.at(i)->getParents()) {
+                for (std::shared_ptr<Node> parent : vertex_array.at(i)->getParents()) {
                     try {
-                        diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent).get()->getValue(0) -
-                                        nodesCopy.at(i).getLambda_x_wi(*parent).get()->getValue(0));
-                    } catch (std::exception e) {diff=-1;}
+                        diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(0) -
+                                        nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(0));
+                    } catch (std::exception& e) {diff=-1;}
 
                     if (diff > maxDiff) maxDiff = diff;
                     try {
-                        diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent).get()->getValue(1) -
-                                        nodesCopy.at(i).getLambda_x_wi(*parent).get()->getValue(1));
-                    } catch (std::exception e) {diff=-1;}
+                        diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(1) -
+                                        nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(1));
+                    } catch (std::exception& e) {diff=-1;}
 
                     if (diff > maxDiff) maxDiff = diff;
                 }
@@ -273,36 +276,29 @@ public:
             found = false;
             nodesCopy.clear();
 
-            for (std::shared_ptr<Node<T>> node : vertex_array) nodesCopy.push_back(*node);
+            for (std::shared_ptr<Node> node : vertex_array) nodesCopy.push_back(*node);
             //fine calcolo differenza
         }
         //output();
-
-
 
         return ;
 
     }
 
 
-    void inference(std::string str, int evidence){
-        for (std::shared_ptr<Node<T>> nodeInf : vertex_array){
-            if (nodeInf->getLabel().compare(str)==0){
+    void inference(const std::string &str, int evidence){
+        for (std::shared_ptr<Node> nodeInf : vertex_array){
+            if (nodeInf->getLabel() == str){
                 nodeInf->getLambda()->setValue(evidence,1);
                 nodeInf->getLambda()->setValue(std::abs(evidence-1),0);
-                for (int j = 0 ; j < 100  ; j++){
-
-
+                for (int j = 0 ; j < 100  ; j++){ //togliere le 100 iterazioni
                     ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
-
-
-
                     for (int i = 0; i < 3 ; i++){
                         listaThread.push_back(std::thread ([&](){ lambdaXPool.runThread();}));
                     }
-                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
-                        for (std::shared_ptr<Node<T>> parent : node->getParents()){
-                                lambdaXPool.submit(std::bind(&Node<T>::updateLambdaX,node,*parent.get()));
+                    for ( std::shared_ptr<Node> node : vertex_array) {
+                        for (std::shared_ptr<Node> parent : node->getParents()){
+                                lambdaXPool.submit(std::bind(&Node::updateLambdaX,node,*parent));
                         }
                     }
 
@@ -317,10 +313,10 @@ public:
                     for (int i = 0; i < 3 ; i++){
                         listaThread.push_back(std::thread ([&](){ piZPool.runThread();}));
                     }
-                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
-                        for (std::shared_ptr<Node<T>> child : node->getChildren()){
+                    for ( std::shared_ptr<Node> node : vertex_array) {
+                        for (std::shared_ptr<Node> child : node->getChildren()){
 
-                            piZPool.submit(std::bind(&Node<T>::updatePiZ,node,*child.get()));
+                            piZPool.submit(std::bind(&Node::updatePiZ,node,*child));
 
                         }}
                     piZPool.quit();
@@ -335,9 +331,9 @@ public:
                     for (int i = 0; i < 3 ; i++){
                         listaThread.push_back(std::thread ([&](){ piPool.runThread();}));
                     }
-                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
+                    for ( std::shared_ptr<Node> node : vertex_array) {
                             //if (nodeInf->getLabel().compare(node->getLabel())!=0) {
-                                piPool.submit(std::bind(&Node<T>::updatePi, node));
+                                piPool.submit(std::bind(&Node::updatePi, node));
                             //}
                         //node->updateBEL();
                     }
@@ -357,9 +353,9 @@ public:
                         listaThread.push_back(std::thread ([&](){ lambdaPool.runThread();}));
                     }
 
-                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
-                        if (nodeInf->getLabel().compare(node->getLabel())!=0) {
-                            lambdaPool.submit(std::bind(&Node<T>::updateLambda, node));
+                    for ( std::shared_ptr<Node> node : vertex_array) {
+                        if (nodeInf->getLabel() == node->getLabel()) {
+                            lambdaPool.submit(std::bind(&Node::updateLambda, node));
                         }
                         //node->updateBEL();
                     }
@@ -376,8 +372,8 @@ public:
                         listaThread.push_back(std::thread ([&](){ belPool.runThread();}));
                     }
 
-                    for ( std::shared_ptr<Node<T>> node : vertex_array) {
-                        belPool.submit(std::bind(&Node<T>::updateBEL,node));
+                    for ( std::shared_ptr<Node> node : vertex_array) {
+                        belPool.submit(std::bind(&Node::updateBEL,node));
                         //node->updateBEL();
                     }
                     belPool.quit();
@@ -389,11 +385,10 @@ public:
 
             }
         }
-        return ;
     }
 
 //usata da funzione per settare etichette riche
-    void ricorsione( int nPadri,int k,std::vector<std::string> list,std::vector<std::string> parentLabels,std::shared_ptr<Matrix> m,int *j){
+    void setLabelsRecursive( int nPadri,int k,std::vector<std::string> list,std::vector<std::string> parentLabels,std::shared_ptr<Matrix<double>> &m,int *j){
         if (k == nPadri) {
             m->setRowLabels(*j,list);
             (*j)++;
@@ -413,18 +408,16 @@ public:
                 s+= "=n";
                 list.push_back(s);
             }
-            ricorsione(nPadri,k+1,list,parentLabels,m,j);
+            setLabelsRecursive(nPadri,k+1,list,parentLabels,m,j);
             list.pop_back();
         }
-        return ;
     }
 
 //per settare etichette riche
-    void matriceCominazioni(int nPadri,std::vector<std::string> parentLabels,std::shared_ptr<Matrix> m){
-        int nRow = 1 << nPadri;
+    void createMatrix(int nPadri,std::vector<std::string> parentLabels,std::shared_ptr<Matrix<double>> m){
         std::vector<std::string> list;
         int j = 0;
-        ricorsione(nPadri,0,list,parentLabels,m,&j);
+        setLabelsRecursive(nPadri,0,list,std::move(parentLabels),m,&j);
     }
 
 

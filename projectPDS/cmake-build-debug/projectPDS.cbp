@@ -87,13 +87,13 @@
 		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/BayesianNetwork.hpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.cpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.hpp">
 			<Option target="projectPDS"/>
 		</Unit>
 		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Node.hpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.cpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.hpp">
 			<Option target="projectPDS"/>
 		</Unit>
 		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/ThreadPool.cpp">

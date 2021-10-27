@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/projectPDS.dir/Matrix.cpp.obj"
-  "CMakeFiles/projectPDS.dir/RealVector.cpp.obj"
   "CMakeFiles/projectPDS.dir/ThreadPool.cpp.obj"
   "CMakeFiles/projectPDS.dir/main.cpp.obj"
   "CMakeFiles/projectPDS.dir/pugixml.cpp.obj"

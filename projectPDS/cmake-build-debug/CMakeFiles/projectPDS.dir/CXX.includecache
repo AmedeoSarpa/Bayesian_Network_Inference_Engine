@@ -22,7 +22,7 @@ thread
 ThreadPool.cpp
 C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/ThreadPool.cpp
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.cpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.hpp
 vector
 -
 string
@@ -47,10 +47,10 @@ memory
 -
 map
 -
-RealVector.cpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.cpp
-Matrix.cpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.cpp
+RealVector.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.hpp
+Matrix.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.hpp
 condition_variable
 -
 mutex
@@ -62,8 +62,6 @@ boost/graph/adjacency_list.hpp
 boost/graph/graphviz.hpp
 -
 vector
--
-ctime
 -
 algorithm
 -
@@ -80,7 +78,7 @@ C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS
 boost/lexical_cast.hpp
 -
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.cpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.hpp
 sstream
 -
 iomanip
