@@ -16,7 +16,6 @@ template <typename  T> class Matrix{
         std::vector<std::vector<std::string>> rowLabels; //etichette tabelle e colonne
         std::vector<std::vector<std::string>> colLabels;
     };
-
 private :
     std::shared_ptr<MatrixData> m_data;
 
@@ -55,21 +54,18 @@ public :
 
 
     Matrix(const Matrix& source){
-
         m_data = source.m_data;
     }
 
     Matrix& operator=(const Matrix &source){
         if (this != &source){
             m_data = source.m_data;
-
         }
         return *this;
     }
     Matrix& operator=( Matrix &&source){
         if (this != &source){
             m_data = source.m_data;
-
         }
         return *this;
     }
@@ -88,9 +84,10 @@ public :
             m_data->rowLabels.push_back(std::vector<std::string>());
             for (int j = 0; j < col ; j++){
                 m_data->values[i][j] = input[i*col + j];
-                m_data->colLabels.push_back(std::vector<std::string>());
-
             }
+        }
+        for (int i = 0; i < col ; i++) {
+            m_data->colLabels.push_back(std::vector<std::string>());
         }
     }
 
@@ -99,24 +96,16 @@ public :
 
 
 
-    std::vector<std::string> getRowLabels(int index) {
-        try {
-            return m_data->rowLabels.at(index);
-        }
-        catch (std::exception &e){
-            return std::vector<std::string>();
-        }
+    std::vector<std::string>& getRowLabels(int index) {
+        if (index < m_data->rowLabels.size()) return m_data->rowLabels.at(index);
+
     }
 
 
 
-    std::vector<std::string> getColLabels(int index) {
-        try {
-            return m_data->colLabels.at(index);
-        }
-        catch (std::exception& e){
-            return std::vector<std::string>();
-        }
+    std::vector<std::string>& getColLabels(int index) {
+        if (index < m_data->colLabels.size()) return m_data->colLabels.at(index);
+
 
     }
 
@@ -124,12 +113,14 @@ public :
 
     void setRowLabels(int index,const std::vector<std::string>& rowLabel){
 
-        if (m_data.operator bool() == false || m_data.unique() == false) {
+        if (m_data.unique() == false) {
             std::shared_ptr<MatrixData> tmp = m_data;
+
             m_data = std::make_shared<MatrixData>();
             m_data->nColumns = tmp->nColumns;
             m_data->nRows = tmp->nRows;
             m_data->label = tmp->label;
+            m_data->rowLabels = tmp->rowLabels;
             m_data->colLabels = tmp->colLabels;
             m_data->values = std::shared_ptr<std::shared_ptr<T[]>[]>(new std::shared_ptr<T[]>[m_data->nRows]);
 
@@ -142,6 +133,8 @@ public :
         }
 
         try {
+
+            m_data->rowLabels.at(index).clear();
             for (std::string str : rowLabel) m_data->rowLabels.at(index).push_back(str);
         }
         catch (std::exception &e){
@@ -151,13 +144,15 @@ public :
     }
 
     void setColLabels(int index,const  std::vector<std::string>& colLabel){
-        if (m_data.operator bool() == false || m_data.unique() == false) {
+        if (m_data.unique() == false) {
             std::shared_ptr<MatrixData> tmp = m_data;
+
             m_data = std::make_shared<MatrixData>();
             m_data->nColumns = tmp->nColumns;
             m_data->nRows = tmp->nRows;
             m_data->label = tmp->label;
             m_data->rowLabels = tmp->rowLabels;
+            m_data->colLabels = tmp->colLabels;
             m_data->values = std::shared_ptr<std::shared_ptr<T[]>[]>(new std::shared_ptr<T[]>[m_data->nRows]);
 
             for (int i = 0; i < m_data->nRows; i++) {
@@ -168,6 +163,7 @@ public :
             }
         }
         try {
+            m_data->colLabels.at(index).clear();
             for (std::string str : colLabel)  m_data->colLabels.at(index).push_back(str);
 
         }
@@ -186,6 +182,7 @@ public :
         if (row >= m_data->nRows || col >= m_data->nColumns ) return ;
         if (m_data.operator bool() == false || m_data.unique() == false) {
             std::shared_ptr<MatrixData> tmp = m_data;
+
             m_data = std::make_shared<MatrixData>();
             m_data->nColumns = tmp->nColumns;
             m_data->nRows = tmp->nRows;

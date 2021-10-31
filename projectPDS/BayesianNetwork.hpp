@@ -1,4 +1,3 @@
-
 #define BOOST_DISABLE_PRAGMA_MESSAGE //to disable some warning at compile time
 
 #include <iostream>                  // for std::cout
@@ -97,13 +96,13 @@ public:
         for (std::shared_ptr<Node> node : vertex_array){
             //RealVector* v;
             if (node->getChildren().size() == 0){
-                node->getLambda()->setValue(0,1);
-                node->getLambda()->setValue(1,1);
+                node->getLambda().setValue(0,1);
+                node->getLambda().setValue(1,1);
 
             }
             if (node->getParents().size() == 0){
-                node->getPi()->setValue(0,node->getMx_wAll()->getValue(0,0));
-                node->getPi()->setValue(1,node->getMx_wAll()->getValue(0,1));
+                node->getPi().setValue(0,node->getMx_wAll().getValue(0,0));
+                node->getPi().setValue(1,node->getMx_wAll().getValue(0,1));
 
             }
         }
@@ -114,7 +113,7 @@ public:
         //XDSL output
         int i = 0;
         for (pugi::xml_node cpt: xdsl_nodes.children("cpt")) {
-            std::string beliefs_string = original_vertex_array[i++]->getBel()->GetValuesString(); // extract beliefs from the
+            std::string beliefs_string = original_vertex_array[i++]->getBel().GetValuesString(); // extract beliefs from the
 
             cpt.child("BEL").text().set(beliefs_string.c_str());
         }
@@ -130,7 +129,7 @@ public:
         for (std::shared_ptr<Node> node : vertex_array) nodesCopy.push_back(*node);
         bool found = false;
         double maxDiff = -1,diff;
-
+        int it=0;
         //ciclo dei calcoli
         while(true){ // nella costruzione del grafo , i nodi fogli hanno precedenza
             ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
@@ -223,14 +222,14 @@ public:
 
 
 
-
+            it++;
 
             //Calcolo della differenza
 
             for ( std::shared_ptr<Node> node : vertex_array) {
 
-                if (node->getBel()->getValue(0) == 0 &&
-                    node->getBel()->getValue(1) == 0) { maxDiff = -1;found = true; }
+                if (node->getBel().getValue(0) == 0 &&
+                    node->getBel().getValue(1) == 0) { maxDiff = -1;found = true; }
             }
 
 
@@ -289,9 +288,9 @@ public:
     void inference(const std::string &str, int evidence){
         for (std::shared_ptr<Node> nodeInf : vertex_array){
             if (nodeInf->getLabel() == str){
-                nodeInf->getLambda()->setValue(evidence,1);
-                nodeInf->getLambda()->setValue(std::abs(evidence-1),0);
-                for (int j = 0 ; j < 100  ; j++){ //togliere le 100 iterazioni
+                nodeInf->getLambda().setValue(evidence,1);
+                nodeInf->getLambda().setValue(std::abs(evidence-1),0);
+                for (int j = 0 ; j < 5  ; j++){ //togliere le 100 iterazioni
                     ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
                     for (int i = 0; i < 3 ; i++){
                         listaThread.push_back(std::thread ([&](){ lambdaXPool.runThread();}));

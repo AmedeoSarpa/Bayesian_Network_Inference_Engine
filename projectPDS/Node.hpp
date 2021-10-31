@@ -27,7 +27,6 @@
 
 class Node {
     struct  NodeData{
-
         std::string label;
         int id;
         std::vector<std::string> valueLabes;
@@ -70,52 +69,53 @@ public:
 
     Node& operator=(const Node& source){
         if(this!= &source){
-            /*
-            id = source.id;
-            label = source.label;
-            valueLabes = source.valueLabes;
-            bel = source.bel;
-            lambda = source.lambda;
-            pi = source.pi;
-            parents = source.parents;
-            children = source.children;
-            _priorTable = source._priorTable;
-            pi_zi_x = source.pi_zi_x;
-            lambda_x_wi = source.lambda_x_wi;
-             */
             nData = source.nData;
         }
         return *this;
     }
 
-    std::shared_ptr<RealVector<double>> getBel() {
-        return std::make_shared<RealVector<double>>(nData->bel);
+    RealVector<double>& getBel() {
+        return nData->bel;
     }
 
-    //Vedere questa cosa
-    RealVector<double>* getPi() {
-        return &nData->pi;
+    RealVector<double>& getPi() {
+        return nData->pi;
     }
 
-    //Vedere questa cosa
-    RealVector<double>* getLambda() {
-        return &(nData->lambda);
+    RealVector<double>& getLambda() {
+        return nData->lambda;
     }
 
 
-    std::string getLabel(){
+    std::string& getLabel(){
         return nData->label;
     }
-    std::vector<std::shared_ptr<Node>> getChildren() { return nData->children; }
+    std::vector<std::shared_ptr<Node>>& getChildren() { return nData->children; }
 
-    std::vector<std::shared_ptr<Node>> getParents() { return nData->parents; }
+    std::vector<std::shared_ptr<Node>>& getParents() { return nData->parents; }
 
-    std::shared_ptr<Matrix<double>> getMx_wAll() {
-        return std::make_shared<Matrix<double>>(nData->_priorTable);
+    Matrix<double>& getMx_wAll() {
+        return nData->_priorTable;
     }
 
 
     void setMx_wAll(Matrix<double>& m) {
+        if (nData.operator bool() == false || nData.unique() == false){
+            std::shared_ptr<NodeData> source = nData;
+            nData = std::make_shared<NodeData>();
+            nData->id = source->id;
+            nData->label = source->label;
+            nData->valueLabes = source->valueLabes;
+            nData->bel = source->bel;
+            nData->lambda = source->lambda;
+            nData->pi = source->pi;
+            nData->parents = source->parents;
+            nData->children = source->children;
+            nData->_priorTable = source->_priorTable;
+            nData->pi_zi_x = source->pi_zi_x;
+            nData->lambda_x_wi = source->lambda_x_wi;
+
+        }
         nData->_priorTable = m;
     }
 
@@ -140,11 +140,11 @@ public:
         return nData->id;
     }
 
-    std::shared_ptr<RealVector<double>> getPi_zi_x(const Node& child) {
+    std::shared_ptr<RealVector<double>>& getPi_zi_x(const Node& child) {
         return nData->pi_zi_x.at(child.nData->id);
     }
 
-    std::shared_ptr<RealVector<double>> getLambda_x_wi(Node& parent) {
+    std::shared_ptr<RealVector<double>>& getLambda_x_wi(Node& parent) {
         return nData->lambda_x_wi.at(parent.nData->id);
 
     }
@@ -318,22 +318,22 @@ public:
     //terminated
     void updatePiZ(Node& child)
     {
-    if (nData.operator bool() == false || nData.unique() == false){
-        std::shared_ptr<NodeData> source = nData;
-        nData = std::make_shared<NodeData>();
-        nData->id = source->id;
-        nData->label = source->label;
-        nData->valueLabes = source->valueLabes;
-        nData->bel = source->bel;
-        nData->lambda = source->lambda;
-        nData->pi = source->pi;
-        nData->parents = source->parents;
-        nData->children = source->children;
-        nData->_priorTable = source->_priorTable;
-        nData->pi_zi_x = source->pi_zi_x;
-        nData->lambda_x_wi = source->lambda_x_wi;
+        if (nData.operator bool() == false || nData.unique() == false){
+            std::shared_ptr<NodeData> source = nData;
+            nData = std::make_shared<NodeData>();
+            nData->id = source->id;
+            nData->label = source->label;
+            nData->valueLabes = source->valueLabes;
+            nData->bel = source->bel;
+            nData->lambda = source->lambda;
+            nData->pi = source->pi;
+            nData->parents = source->parents;
+            nData->children = source->children;
+            nData->_priorTable = source->_priorTable;
+            nData->pi_zi_x = source->pi_zi_x;
+            nData->lambda_x_wi = source->lambda_x_wi;
 
-    }
+        }
 
         if (!isChild(child))
         {
@@ -425,14 +425,14 @@ public:
                 lambda_wi = getLambda_x_wi(parent);
             }
             else {
-                lambda_wi = std::shared_ptr<RealVector<double>>(new RealVector<double>(parent.getBel()->getDimension()));
+                lambda_wi = std::shared_ptr<RealVector<double>>(new RealVector<double>(parent.getBel().getDimension()));
                 lambda_wi->setLabels(parent.nData->bel.getLabels());
             }
 
         }
         catch (std::exception& e)
         {
-            lambda_wi = std::shared_ptr<RealVector<double>>(new RealVector<double>(parent.getBel()->getDimension()));
+            lambda_wi = std::shared_ptr<RealVector<double>>(new RealVector<double>(parent.getBel().getDimension()));
             lambda_wi->setLabels(parent.nData->bel.getLabels());
             std::cout << "errore in updateLambdaX: errore settaggio lambda_wi in nodo " << nData->label << "\n";
             return;

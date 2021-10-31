@@ -1,11 +1,9 @@
 #include "BayesianNetwork.hpp"
 
-
-
 int main()
 {
     BayesianNetwork bn;
-    bn.input("./../Grass.xdsl");
+    bn.input("./../Asia.xdsl");
     bn.start();
     //bn.inference("Smoker",0);
     //bn.inference("H",0);
