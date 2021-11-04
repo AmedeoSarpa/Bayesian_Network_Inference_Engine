@@ -6,23 +6,23 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/BayesianNetwork.cpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/BayesianNetwork.cpp
 iostream
 -
 algorithm
 -
 Node.cpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/Node.cpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Node.cpp
 vector
 -
 thread
 -
 ThreadPool.cpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/ThreadPool.cpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/ThreadPool.cpp
 memory_resource
 -
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/Matrix.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.hpp
 vector
 -
 string
@@ -32,7 +32,7 @@ iostream
 memory
 -
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/Node.cpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Node.cpp
 iostream
 -
 utility
@@ -48,9 +48,9 @@ memory
 map
 -
 RealVector.hpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/RealVector.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.hpp
 Matrix.hpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/Matrix.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.hpp
 condition_variable
 -
 mutex
@@ -74,11 +74,11 @@ boost/algorithm/string.hpp
 boost/lexical_cast.hpp
 -
 pugixml.hpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/pugixml.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugixml.hpp
 boost/lexical_cast.hpp
 -
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/RealVector.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.hpp
 sstream
 -
 iomanip
@@ -92,7 +92,7 @@ iostream
 memory
 -
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/ThreadPool.cpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/ThreadPool.cpp
 memory
 -
 mutex
@@ -106,17 +106,17 @@ functional
 future
 -
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/main.cpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/main.cpp
 BayesianNetwork.cpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/BayesianNetwork.cpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/BayesianNetwork.cpp
 exception
 -
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/pugiconfig.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugiconfig.hpp
 
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/pugixml.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugixml.hpp
 pugiconfig.hpp
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb/projectPDS/pugiconfig.hpp
+C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugiconfig.hpp
 stddef.h
 -
 exception

@@ -312,7 +312,9 @@ public:
 
         }
         ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
-        std::vector<Node> nodesCopy;
+        //allocatore polimorfico , nodesCopy ha dimensione pari alla lunghezza di  vertex_array e la liberaizone deve avvenire tutta in una volta quando nodesCopy non serve piu
+        std::pmr::monotonic_buffer_resource pool{vertex_array.size()};
+        std::pmr::vector<Node> nodesCopy{&pool};
 
         for (std::shared_ptr<Node> node : vertex_array) nodesCopy.push_back(*node);
         double maxDiff = -1,diff;
