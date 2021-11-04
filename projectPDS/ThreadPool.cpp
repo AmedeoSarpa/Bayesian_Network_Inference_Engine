@@ -19,6 +19,13 @@ public :
         cv.notify_all();
     }
 
+    void start(){
+        std::lock_guard l(m);
+        end = false;
+        coda.clear();
+        cv.notify_all();
+    }
+
     void submit(std::function<void()> f){
         std::lock_guard l(m);
         if (end == false ) {

@@ -56,10 +56,10 @@ RM = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\myBranchBN\progettoPDS\projectPDS"
+CMAKE_SOURCE_DIR = "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb\projectPDS"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\myBranchBN\progettoPDS\projectPDS\cmake-build-debug"
+CMAKE_BINARY_DIR = "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb\projectPDS\cmake-build-debug"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\myBranchBN\progettoPDS\projectPDS\cmake-build-debug\CMakeFiles" "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\myBranchBN\progettoPDS\projectPDS\cmake-build-debug\\CMakeFiles\progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb\projectPDS\cmake-build-debug\CMakeFiles" "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb\projectPDS\cmake-build-debug\\CMakeFiles\progress.marks"
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\myBranchBN\progettoPDS\projectPDS\cmake-build-debug\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\amede\OneDrive\Desktop\Programmazione di Sistema\progettoPDS-d5f01be1c3fd6e70e84ae625621c42073e364cbb\projectPDS\cmake-build-debug\CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -127,6 +127,54 @@ projectPDS: cmake_check_build_system
 projectPDS/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/build
 .PHONY : projectPDS/fast
+
+BayesianNetwork.obj: BayesianNetwork.cpp.obj
+.PHONY : BayesianNetwork.obj
+
+# target to build an object file
+BayesianNetwork.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/BayesianNetwork.cpp.obj
+.PHONY : BayesianNetwork.cpp.obj
+
+BayesianNetwork.i: BayesianNetwork.cpp.i
+.PHONY : BayesianNetwork.i
+
+# target to preprocess a source file
+BayesianNetwork.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/BayesianNetwork.cpp.i
+.PHONY : BayesianNetwork.cpp.i
+
+BayesianNetwork.s: BayesianNetwork.cpp.s
+.PHONY : BayesianNetwork.s
+
+# target to generate assembly for a file
+BayesianNetwork.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/BayesianNetwork.cpp.s
+.PHONY : BayesianNetwork.cpp.s
+
+Node.obj: Node.cpp.obj
+.PHONY : Node.obj
+
+# target to build an object file
+Node.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/Node.cpp.obj
+.PHONY : Node.cpp.obj
+
+Node.i: Node.cpp.i
+.PHONY : Node.i
+
+# target to preprocess a source file
+Node.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/Node.cpp.i
+.PHONY : Node.cpp.i
+
+Node.s: Node.cpp.s
+.PHONY : Node.s
+
+# target to generate assembly for a file
+Node.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\projectPDS.dir\build.make CMakeFiles/projectPDS.dir/Node.cpp.s
+.PHONY : Node.cpp.s
 
 ThreadPool.obj: ThreadPool.cpp.obj
 .PHONY : ThreadPool.obj
@@ -209,6 +257,12 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... projectPDS
+	@echo ... BayesianNetwork.obj
+	@echo ... BayesianNetwork.i
+	@echo ... BayesianNetwork.s
+	@echo ... Node.obj
+	@echo ... Node.i
+	@echo ... Node.s
 	@echo ... ThreadPool.obj
 	@echo ... ThreadPool.i
 	@echo ... ThreadPool.s

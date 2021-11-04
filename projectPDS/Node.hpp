@@ -40,7 +40,6 @@ class Node {
 private:
    std::shared_ptr<NodeData> nData;
 
-
 public:
 
     Node(const Node& source){

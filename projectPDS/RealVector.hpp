@@ -22,14 +22,14 @@ private:
     /*
     std::string label;
     std::vector<std::string> valueLabes; //etichetta (R=y, R = n)..
-    std::shared_ptr<double[]> values;  //valori
+    std::shared_ptr<T[]> values;  //valori
     int size;
      */
     std::shared_ptr<RealVectorData> rv_data;
 
 
 public :
-    RealVector() {rv_data = std::make_shared<RealVectorData>() ; rv_data->size = 0; rv_data->label="";};
+    RealVector() {rv_data = std::make_shared<RealVectorData>() ; rv_data->size = 0; rv_data->label="null";};
     RealVector(int size)  {
         rv_data = std::make_shared<RealVectorData>() ;
         rv_data->size = size;
@@ -46,6 +46,7 @@ public :
     void operator()(int states) {
         rv_data = std::make_shared<RealVectorData>();
         rv_data->size = states;
+
         rv_data->values = std::shared_ptr<T[]>(new T[rv_data->size]);
     }
 
@@ -53,7 +54,7 @@ public :
         rv_data = source.rv_data;
         /*
         size = source.size;
-        values = std::shared_ptr<double[]>(new double[size]);
+        values = std::shared_ptr<T[]>(new T[size]);
         labelsSet = source.labelsSet;
         label = source.label;
         for (int i = 0; i < source.size; i++) {
@@ -90,7 +91,7 @@ public :
             valueLabes.clear();
             size = source.size;
             label = source.label;
-            values = std::shared_ptr<double[]>(new double[size]);
+            values = std::shared_ptr<T[]>(new T[size]);
             labelsSet = source.labelsSet;
             for (int i = 0; i < source.size; i++) {
                 values[i] = source.values[i];
@@ -126,42 +127,33 @@ public :
 
 
     std::string getLabel(int index){
-        try {
+
             return rv_data->valueLabes[index];
-        }
-        catch(std::exception& e){
-            return "";
-        }
+
     }
     std::vector<std::string> getLabels() {return rv_data->valueLabes;}
 
-    void setLabels (const std::vector<std::string>& labels){//labels.size dovrebbe essere uguale a this->size
+    void setLabels (std::vector<std::string> labels){//labels.size dovrebbe essere uguale a this->size
         if (rv_data.operator bool() == false || rv_data.unique() == false){
             std::shared_ptr<RealVectorData> tmp = rv_data;
-
             rv_data = std::make_shared<RealVectorData>();
             rv_data->size = tmp->size;
             rv_data->label = tmp->label;
-            rv_data->valueLabes = tmp->valueLabes;
             rv_data->values = std::shared_ptr<T[]>(new T[rv_data->size]);
             for (int i = 0; i < rv_data->size ; i++) rv_data->values[i] = tmp->values[i];
         }
-        rv_data->valueLabes.clear();
-        for (std::string s : labels) rv_data->valueLabes.push_back(s);
+        for (int i = 0 ; i < labels.size() ; i++) rv_data->valueLabes.push_back(labels.at(i));
     }
 
-    void setLabels(std::string& label,const std::vector<std::string>& labels){
+    void setLabels(std::string label, std::vector<std::string> labels){
         if (rv_data.operator bool() == false || rv_data.unique() == false){
             std::shared_ptr<RealVectorData> tmp = rv_data;
-
             rv_data = std::make_shared<RealVectorData>();
             rv_data->size = tmp->size;
-            rv_data->valueLabes = tmp->valueLabes;
             rv_data->values = std::shared_ptr<T[]>(new T[rv_data->size]);
             for (int i = 0; i < rv_data->size ; i++) rv_data->values[i] = tmp->values[i];
         }
 
-        rv_data->valueLabes.clear();
         for (std::string s : labels) { rv_data->valueLabes.push_back(s) ;}
         this->rv_data->label = label;
 
@@ -172,7 +164,7 @@ public :
         return rv_data->values[index];
     }
 
-    T getValue(const std::string &str) {
+    T getValue(std::string str) {
         for (int i = 0 ; i < rv_data->valueLabes.size();i++){
             if (str == rv_data->valueLabes.at(i)) return rv_data->values[i];
         }
@@ -184,7 +176,6 @@ public :
         if (index < rv_data->size) {
             if (rv_data.operator bool() == false || rv_data.unique() == false) {
                 std::shared_ptr<RealVectorData> tmp = rv_data;
-
                 rv_data = std::make_shared<RealVectorData>();
                 rv_data->size = tmp->size;
                 rv_data->label = tmp->label;
@@ -196,10 +187,9 @@ public :
         }
     }
 
-    void setValues(const std::shared_ptr<T[]> &input){
+    void setValues(std::shared_ptr<T[]> input){
         if (rv_data.operator bool() == false || rv_data.unique() == false){
             std::shared_ptr<RealVectorData> tmp = rv_data;
-
             rv_data = std::make_shared<RealVectorData>();
             rv_data->size = tmp->size;
             rv_data->label = tmp->label;
@@ -215,10 +205,9 @@ public :
         return rv_data->values;
     }
 
-    void setValue( const std::string& str , T value){
+    void setValue( std::string str , T value){
         if (rv_data.operator bool() == false || rv_data.unique() == false){
             std::shared_ptr<RealVectorData> tmp = rv_data;
-
             rv_data = std::make_shared<RealVectorData>();
             rv_data->size = tmp->size;
             rv_data->label = tmp->label;
@@ -237,22 +226,12 @@ public :
 
     bool isAllOnes() {
         for (int i = 0 ; i < rv_data->size ; i++) {
-            if (rv_data->values[i] != 1)return false;
+            if (rv_data->values[i] != 1) return false;
         }
         return true;
     }
 
     void toAllOnes() {
-        if (rv_data.operator bool() == false || rv_data.unique() == false){
-            std::shared_ptr<RealVectorData> tmp = rv_data;
-
-            rv_data = std::make_shared<RealVectorData>();
-            rv_data->size = tmp->size;
-            rv_data->label = tmp->label;
-            rv_data->valueLabes = tmp->valueLabes;
-            rv_data->values = std::shared_ptr<T[]>(new T[rv_data->size]);
-
-        }
         for (int i = 0 ; i < rv_data->size ; i++) {
             rv_data->values[i] = 1;
         }
@@ -260,15 +239,6 @@ public :
 
 
     void toAllZeros() {
-        if (rv_data.operator bool() == false || rv_data.unique() == false){
-            std::shared_ptr<RealVectorData> tmp = rv_data;
-
-            rv_data = std::make_shared<RealVectorData>();
-            rv_data->size = tmp->size;
-            rv_data->label = tmp->label;
-            rv_data->valueLabes = tmp->valueLabes;
-            rv_data->values = std::shared_ptr<T[]>(new T[rv_data->size]);
-            }
         for (int i = 0 ; i < rv_data->size ; i++) {
             rv_data->values[i] = 0;
         }
@@ -278,7 +248,6 @@ public :
         T sum=0;
         if (rv_data.operator bool() == false || rv_data.unique() == false){
             std::shared_ptr<RealVectorData> tmp = rv_data;
-
             rv_data = std::make_shared<RealVectorData>();
             rv_data->size = tmp->size;
             rv_data->label = tmp->label;
@@ -295,7 +264,6 @@ public :
     void termProduct(RealVector v1, RealVector v2){
         if (rv_data.operator bool() == false || rv_data.unique() == false){
             std::shared_ptr<RealVectorData> tmp = rv_data;
-
             rv_data = std::make_shared<RealVectorData>();
             rv_data->size = tmp->size;
             rv_data->label = tmp->label;
@@ -312,7 +280,6 @@ public :
     void divide(RealVector v1, RealVector v2){
         if (rv_data.operator bool() == false || rv_data.unique() == false){
             std::shared_ptr<RealVectorData> tmp = rv_data;
-
             rv_data = std::make_shared<RealVectorData>();
             rv_data->size = tmp->size;
             rv_data->label = tmp->label;
@@ -328,7 +295,7 @@ public :
                 rv_data->values[i] = 0;
             else if (y == 0)
             {
-                std::cout << "eccezione, non si può dividere per zero" << std::endl;
+                //std::cout << "eccezione, non si può dividere per zero" << std::endl;
                 //lanciare eccezione
                 rv_data->values[i] = 0;
             }
@@ -336,6 +303,10 @@ public :
                 rv_data->values[i] = x / y;
         }
 
+    }
+
+    ~RealVector(){
+        rv_data.reset();
     }
 
 

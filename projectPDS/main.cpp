@@ -1,19 +1,19 @@
-#include "BayesianNetwork.hpp"
+#include "BayesianNetwork.cpp"
+#include <exception>
+
+
 
 int main()
 {
     BayesianNetwork bn;
     bn.input("./../Asia.xdsl");
-    bn.start();
-    //bn.inference("Smoker",0);
-    //bn.inference("H",0);
-    //bn.inference("W",0);
+
+    std::vector<std::string> inferences;
+    std::vector<std::string> evidences;
+    inferences.push_back("Smoker");
+    //inferences.push_back("Asia");
+    evidences.push_back("yes");
+    //evidences.push_back("no");
+    bn.inference(inferences,evidences);
     bn.output();
 }
-
-/*COMMENTI INFERENZA
- * - nodo foglia errato se c'è un graph not singly connected (es. Asia)
- * - da implementare: doppia (o più) inferenza contemporanea
- * - errori printati
- * - a volte il run fallisce proprio
- */

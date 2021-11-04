@@ -290,7 +290,7 @@ public:
             if (nodeInf->getLabel() == str){
                 nodeInf->getLambda().setValue(evidence,1);
                 nodeInf->getLambda().setValue(std::abs(evidence-1),0);
-                for (int j = 0 ; j < 5  ; j++){ //togliere le 100 iterazioni
+                for (int j = 0 ; j < 20  ; j++){ //togliere le 100 iterazioni
                     ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
                     for (int i = 0; i < 3 ; i++){
                         listaThread.push_back(std::thread ([&](){ lambdaXPool.runThread();}));
@@ -381,6 +381,8 @@ public:
                     }
 
                 }
+                nodeInf->getBel().setValue(evidence,1);
+                nodeInf->getBel().setValue(std::abs(evidence-1),0);
 
             }
         }
