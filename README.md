@@ -3,7 +3,7 @@ Francesco
 <br>Protopapa Andrea
 <br>Sarpa Amedeo 281638
 
-##Requisiti Progetto
+**Requisiti Progetto**
 *Algortimo scelto* : "Pearl's Belief Propagation Algorithm" , algortimo esatto  che converge e fornisce sempre un risultato esatto
 per reti tree-structured. In caso di grafi con cicli , questo algoritmo fornisce un risultato approssimato.
 Tale algortimo è basato sullo scambio di messaggi tra padri e figli , una volta che un nodo riceve tali valori è in grado di calcolare
@@ -22,7 +22,7 @@ uno shared pointer a tale struttura. Soloo in caso di operazioni di scrittura  v
 
 *I/O formato xdsl* : 
 
-##Utilizzo
+**Utilizzo**
 Tutte le operazioni, quali il calcolo iniziale , inferenza e i/o , sono fornite dalla classe 'BayesianNetwork'.
 Basta istanziare un ogetto di tale classe nel main (costruttore non richiede parametri) ed invocare i seguenti metodi da tale oggetto :
 - input : riceve come parametro il path del file xdsl e ne esegue la lettura
