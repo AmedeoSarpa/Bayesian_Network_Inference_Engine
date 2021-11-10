@@ -117,7 +117,7 @@ public:
 
             cpt.child("BEL").text().set(beliefs_string.c_str());
         }
-        inputXdsl.save_file("./../output.xdsl");
+        inputXdsl.save_file("./../IOFiles/output.xdsl");
 
         //Fine output XDSL
 
