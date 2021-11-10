@@ -32,6 +32,6 @@ I due vettori sono di stringhe , il primo indica i nomi dei nodi per i quali vog
 - output : si può invocare a seguito di inferenze o anche dopo i calcoli iniziali , mostra su console e memorizza in un file xdsl l'output dei calcoli , cioè il BEL di ogni nodo
 
 **Esempi**
-<br>Per verificare il funzionamento dell'algoritmo abbiamo utilizzato diversi esempi , alcuni dei quali disponibili ai link seguenti :
+<br>Per verificare il funzionamento dell'algoritmo abbiamo utilizzato diversi esempi , alcuni dei quali disponibili ai link seguenti :<br>
 https://www.bayesserver.com/examples/networks/asia
 <br>http://www.cse.unsw.edu.au/~cs9417ml/Bayes/Pages/PearlExamples.html
