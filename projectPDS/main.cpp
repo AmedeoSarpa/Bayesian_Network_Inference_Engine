@@ -7,6 +7,7 @@ int main()
 {
     BayesianNetwork bn;
     bn.input("./../Asia.xdsl");
+    bn.compute();
 
     std::vector<std::string> inferences;
     std::vector<std::string> evidences;

@@ -8,18 +8,18 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug"/>
+				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="projectPDS">
-				<Option output="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/projectPDS.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug"/>
+				<Option output="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/projectPDS.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -34,15 +34,15 @@
 					<Add directory="C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/10.3.0/../../../../x86_64-w64-mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 projectPDS"/>
-					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 projectPDS"/>
+					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="projectPDS/fast">
-				<Option output="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/projectPDS.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug"/>
+				<Option output="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/projectPDS.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -57,67 +57,61 @@
 					<Add directory="C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/10.3.0/../../../../x86_64-w64-mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 projectPDS/fast"/>
-					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 projectPDS/fast"/>
+					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug"/>
+				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug"/>
+				<Option working_dir="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/msys64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/BayesianNetwork.cpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/BayesianNetwork.cpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/BayesianNetwork.hpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/Matrix.hpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Matrix.hpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/Node.cpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Node.cpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/RealVector.hpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/Node.hpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/ThreadPool.cpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/RealVector.hpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/main.cpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/ThreadPool.cpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/pugiconfig.hpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/main.cpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/pugixml.cpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugiconfig.hpp">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/pugixml.hpp">
 			<Option target="projectPDS"/>
 		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugixml.cpp">
-			<Option target="projectPDS"/>
-		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/pugixml.hpp">
-			<Option target="projectPDS"/>
-		</Unit>
-		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/myBranchBN/progettoPDS/projectPDS/CMakeLists.txt">
+		<Unit filename="C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
