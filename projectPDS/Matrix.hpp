@@ -5,218 +5,214 @@
 #include <iostream>
 #include <memory>
 
-class Matrix{
+
+
+
+
+template <typename T> class Matrix{
+    struct MatrixData {
+        std::string label; //nome della matrice
+        std::shared_ptr<std::shared_ptr<T[]>[]> values; //matrice dei valori
+        int nRows, nColumns;
+        std::vector<std::vector<std::string>> rowLabels; //etichette tabelle e colonne
+        std::vector<std::vector<std::string>> colLabels;
+    };
 private :
-    std::string label; //nome della matrice
-    std::shared_ptr<std::shared_ptr<double[]>[]> values; //matrice dei valori
-    int nRows, nColumns;
-    std::vector<std::vector<std::string>> rowLabels; //capire bene a cosa servono questi
-    std::vector<std::vector<std::string>> colLabels;
-    bool labelsSet,rowLabelsSet,colLabelsSet;
+    std::shared_ptr<MatrixData> m_data;
+
 
 public :
-    Matrix(){  nRows=0;nColumns=0;};
+    Matrix(){ m_data = std::make_shared<MatrixData>(); m_data->nRows=0;m_data->nColumns=0;};
 
-    Matrix(int rows , int col) :labelsSet(false),rowLabelsSet(false),colLabelsSet(false) , nRows(rows), nColumns(col){
-        values =  std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[rows]);
-        for (int i = 0; i < rows ; i++) {
-            values[i] = std::shared_ptr<double[]>(new double[col]);
-            rowLabels.push_back(std::vector<std::string>());  //incerto
-            for (int j = 0; j < col; j++) values[i][j] = -1;
-        }
-        for (int i = 0; i < col ; i++) {
-            colLabels.push_back(std::vector<std::string>()); //incerto
-        }
-
-    }
     void operator()(){
-        nRows = 0;
-        nColumns = 0;
+        m_data = std::make_shared<MatrixData>(); m_data->nRows=0;m_data->nColumns=0;
     }
-
-
-
-    /*
-    ~Matrix(){
-        if (values != nullptr){
-            for (int i = 0 ; i < nRows ; i++) delete[] values[i];
-            delete [] values;
-            values = nullptr;
+    Matrix(int rows , int col) {
+        m_data = std::make_shared<MatrixData>();
+        m_data->nRows = rows; m_data->nColumns = col;
+        m_data->values =  std::shared_ptr<std::shared_ptr<T[]>[]>(new std::shared_ptr<T[]>[rows]);
+        for (int i = 0; i < rows ; i++) {
+            m_data->values[i] = std::shared_ptr<T[]>(new T[col]);
+            m_data->rowLabels.push_back(std::vector<std::string>());
+            for (int j = 0; j < col; j++) m_data->values[i][j] = -1;
         }
+
+
+        for (int i = 0; i < col ; i++) {
+            m_data->colLabels.push_back(std::vector<std::string>());
+        }
+
+
     }
-    */
+
+
 
 
     Matrix (Matrix && source){
-        label = source.label;
-        labelsSet = source.labelsSet;
-        colLabels = source.colLabels;
-        rowLabelsSet = source.rowLabelsSet;
-        nRows = source.nRows;
-        nColumns = source.nColumns;
-        rowLabels = source.rowLabels;
-        colLabels = source.colLabels;
-        values = source.values;
-        source.values.reset();
-        source.nRows = 0;
-        source.nColumns = 0;
-        source.rowLabels.clear();
-        source.colLabels.clear();
+        m_data = source.m_data;
+
     }
 
 
-    Matrix(const Matrix& source){ //costruttore di copia
-        label = source.label;
-        labelsSet = source.labelsSet;
-        colLabels = source.colLabels;
-        rowLabelsSet = source.rowLabelsSet;
-        nRows = source.nRows;
-        nColumns = source.nColumns;
-        values = std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[nRows]);
-        rowLabels = source.rowLabels;
-        colLabels = source.colLabels;
+    Matrix(const Matrix& source){
 
-        for (int i = 0; i < nRows ; i++) {
-            values[i] = std::shared_ptr<double[]> (new double[nColumns]);
-            for (int j = 0 ; j < nColumns ; j++){
-                values[i][j] = source.values[i][j];
-            }
-        }
+        m_data = source.m_data;
     }
 
     Matrix& operator=(const Matrix &source){
         if (this != &source){
-
-
-            values.reset();
-            rowLabels.clear();
-            colLabels.clear();
-            label = source.label;
-            labelsSet = source.labelsSet;
-            colLabels = source.colLabels;
-            rowLabelsSet = source.rowLabelsSet;
-            nRows = source.nRows;
-            nColumns = source.nColumns;
-            values = std::shared_ptr<std::shared_ptr<double[]>[]>(new std::shared_ptr<double[]>[nRows]);
-            colLabels = source.colLabels;
-            rowLabels = source.rowLabels;
-            for (int i = 0 ; i < nRows ; i++){
-                values[i] = std::shared_ptr<double[]> (new double[nColumns]);
-
-                for (int j = 0 ; j < nColumns ; j++){
-                    values[i][j] = source.values[i][j];
-                }
-            }
+            m_data = source.m_data;
 
         }
         return *this;
     }
     Matrix& operator=( Matrix &&source){
         if (this != &source){
-            values.reset();
-            rowLabels.clear();
-            colLabels.clear();
-            label = source.label;
-            labelsSet = source.labelsSet;
-            colLabels = source.colLabels;
-            rowLabelsSet = source.rowLabelsSet;
-            nRows = source.nRows;
-            nColumns = source.nColumns;
-            values = source.values;
-            source.values.reset();
-            colLabels = source.colLabels;
-            rowLabels = source.rowLabels;
+            m_data = source.m_data;
+
         }
         return *this;
     }
 
-    //modificare questo raw pointer in base all'input
-    Matrix(int rows , int col, std::vector<double> input) :labelsSet(false),rowLabelsSet(false),colLabelsSet(false) , nRows(rows), nColumns(col){
-        values = std::shared_ptr<std::shared_ptr<double[]>[]> (new std::shared_ptr<double[]>[rows]);
+    Matrix(int rows , int col, std::vector<T> input){
+        m_data = std::make_shared<MatrixData>();
+        m_data->nRows = rows;
+        m_data->nColumns = col;
 
-        for (int i = 0; i < rows ; i++) values[i] = std::shared_ptr<double[]> (new double[col]);
+
+        m_data->values = std::shared_ptr<std::shared_ptr<T[]>[]> (new std::shared_ptr<T[]>[rows]);
+
+        for (int i = 0; i < rows ; i++) m_data->values[i] = std::shared_ptr<T[]> (new T[col]);
 
         for (int i = 0; i < rows ; i++){
-            rowLabels.push_back(std::vector<std::string>());
+            m_data->rowLabels.push_back(std::vector<std::string>());
             for (int j = 0; j < col ; j++){
-                values[i][j] = input[i*col + j];
+                m_data->values[i][j] = input[i*col + j];
             }
         }
+
         for (int i = 0; i < col ; i++) {
-            colLabels.push_back(std::vector<std::string>());
+            m_data->colLabels.push_back(std::vector<std::string>());
         }
 
+
     }
 
-    int getRowDimension() {return nRows;}
-    int getColDimension(){return nColumns;}
-    std::string  getLabel() {
-        return label;
-    }
+    int getRowDimension() {return m_data->nRows;}
+    int getColDimension(){return m_data->nColumns;}
 
-    void setLabel(std::string label){
-        this->label = label;
-    }
+
+
     std::vector<std::string> getRowLabels(int index) {
         try {
-            return rowLabels.at(index);
+            return m_data->rowLabels.at(index);
         }
-        catch (std::exception e){
-            std::cout << "fuori indice" << std::endl;
+        catch (std::exception& e){
+            return std::vector<std::string>();
         }
-        return std::vector<std::string>();
-
     }
+
+
+
     std::vector<std::string> getColLabels(int index) {
         try {
-            return colLabels.at(index);
+            return m_data->colLabels.at(index);
         }
-        catch (std::exception e){
-            std::cout << "fuori indice" << std::endl;
+        catch (std::exception& e){
+            return std::vector<std::string>();
         }
-        return std::vector<std::string>();
+
     }
 
 
     void setRowLabels(int index, std::vector<std::string> rowLabel){
 
-        try {
-            for (int i = 0; i < rowLabel.size(); i++) rowLabels.at(index).push_back(rowLabel.at(i));
-            rowLabelsSet = true;
-            if (colLabelsSet) labelsSet = true;
+        if (m_data.operator bool() == false || m_data.unique() == false) {
+            std::shared_ptr<MatrixData> tmp = m_data;
+            m_data = std::make_shared<MatrixData>();
+            m_data->nColumns = tmp->nColumns;
+            m_data->nRows = tmp->nRows;
+            m_data->label = tmp->label;
+            m_data->colLabels = tmp->colLabels;
+            m_data->values = std::shared_ptr<std::shared_ptr<T[]>[]>(new std::shared_ptr<T[]>[m_data->nRows]);
+
+            for (int i = 0; i < m_data->nRows; i++) {
+                m_data->values[i] = std::shared_ptr<T[]>(new T[m_data->nColumns]);
+                for (int j = 0; j < m_data->nColumns; j++) {
+                    m_data->values[i][j] = tmp->values[i][j];
+                }
+            }
         }
-        catch (std::exception e){
-            std::cout << "error in setRowLabels";
+
+        try {
+            for (std::string s : rowLabel) m_data->rowLabels.at(index).push_back(s);
+        }
+        catch (std::exception& e){
+            //std::cout << "error during set rowLabel" ;
+            m_data->rowLabels.at(index).push_back("");
         }
     }
 
     void setColLabels(int index, std::vector<std::string> colLabel){
+        if (m_data.operator bool() == false || m_data.unique() == false) {
+            std::shared_ptr<MatrixData> tmp = m_data;
+            m_data = std::make_shared<MatrixData>();
+            m_data->nColumns = tmp->nColumns;
+            m_data->nRows = tmp->nRows;
+            m_data->label = tmp->label;
+            m_data->rowLabels = tmp->rowLabels;
+            m_data->values = std::shared_ptr<std::shared_ptr<T[]>[]>(new std::shared_ptr<T[]>[m_data->nRows]);
+
+            for (int i = 0; i < m_data->nRows; i++) {
+                m_data->values[i] = std::shared_ptr<T[]>(new T[m_data->nColumns]);
+                for (int j = 0; j < m_data->nColumns; j++) {
+                    m_data->values[i][j] = tmp->values[i][j];
+                }
+            }
+        }
         try {
-            for (int i = 0; i < colLabel.size(); i++) colLabels.at(index).push_back(colLabel.at(i));
-            colLabelsSet = true;
-            if (rowLabelsSet) labelsSet = true;
+            for (std::string s : colLabel) m_data->colLabels.at(index).push_back(s);
+
         }
-        catch (std::exception e){
-            std::cout << "errore" ;
+        catch (std::exception& e){
+            //std::cout << "error during  set colLabel" ;
+            m_data->colLabels.at(index).push_back("");
         }
     }
 
-    double getValue(int row,int col){
-        if (row >= nRows || col >= nColumns ) return -1;
-        return values[row][col];
+    T getValue(int row,int col){
+        if (row >= m_data->nRows || col >= m_data->nColumns ) return -1;
+        return m_data->values[row][col];
     }
 
-    void setValue(int row,int col, double value){
-        if (row >= nRows || col >= nColumns ) return ;
-        values[row][col] = value;
+    void setValue(int row,int col, T value){ //qui bisonga fare la copia
+        if (row >= m_data->nRows || col >= m_data->nColumns ) return ;
+        if (m_data.operator bool() == false || m_data.unique() == false) {
+            std::shared_ptr<MatrixData> tmp = m_data;
+            m_data = std::make_shared<MatrixData>();
+            m_data->nColumns = tmp->nColumns;
+            m_data->nRows = tmp->nRows;
+            m_data->label = tmp->label;
+            m_data->colLabels = tmp->colLabels;
+            m_data->rowLabels = tmp->rowLabels;
+            m_data->values = std::shared_ptr<std::shared_ptr<T[]>[]>(new std::shared_ptr<T[]>[m_data->nRows]);
+
+            for (int i = 0; i < m_data->nRows; i++) {
+                m_data->values[i] = std::shared_ptr<T[]>(new T[m_data->nColumns]);
+                for (int j = 0; j < m_data->nColumns; j++) {
+                    m_data->values[i][j] = tmp->values[i][j];
+                }
+            }
+        }
+        m_data->values[row][col] = value;
     }
 
-    double getValue(std::string rLabel, std::string cLabel){
-        for (int i = 0 ; i < nRows ; i++){
-            if (partOf(rLabel,rowLabels.at(i))){
-                for (int j = 0; j < nColumns ; j++){
-                    if (partOf(cLabel,colLabels.at(j))){
-                        return values[i][j];
+    T getValue(std::string rLabel, std::string cLabel){
+        for (int i = 0 ; i < m_data->nRows ; i++){
+            if (partOf(rLabel,m_data->rowLabels.at(i))){
+                for (int j = 0; j < m_data->nColumns ; j++){
+                    if (partOf(cLabel,m_data->colLabels.at(j))){
+                        return m_data->values[i][j];
                     }
                 }
             }
@@ -224,46 +220,33 @@ public :
 
         return -1;
     }
+    ~Matrix(){
+        m_data.reset();
+    }
 
 
     static bool partOf(std::string str, std::vector<std::string> vec){
-        for (int i = 0; i < vec.size(); i++) {
-            if (vec.at(i).compare(str)==0) { return true; }
+
+        for (std::string s : vec){
+            if (s == str) return  true;
         }
         return false;
+
     }
 
     static bool partOf(std::vector<std::string> str, std::vector<std::string> vec){
         bool found;
-        for (int i = 0; i < str.size(); i++) {
+        for (std::string s1 : str) {
             found = false;
-            for (int j = 0 ; j < vec.size() ; j++){
-                if (str.at(i) == vec.at(j)) found = true;
+            for (std::string s2 : vec){
+                if (s1 == s2) found = true;
             }
             if (!found) return false;
         }
         return true;
     }
-//vectToString , toString
 
-    void printMatrix(){
-        std::cout << "etichette colonne " << std::endl;
-        for (int i = 0 ; i < colLabels.size() ; i++){
-            for (int j =  0 ;  j < colLabels.at(i).size() ; j++){
-                std::cout << colLabels.at(i).at(j) << std::endl;
-            }
-            std::cout << "--------------" << std::endl;
-        }
 
-        std::cout << "etichette righe " << std::endl;
-        for (int i = 0 ; i < rowLabels.size() ; i++){
-            for (int j =  0 ;  j < rowLabels.at(i).size() ; j++){
-                std::cout << rowLabels.at(i).at(j) << std::endl;
-            }
-            std::cout << "--------------" << std::endl;
-        }
-
-    }
 };
 
 #endif
