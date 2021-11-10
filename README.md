@@ -14,7 +14,7 @@ Una limitazione nel nostro algoritmo è che funziona solo per nodi con due stati
 *COW* : La copy-on-write è stata realizzata inserendo gli attributi delle classi 'Node','Matrix' e 'RealVector' in una struttura dati. Si è inserito poi in ciascuna classe , come unico attributo,
 uno shared pointer a tale struttura. Soloo in caso di operazioni di scrittura  viene effettuata la copia, duplicando tale shared pointer per due diverse ( a seguito della scrittura) referenze.
 
-*Parallelizzazione* : implementata tramite l'uso di thread , vengono utilizzati diversi thread pool ognuno per ogni operazione da svolgere per ogni nodo.
+*Parallelizzazione* : implementata tramite l'uso di thread , vengono utilizzati diversi thread pool ognuno per ogni operazione da svolgere in ogni nodo (in questa configurazione vengono sganciati 3 thread).
 
 *Template* : le classi generiche sono 'RealVector' e 'Matrix' , una versione da noi customizzata di vettori e matrici. Nel nostro caso il tipo geenrico è 'double'
 
@@ -31,4 +31,7 @@ Basta istanziare un ogetto di tale classe nel main (costruttore non richiede par
 I due vettori sono di stringhe , il primo indica i nomi dei nodi per i quali voglio fare inferenza ed il secondo indica per ciascuno nodo l'evidenza ('yes' o 'no').
 - output : si può invocare a seguito di inferenze o anche dopo i calcoli iniziali , mostra su console e memorizza in un file xdsl l'output dei calcoli , cioè il BEL di ogni nodo
 
-
+**Esempi**
+<br>Per verificare il funzionamento dell'algoritmo abbiamo utilizzato diversi esempi , alcuni dei quali disponibili ai link seguenti :
+https://www.bayesserver.com/examples/networks/asia
+<br>http://www.cse.unsw.edu.au/~cs9417ml/Bayes/Pages/PearlExamples.html

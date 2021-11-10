@@ -12,6 +12,7 @@
 class BayesianNetwork{
 private :
     double epsilon ;
+    int numThreads;
     pugi::xml_document inputXdsl;
     pugi::xml_node xdsl_nodes;
     std::deque<std::thread> listaThread ;
@@ -21,6 +22,7 @@ public:
 
     BayesianNetwork(){
         epsilon = 10e-12;
+        numThreads = 3;
     }
 
 
@@ -143,7 +145,7 @@ public:
 
             //inizio calcoli (suddivisi per ogni operazione)
 
-            for (int i = 0; i < 3 ; i++){
+            for (int i = 0; i < numThreads ; i++){
                 listaThread.push_back(std::thread ([&](){ lambdaXPool.runThread();}));
             }
             for ( std::shared_ptr<Node> node : vertex_array) {
@@ -160,7 +162,7 @@ public:
 
             //versione parallelizzata updatePiZ
 
-            for (int i = 0; i < 3 ; i++){
+            for (int i = 0; i < numThreads ; i++){
                 listaThread.push_back(std::thread ([&](){ piZPool.runThread();}));
             }
             for ( std::shared_ptr<Node> node : vertex_array) {
@@ -178,7 +180,7 @@ public:
 
             //Verisone parallelizzata updatePi
 
-            for (int i = 0; i < 3 ; i++){
+            for (int i = 0; i < numThreads ; i++){
                 listaThread.push_back(std::thread ([&](){ piPool.runThread();}));
             }
             for ( std::shared_ptr<Node> node : vertex_array) {
@@ -197,7 +199,7 @@ public:
 
             //Verisone parallelizzata updateLAMBDA
 
-            for (int i = 0; i < 3 ; i++){
+            for (int i = 0; i < numThreads ; i++){
                 listaThread.push_back(std::thread ([&](){ lambdaPool.runThread();}));
             }
             for ( std::shared_ptr<Node> node : vertex_array) {
@@ -213,7 +215,7 @@ public:
 
             //Versione parallelizzata updateBEL
 
-            for (int i = 0; i < 3 ; i++){
+            for (int i = 0; i < numThreads ; i++){
                 listaThread.push_back(std::thread ([&](){ belPool.runThread();}));
             }
 
@@ -312,22 +314,15 @@ public:
 
         }
         ThreadPool lambdaPool,piPool,belPool,lambdaXPool,piZPool;
-        //allocatore polimorfico , nodesCopy ha dimensione pari alla lunghezza di  vertex_array e la liberaizone deve avvenire tutta in una volta quando nodesCopy non serve piu
-        std::pmr::monotonic_buffer_resource pool{vertex_array.size()};
-        std::pmr::vector<Node> nodesCopy{&pool};
-
-        for (std::shared_ptr<Node> node : vertex_array) nodesCopy.push_back(*node);
-        double maxDiff = -1,diff;
         int it = 0;
-        bool end = false;
-        while ( true ){
+        while ( it < vertex_array.size() ){ //asssumiamo che il diametro sia pari al numero dei nodi, poichè per convergere l'algortimo richiede al massimo un numero di iterazioni pari al diametro del grafo
             it++;
             lambdaPool.start();
             piZPool.start();
             belPool.start();
             lambdaXPool.start();
             piPool.start();
-                    for (int i = 0; i < 3 ; i++){
+                    for (int i = 0; i < numThreads ; i++){
                         listaThread.push_back(std::thread ([&](){ lambdaXPool.runThread();}));
                     }
                     for ( std::shared_ptr<Node> node : vertex_array) {
@@ -344,7 +339,7 @@ public:
 
                     //versione parallelizzata updatePiZ
 
-                    for (int i = 0; i < 3 ; i++){
+                    for (int i = 0; i < numThreads ; i++){
                         listaThread.push_back(std::thread ([&](){ piZPool.runThread();}));
                     }
                     for ( std::shared_ptr<Node> node : vertex_array) {
@@ -362,7 +357,7 @@ public:
 
                     //Verisone parallelizzata updatePi
 
-                    for (int i = 0; i < 3 ; i++){
+                    for (int i = 0; i < numThreads ; i++){
                         listaThread.push_back(std::thread ([&](){ piPool.runThread();}));
                     }
                     for ( std::shared_ptr<Node> node : vertex_array) {
@@ -383,7 +378,7 @@ public:
 
                     //Verisone parallelizzata updateLAMBDA
 
-                    for (int i = 0; i < 3 ; i++){
+                    for (int i = 0; i < numThreads ; i++){
                         listaThread.push_back(std::thread ([&](){ lambdaPool.runThread();}));
                     }
 
@@ -403,7 +398,7 @@ public:
 
                     //Versione parallelizzata updateBEL
 
-                    for (int i = 0; i < 3 ; i++){
+                    for (int i = 0; i < numThreads ; i++){
                         listaThread.push_back(std::thread ([&](){ belPool.runThread();}));
                     }
 
@@ -418,53 +413,11 @@ public:
 
 
 
-            for ( int i = 0 ; i < vertex_array.size(); i++) {
-
-                for (std::shared_ptr<Node> child : vertex_array.at(i)->getChildren()) {
-                    try {
-                        diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(0) -
-                                        nodesCopy.at(i).getPi_zi_x(*child)->getValue(0));
-                    }
-                    catch (std::exception& e) {diff=-1;}
-                    if (diff > maxDiff) maxDiff = diff;
-
-                    try {
-                        diff = std::abs(vertex_array.at(i)->getPi_zi_x(*child)->getValue(1) -
-                                        nodesCopy.at(i).getPi_zi_x(*child)->getValue(1));
-                    }
-                    catch (std::exception& e) {diff=-1;}
-
-                    if (diff > maxDiff) maxDiff = diff;
-                }
-
-                for (std::shared_ptr<Node> parent : vertex_array.at(i)->getParents()) {
-                    try {
-                        diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(0) -
-                                        nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(0));
-                    } catch (std::exception& e) {diff=-1;}
-
-                    if (diff > maxDiff) maxDiff = diff;
-                    try {
-                        diff = std::abs(vertex_array.at(i)->getLambda_x_wi(*parent)->getValue(1) -
-                                        nodesCopy.at(i).getLambda_x_wi(*parent)->getValue(1));
-                    } catch (std::exception& e) {diff=-1;}
-
-                    if (diff > maxDiff) maxDiff = diff;
-                }
-            }
-
-            if (std::abs(maxDiff) < epsilon && it >= vertex_array.size()){
-
-                break;
-            }
-            maxDiff = -1;
-            nodesCopy.clear();
-            for (std::shared_ptr<Node> node : vertex_array) nodesCopy.push_back(*node);
-
-
-        }
 
             }
+    }
+
+
 
 
 

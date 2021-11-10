@@ -248,7 +248,7 @@ public:
         }
         if (nData->parents.size() == 0) { return; }
         nData->pi.toAllZeros();
-        std::shared_ptr<Node> parent ;
+        //std::shared_ptr<Node> parent ;
         std::shared_ptr<RealVector<double>> pi_z;
         try {
             for (int j = 0; j < nData->_priorTable.getRowDimension(); j++) {
@@ -259,8 +259,8 @@ public:
 
                 //fin qui mi sono calcolato P(x|w)
                 for (int i = 0; i < nData->parents.size(); i++) { //produttoria sui padri
-                    parent = nData->parents.at(i);
-                    pi_z = parent->getPi_zi_x(*this);
+                    //parent = nData->parents.at(i);
+                    pi_z = nData->parents.at(i)->getPi_zi_x(*this);
                     for (int k = 0; k < pi_z->getDimension(); k++) {
 
                         if (nData->_priorTable.partOf(pi_z->getLabel(k), nData->_priorTable.getRowLabels(j))) {
