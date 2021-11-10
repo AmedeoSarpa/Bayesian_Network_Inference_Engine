@@ -1,14 +1,11 @@
 #include "BayesianNetwork.cpp"
 #include <exception>
 
-
-
 int main()
 {
     BayesianNetwork bn;
     bn.input("./../IOFiles/Asia.xdsl");
     bn.compute();
-
     std::vector<std::string> inferences;
     std::vector<std::string> evidences;
     inferences.push_back("Smoker");
