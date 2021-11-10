@@ -3,6 +3,8 @@ Francesco
 <br>Protopapa Andrea 286302
 <br>Sarpa Amedeo 281638
 
+Repository gitHub : https://github.com/AmedeoSarpa/progettoPDS/tree/finalVersion
+
 **Requisiti Progetto**
 <br>*Algortimo scelto* : "Pearl's Belief Propagation Algorithm" , algortimo esatto  che converge e fornisce sempre un risultato esatto
 per reti tree-structured. In caso di grafi con cicli , questo algoritmo fornisce un risultato approssimato.
