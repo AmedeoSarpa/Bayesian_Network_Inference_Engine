@@ -1,6 +1,6 @@
 # Bayesian Networks e parallelismo
 Francesco
-<br>Protopapa Andrea
+<br>Protopapa Andrea 286302
 <br>Sarpa Amedeo 281638
 
 **Requisiti Progetto**
