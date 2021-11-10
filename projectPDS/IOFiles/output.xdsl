@@ -1,35 +1,89 @@
 <?xml version="1.0"?>
 <smile version="1.0" id="Coma" numsamples="1000" discsamples="10000">
 	<nodes>
-		<cpt id="Asia">
-			<probabilities>0.01 0.99</probabilities>
+		<cpt id="MetastCancer">
+			<state id="present" />
+			<state id="absent" />
+			<probabilities>0.2 0.8</probabilities>
 		</cpt>
-		<cpt id="Smoker">
-			<probabilities>0.5 0.5</probabilities>
+		<cpt id="BrainTumor">
+			<state id="present" />
+			<state id="absent" />
+			<parents>MetastCancer</parents>
+			<probabilities>0.2 0.8 0.05 0.95</probabilities>
 		</cpt>
-		<cpt id="Tuberculosis">
-			<parents>Asia</parents>
-			<probabilities>0.05 0.95 0.01 0.99</probabilities>
+		<cpt id="IncrSerCal">
+			<state id="present" />
+			<state id="absent" />
+			<parents>MetastCancer</parents>
+			<probabilities>0.8 0.2 0.2 0.8</probabilities>
 		</cpt>
-		<cpt id="Cancer">
-			<parents>Smoker</parents>
-			<probabilities>0.1 0.9 0.01 0.99</probabilities>
+		<cpt id="Coma">
+			<state id="present" />
+			<state id="absent" />
+			<parents>IncrSerCal BrainTumor</parents>
+			<probabilities>0.8 0.2 0.8 0.2 0.8 0.2 0.05 0.95</probabilities>
 		</cpt>
-		<cpt id="Bronchitis">
-			<parents>Smoker</parents>
-			<probabilities>0.6 0.4 0.3 0.7</probabilities>
-		</cpt>
-		<cpt id="TuberculosisOrCancer">
-			<parents>Cancer Tuberculosis</parents>
-			<probabilities>1 0 1 0 1 0 0 1</probabilities>
-		</cpt>
-		<cpt id="XRay">
-			<parents>TuberculosisOrCancer</parents>
-			<probabilities>0.98 0.2 0.05 0.95</probabilities>
-		</cpt>
-		<cpt id="Dyspnea">
-			<parents>Bronchitis TuberculosisOrCancer</parents>
-			<probabilities>0.9 0.1 0.7 0.3 0.8 0.2 0.1 0.9</probabilities>
+		<cpt id="SevHeadaches">
+			<state id="present" />
+			<state id="absent" />
+			<parents>BrainTumor</parents>
+			<probabilities>0.8 0.2 0.6 0.4</probabilities>
 		</cpt>
 	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 2.3.3926.2 1d4e40af44bc800" name="Greg Cooper's Coma network" faultnameformat="nodestate">
+			<comment>The Coma or Cancer network, as it is popularly known in the literature, is a simple network used for explaining how Bayesian networks work.\nReference:\nThe network has been first mentioned in in Greg Cooper's doctoral dissertation: Cooper, Gregory F. (1984). NESTOR: A computer-based medical diagnostic aid that integrates causal and probabilistic knowledge. PhD thesis, Medical Information Sciences, Stanford University, Stanford, CA, 1984</comment>
+			<node id="MetastCancer">
+				<name>Metastatic Cancer</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>128 33 243 76</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="BrainTumor">
+				<name>Brain Tumor</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>224 134 305 175</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="IncrSerCal">
+				<name>Increased Serum Calcium</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>35 126 155 182</position>
+				<barchart active="true" width="150" height="64" />
+			</node>
+			<node id="Coma">
+				<name>Coma</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>144 234 220 270</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<node id="SevHeadaches">
+				<name>Severe Headaches</name>
+				<interior color="e5f6f7" />
+				<outline color="0000bb" />
+				<font color="000000" name="Arial" size="8" />
+				<position>294 230 412 275</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+			<textbox>
+				<caption>The Coma or Cancer network, as it is popularly known in the literature, appeared first in Greg Cooper's doctoral dissertation:\nCooper, Gregory F. (1984). NESTOR: A computer-based medical diagnostic aid that integrates causal and probabilistic knowledge. PhD thesis, Medical Information Sciences, Stanford University, Stanford, CA, 1984</caption>
+				<font color="333399" name="Arial" size="12" bold="true" />
+				<position>367 17 672 207</position>
+			</textbox>
+			<textbox>
+				<caption>Click on any node to observe it.</caption>
+				<font color="333399" name="Arial" size="12" bold="true" />
+				<position>118 312 357 331</position>
+			</textbox>
+		</genie>
+	</extensions>
 </smile>

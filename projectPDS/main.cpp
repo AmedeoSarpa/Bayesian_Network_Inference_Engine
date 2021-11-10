@@ -4,7 +4,7 @@
 int main()
 {
     BayesianNetwork bn;
-    bn.input("./../IOFiles/Asia.xdsl");
+    bn.input("./../IOFiles/Coma.xdsl");
     bn.compute();
     std::vector<std::string> inferences;
     std::vector<std::string> evidences;
@@ -12,6 +12,6 @@ int main()
     //inferences.push_back("Asia");
     evidences.push_back("yes");
     //evidences.push_back("no");
-    bn.inference(inferences,evidences);
+    //bn.inference(inferences,evidences);
     bn.output();
 }
