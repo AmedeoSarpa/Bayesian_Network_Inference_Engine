@@ -11,5 +11,5 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_FLAGS -pthread)
 
-add_executable(projectPDS main.cpp Node.cpp BayesianNetwork.cpp RealVector.hpp Matrix.hpp ThreadPool.cpp pugiconfig.hpp pugixml.cpp pugixml.hpp)
+add_executable(projectPDS main.cpp Node.cpp BayesianNetwork.cpp RealVector.hpp Matrix.hpp ThreadPool.cpp pugixml_library/pugiconfig.hpp pugixml_library/pugixml.cpp pugixml_library/pugixml.hpp)
 target_link_libraries (projectPDS ${Boost_LIBRARIES})

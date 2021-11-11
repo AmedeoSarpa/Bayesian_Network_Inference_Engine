@@ -20,7 +20,7 @@
 #include <boost/pending/indirect_cmp.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
-#include "pugixml.hpp"
+#include "pugixml_library/pugixml.hpp"
 #include <boost/lexical_cast.hpp>
 
 
@@ -124,7 +124,9 @@ public:
     }
 
     bool isParent(const Node& node) {
-        for (std::shared_ptr<Node> n : nData->parents) {if (node.nData->id == n->nData->id) return  true;}
+        for (std::shared_ptr<Node> n : nData->parents) {
+          if (node.nData->id == n->nData->id)
+            return  true;}
 
         return false;
     }

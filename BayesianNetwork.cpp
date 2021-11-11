@@ -111,14 +111,13 @@ public:
         std::for_each_n(vertex_array.begin(), vertex_array.size(),[](std::shared_ptr<Node> n) {n->printValues();});
 
         //XDSL output
-        int i = 0;
-        for (pugi::xml_node cpt: xdsl_nodes.children("cpt")) {
-            std::string beliefs_string = vertex_array[i++]->getBel()->GetValuesString(); // extract beliefs from the
+      /*        int i = 0;
+              for (pugi::xml_node cpt: xdsl_nodes.children("cpt")) {
+                  std::string beliefs_string = vertex_array[i++]->getBel()->GetValuesString(); // extract beliefs from the
 
-            cpt.child("BEL").text().set(beliefs_string.c_str());
-        }
-        inputXdsl.save_file("./../IOFiles/output.xdsl");
-
+                  cpt.child("BEL").text().set(beliefs_string.c_str());
+              }
+              inputXdsl.save_file("./../IOFiles/output.xdsl");*/
         //Fine output XDSL
 
     }
