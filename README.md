@@ -1,7 +1,7 @@
 # Bayesian Networks e parallelismo
-Francesco
-<br>Protopapa Andrea
+Protopapa Andrea
 <br>Sarpa Amedeo 281638
+<br>Sattolo Francesco 290158
 
 **Requisiti Progetto**
 <br>*Algortimo scelto* : "Pearl's Belief Propagation Algorithm" , algortimo esatto  che converge e fornisce sempre un risultato esatto
