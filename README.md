@@ -1,7 +1,7 @@
 # Bayesian Networks e parallelismo
-Francesco
-<br>Protopapa Andrea 286302
+Protopapa Andrea 286302
 <br>Sarpa Amedeo 281638
+<br>Sattolo Francesco 290158
 
 Repository gitHub : https://github.com/AmedeoSarpa/progettoPDS/tree/finalVersion
 
