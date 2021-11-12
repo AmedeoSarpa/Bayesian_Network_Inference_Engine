@@ -22,7 +22,7 @@ uno shared pointer a tale struttura. Soloo in caso di operazioni di scrittura  v
 
 *Allocatore polimorfico* : 'monotonic_buffer_resource' utilizzato  nel vettore 'nodesCopy' che serve a calcolare la differenza dei calcoli con l'iterazione precedente. Tale vettore ha una lunghezza che è pari a quella dei nodi del grafo e deve essere liberato una volta che non serve più. 
 
-*I/O formato xdsl* : 
+*I/O formato xdsl* : la lettura e il parsing del file xdsl sfruttano i metodi provenienti dalla libreria pugixml. Tutti i nodi e le loro strutture dati vengono inizializzati con le informazioni presenti nel file.
 
 **Utilizzo**
 <br>Tutte le operazioni, quali il calcolo iniziale , inferenza e i/o , sono fornite dalla classe 'BayesianNetwork'.
