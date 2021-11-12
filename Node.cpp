@@ -25,7 +25,7 @@ Node::Node(std::string label, int id, int states) {
 }
 
 Node::~Node() {
-  nData.reset();
+  if (nData.operator bool() == true) nData.reset();
 }
 
 Node &Node::operator=(const Node &source) {
@@ -52,12 +52,10 @@ std::shared_ptr<RealVector<double>> Node::getBel() {
   return std::make_shared<RealVector<double>>(nData->bel);
 }
 
-//Vedere questa cosa
 RealVector<double> &Node::getPi() {
   return nData->pi;
 }
 
-//Vedere questa cosa
 RealVector<double> &Node::getLambda() {
   return (nData->lambda);
 }
@@ -168,7 +166,6 @@ void Node::addChild(std::shared_ptr<Node> node) {
   }
 }
 
-//terminated
 void Node::updateBEL() { //prodotto con normalizzazione
   if (nData.operator bool() == false || nData.unique() == false) {
     std::shared_ptr<NodeData> source = nData;
@@ -196,7 +193,6 @@ void Node::updateBEL() { //prodotto con normalizzazione
   }
 }
 
-//terminated
 void Node::updatePi() {
   if (nData.operator bool() == false || nData.unique() == false) {
     std::shared_ptr<NodeData> source = nData;
@@ -257,7 +253,6 @@ void Node::updatePi() {
   }
 }
 
-//terminated
 void Node::updateLambda() { //produttoria dei lamda_z_j (formula 1 del sito)
   if (nData.operator bool() == false || nData.unique() == false) {
     std::shared_ptr<NodeData> source = nData;
@@ -378,7 +373,6 @@ void Node::printValues(std::ostream &outputTarget) {
    */
 }
 
-//terminated
 void Node::updateLambdaX(Node &parent) {
   if (nData.operator bool() == false || nData.unique() == false) {
     std::shared_ptr<NodeData> source = nData;

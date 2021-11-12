@@ -6,8 +6,6 @@ if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
-
-
 set(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_FLAGS -pthread)
 

@@ -321,7 +321,7 @@ class RealVector {
   }
 
   ~RealVector() {
-    rv_data.reset();
+    if (rv_data.operator bool() == true) rv_data.reset();
   }
 
 void printTest(std::ostream &outputTarget) {

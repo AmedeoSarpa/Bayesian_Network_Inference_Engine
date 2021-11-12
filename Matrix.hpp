@@ -216,7 +216,7 @@ class Matrix {
     return -1;
   }
   ~Matrix() {
-    m_data.reset();
+    if (m_data.operator bool() == true) m_data.reset();
   }
 
   static bool partOf(std::string str, std::vector<std::string> vec) {

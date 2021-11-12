@@ -43,6 +43,7 @@ int main() {
         evidences.emplace_back(selectedEvidence);
         /*      inferences.emplace_back("MetastCancer");
                 evidences.emplace_back("yes");*/
+
         bn.inference(inferences, evidences);
         bn.output(std::cout);
         break;

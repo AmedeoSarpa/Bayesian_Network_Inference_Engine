@@ -33,7 +33,7 @@ void BayesianNetwork::input(const char *path) {
       probabilities_double.push_back(boost::lexical_cast<double>(s));
     }
     std::vector<std::string> labels;
-    std::shared_ptr<Node> node_to_insert(new Node(cptLabel.value(), num_vertices++, 2));
+    std::shared_ptr<Node> node_to_insert = std::make_shared<Node>(Node(cptLabel.value(), num_vertices++, 2));
     vertex_array.push_back(node_to_insert);
     std::string parents_string = cpt.child("parents").text().get(); //prendimao i nomi dei genitori
     std::vector<std::string> parents_labels;
