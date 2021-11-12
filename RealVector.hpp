@@ -330,12 +330,13 @@ void printTest(std::ostream &outputTarget) {
       val = rv_data->values[i] * 100;
       outputTarget << std::setprecision(2) << std::fixed << val << "%\t";
     }
+    outputTarget << std::endl ;
   }
 
   std::string GetValuesString() const {
     std::stringstream values_string;
     for (int i = 0; i < rv_data->size; i++) {
-      values_string << " " << rv_data->values[i];
+      values_string << " " << rv_data->values[i] ;
     }
     return values_string.str();
   }

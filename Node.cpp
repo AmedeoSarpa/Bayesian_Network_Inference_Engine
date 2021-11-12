@@ -361,9 +361,12 @@ void Node::printValues(std::ostream &outputTarget) {
     nData->lambda_x_wi = source->lambda_x_wi;
 
   }
-  outputTarget << this->nData->label << '\t';
+
+  //outputTarget << this->nData->label << std::string((20-this->nData->label.size())," ");
+    outputTarget << this->nData->label <<  std::setw(20-this->nData->label.size());
+
   this->nData->bel.printTest(outputTarget);
-  outputTarget << '\n';
+
 
   /*
   std::cout << "\tPI : ";

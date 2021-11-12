@@ -93,7 +93,7 @@ void BayesianNetwork::input(const char *path) {
   }
 }
 void BayesianNetwork::output(std::ostream& outputTarget) {
-  outputTarget << "node\tBEL(yes)\tBEL(no)\n";
+  outputTarget << "node" << std::setw(28) << "BEL(yes)\tBEL(no)\n";
   std::for_each_n(vertex_array.begin(), vertex_array.size(), [&outputTarget](const std::shared_ptr<Node> &n) {
     n->printValues(outputTarget);
   });
@@ -329,7 +329,6 @@ void BayesianNetwork::inference(std::vector<std::string> inferences, std::vector
     }
     listaThread.clear();
 
-    //versione parallelizzata updatePiZ
 
     for (int i = 0; i < numThreads; i++) {
       listaThread.emplace_back([&]() { piZPool.runThread(); });
@@ -348,7 +347,6 @@ void BayesianNetwork::inference(std::vector<std::string> inferences, std::vector
     }
     listaThread.clear();
 
-    //Verisone parallelizzata updatePi
 
     for (int i = 0; i < numThreads; i++) {
       listaThread.emplace_back([&]() { piPool.runThread(); });
@@ -368,7 +366,6 @@ void BayesianNetwork::inference(std::vector<std::string> inferences, std::vector
     }
     listaThread.clear();
 
-    //Verisone parallelizzata updateLAMBDA
 
     for (int i = 0; i < numThreads; i++) {
       listaThread.emplace_back([&]() { lambdaPool.runThread(); });
@@ -391,7 +388,6 @@ void BayesianNetwork::inference(std::vector<std::string> inferences, std::vector
     }
     listaThread.clear();
 
-    //Versione parallelizzata updateBEL
 
     for (int i = 0; i < numThreads; i++) {
       listaThread.emplace_back([&]() { belPool.runThread(); });
