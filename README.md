@@ -6,19 +6,19 @@ Protopapa Andrea 286302
 Repository gitHub : https://github.com/AmedeoSarpa/progettoPDS/tree/finalVersion
 
 **Requisiti Progetto**
-<br>*Algortimo scelto* : "Pearl's Belief Propagation Algorithm" , algoritmo esatto  che converge e fornisce sempre un risultato esatto
+<br>*Algoritmo scelto* : "Pearl's Belief Propagation Algorithm" , algoritmo esatto  che converge e fornisce sempre un risultato esatto
 per reti tree-structured. In caso di grafi con cicli , questo algoritmo fornisce un risultato approssimato.
-Tale algortimo è basato sullo scambio di messaggi tra padri e figli , una volta che un nodo riceve tali valori è in grado di calcolare
+Tale algoritmo è basato sullo scambio di messaggi tra padri e figli , una volta che un nodo riceve tali valori è in grado di calcolare
 il 'belief' cioè la probabilità a posteriori.
 Una limitazione nel nostro algoritmo è che funziona solo per nodi con due stati.
-<br> Referenze : https://arxiv.org/ftp/arxiv/papers/1301/1301.6725.pdf (qui viene spiegato come funziona l'algortimo e l'approssimazione che si ha in caso di grafi con loops)
+<br> Referenze : https://arxiv.org/ftp/arxiv/papers/1301/1301.6725.pdf (qui viene spiegato come funziona algoritmo e l'approssimazione che si ha in caso di grafi con loops)
 
 *COW* : La copy-on-write è stata realizzata inserendo gli attributi delle classi 'Node','Matrix' e 'RealVector' in una struttura dati. Si è inserito poi in ciascuna classe , come unico attributo,
-uno shared pointer a tale struttura. Soloo in caso di operazioni di scrittura  viene effettuata la copia, duplicando tale shared pointer per due diverse ( a seguito della scrittura) referenze.
+uno shared pointer a tale struttura. Solo in caso di operazioni di scrittura  viene effettuata la copia, duplicando tale shared pointer per due diverse ( a seguito della scrittura) referenze.
 
-*Parallelizzazione* : implementata tramite l'uso di thread , vengono utilizzati diversi thread pool ognuno per ogni operazione da svolgere in ogni nodo (in questa configurazione vengono sganciati un numero di thread indicato dalla variabile 'numThreads' della classe 'BayesianNetwors' ).
+*Parallelizzazione* : implementata tramite l'uso di thread , vengono utilizzati diversi thread pool ognuno per ogni operazione da svolgere in ogni nodo (in questa configurazione vengono sganciati un numero di thread indicato dalla variabile 'numThreads' della classe 'BayesianNetworks' ).
 
-*Template* : le classi generiche sono 'RealVector' e 'Matrix' , una versione da noi customizzata di vettori e matrici. Nel nostro caso il tipo geenrico è 'double'
+*Template* : le classi generiche sono 'RealVector' e 'Matrix' , una versione da noi customizzata di vettori e matrici. Nel nostro caso il tipo generico è 'double'
 
 *Allocatore polimorfico* : 'monotonic_buffer_resource' utilizzato  nel vettore 'nodesCopy' che serve a calcolare la differenza dei calcoli con l'iterazione precedente. Tale vettore ha una lunghezza che è pari a quella dei nodi del grafo e deve essere liberato una volta che non serve più. 
 
