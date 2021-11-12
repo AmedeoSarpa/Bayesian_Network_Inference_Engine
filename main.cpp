@@ -1,5 +1,4 @@
 #include "BayesianNetwork.cpp"
-#include <exception>
 
 int main() {
   BayesianNetwork bn;
@@ -8,10 +7,10 @@ int main() {
   bn.output();
   std::vector<std::string> inferences;
   std::vector<std::string> evidences;
-  inferences.push_back("MetastCancer");
+  inferences.emplace_back("MetastCancer");
   //inferences.push_back("Asia");
-  evidences.push_back("yes");
+  evidences.emplace_back("yes");
   //evidences.push_back("no");
-  bn.inference(inferences,evidences);
+  bn.inference(inferences, evidences);
   bn.output();
 }
