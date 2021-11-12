@@ -47,7 +47,7 @@ class Node {
   bool operator!=(const Node &rhs) const;
   bool operator==(const Node &sx);
 
-  void printValues();
+  void printValues(std::ostream &outputTarget);
 
   int getId() const;
   std::string getLabel();

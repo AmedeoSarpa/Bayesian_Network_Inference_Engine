@@ -1,16 +1,60 @@
+#include <fstream>
 #include "BayesianNetwork.h"
 
 int main() {
   BayesianNetwork bn;
   bn.input("./../IOFiles/Coma.xdsl");
   bn.compute();
-  bn.output();
+  bn.output(std::cout);
+
   std::vector<std::string> inferences;
   std::vector<std::string> evidences;
-  inferences.emplace_back("MetastCancer");
-  //inferences.push_back("Asia");
-  evidences.emplace_back("yes");
-  //evidences.push_back("no");
-  bn.inference(inferences, evidences);
-  bn.output();
+
+  int choice = 0;
+  std::string selectedNode;
+  std::string selectedEvidence;
+  while (choice != 3) {
+    std::cout << "\nSelect operation:\n1: New inference\n2: Extract result to file\n3: Exit\n";
+    std::cin >> choice;
+    std::shared_ptr<Node> nodeInf = nullptr;
+    std::string outputFilename;
+    std::ofstream outputFile;
+    switch (choice) {
+      case 1:std::cout << "Select the node:\n";
+        for (const std::shared_ptr<Node> &node: bn.getVertexArray()) {
+          std::cout << node->getLabel() << '\t';
+        }
+        std::cout << '\n';
+        std::cin >> selectedNode;
+        for (const std::shared_ptr<Node> &node: bn.getVertexArray()) {
+          if (selectedNode == node->getLabel())
+            nodeInf = node;
+        }
+        if (nodeInf == nullptr) {
+          std::cout << "Inference failed: incorrect node or evidence.\n";
+          break;
+        }
+        std::cout << "Select the evidence:\n";
+        std::cout << "yes\tno\n";
+        nodeInf->getBel()->printTest(std::cout);
+
+        std::cin >> selectedEvidence;
+        inferences.emplace_back(selectedNode);
+        evidences.emplace_back(selectedEvidence);
+        /*      inferences.emplace_back("MetastCancer");
+                evidences.emplace_back("yes");*/
+        bn.inference(inferences, evidences);
+        bn.output(std::cout);
+        break;
+      case 2:std::cout << "Insert filename: ";
+        std::cin >> outputFilename;
+        outputFile.open(outputFilename);
+        bn.output(outputFile);
+        outputFile.close();
+        std::cout << "Data written correctly\n";
+        break;
+      case 3:break;
+      default:break;
+    }
+  }
 }

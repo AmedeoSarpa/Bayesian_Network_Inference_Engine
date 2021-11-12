@@ -53,12 +53,12 @@ std::shared_ptr<RealVector<double>> Node::getBel() {
 }
 
 //Vedere questa cosa
-RealVector<double> & Node::getPi() {
+RealVector<double> &Node::getPi() {
   return nData->pi;
 }
 
 //Vedere questa cosa
-RealVector<double> & Node::getLambda() {
+RealVector<double> &Node::getLambda() {
   return (nData->lambda);
 }
 
@@ -349,7 +349,7 @@ bool Node::operator==(const Node &sx) {
   return this->nData->id == sx.nData->id;
 }
 
-void Node::printValues() {
+void Node::printValues(std::ostream &outputTarget) {
   if (nData.operator bool() == false || nData.unique() == false) {
     std::shared_ptr<NodeData> source = nData;
     nData = std::make_shared<NodeData>();
@@ -366,16 +366,16 @@ void Node::printValues() {
     nData->lambda_x_wi = source->lambda_x_wi;
 
   }
-  std::cout << "nodo : " << this->nData->label << "\n";
-  std::cout << "\tBEL : ";
-  this->nData->bel.printTest();
+  outputTarget << this->nData->label << '\t';
+  this->nData->bel.printTest(outputTarget);
+  outputTarget << '\n';
+
   /*
   std::cout << "\tPI : ";
   this->pi.printTest();
   std::cout << "\tLAMBDA : ";
   this->lambda.printTest();
    */
-  std::cout << std::endl;
 }
 
 //terminated

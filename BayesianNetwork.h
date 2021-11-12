@@ -23,8 +23,10 @@ class BayesianNetwork {
  public:
   BayesianNetwork();
 
+  const std::vector<std::shared_ptr<Node>> &getVertexArray() const;
+
   void input(const char *path);
-  void output();
+  void output(std::ostream& outputTarget);
   void compute();
   void inference(std::vector<std::string> inferences, std::vector<std::string> evidences);
   //usata da funzione per settare etichette righe

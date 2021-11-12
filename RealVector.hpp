@@ -324,13 +324,12 @@ class RealVector {
     rv_data.reset();
   }
 
-  void printTest() {
+void printTest(std::ostream &outputTarget) {
     T val;
     for (int i = 0; i < rv_data->size; i++) {
       val = rv_data->values[i] * 100;
-      std::cout << std::setprecision(2) << std::fixed << val << "%" << " ";
+      outputTarget << std::setprecision(2) << std::fixed << val << "%\t";
     }
-    std::cout << std::endl;
   }
 
   std::string GetValuesString() const {

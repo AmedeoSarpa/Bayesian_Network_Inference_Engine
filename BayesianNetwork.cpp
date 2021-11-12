@@ -92,9 +92,11 @@ void BayesianNetwork::input(const char *path) {
     }
   }
 }
-void BayesianNetwork::output() {
-  std::for_each_n(vertex_array.begin(), vertex_array.size(), [](const std::shared_ptr<Node> &n) { n->printValues(); });
-
+void BayesianNetwork::output(std::ostream& outputTarget) {
+  outputTarget << "node\tBEL(yes)\tBEL(no)\n";
+  std::for_each_n(vertex_array.begin(), vertex_array.size(), [&outputTarget](const std::shared_ptr<Node> &n) {
+    n->printValues(outputTarget);
+  });
   //XDSL output
   /*        int i = 0;
           for (pugi::xml_node cpt: xdsl_nodes.children("cpt")) {
@@ -118,7 +120,7 @@ void BayesianNetwork::compute() {
   double maxDiff = -1, diff;
   ThreadPool lambdaPool, piPool, belPool, lambdaXPool, piZPool;
   //ciclo dei calcoli
-  while (true) { // nella costruzione del grafo , i nodi fogli hanno precedenza
+  while (true) { // nella costruzione del grafo, i nodi fogli hanno precedenza
     lambdaPool.start();
     piZPool.start();
     belPool.start();
@@ -291,20 +293,20 @@ void BayesianNetwork::inference(std::vector<std::string> inferences, std::vector
     for (std::shared_ptr<Node> n: vertex_array) {
       if (n->getLabel() == inferences.at(i))
         nodeInf = n;
-    }
 
+    }
     //nodeInf = std::find_if(vertex_array.begin(),vertex_array.end(),[&](std::shared_ptr<Node> n){return n->getLabel()== inferences.at(i); });
 
     evidence = evidences.at(i) == "yes" ? 0 : 1;
 
     nodeInf->getLambda().setValue(evidence, 1);
     nodeInf->getLambda().setValue(std::abs(evidence - 1), 0);
-
   }
+
   ThreadPool lambdaPool, piPool, belPool, lambdaXPool, piZPool;
   int it = 0;
-  while (it
-      < vertex_array.size()) { //asssumiamo che il diametro sia pari al numero dei nodi, poichè per convergere l'algortimo richiede al massimo un numero di iterazioni pari al diametro del grafo
+  while (it < vertex_array.size()) { //asssumiamo che il diametro sia pari al numero dei nodi, poichè per convergere
+    // l'algortimo richiede al massimo un numero di iterazioni pari al diametro del grafo
     it++;
     lambdaPool.start();
     piZPool.start();
@@ -404,7 +406,6 @@ void BayesianNetwork::inference(std::vector<std::string> inferences, std::vector
       if (t.joinable())
         t.join();
     }
-
   }
 }
 
@@ -444,4 +445,7 @@ void BayesianNetwork::matrixCombination(std::vector<std::string>::size_type nPad
   std::vector<std::string> list;
   int j = 0;
   recursiveLabelSet(nPadri, 0, list, std::move(parentLabels), m, &j);
+}
+const std::vector<std::shared_ptr<Node>> &BayesianNetwork::getVertexArray() const {
+  return vertex_array;
 }
