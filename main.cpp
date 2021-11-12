@@ -1,4 +1,4 @@
-#include "BayesianNetwork.cpp"
+#include "BayesianNetwork.h"
 
 int main() {
   BayesianNetwork bn;
