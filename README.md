@@ -1,9 +1,9 @@
 # Bayesian Networks e parallelismo
+Studenti :<br>
 Protopapa Andrea 286302
 <br>Sarpa Amedeo 281638
 <br>Sattolo Francesco 290158
 
-Repository gitHub : https://github.com/AmedeoSarpa/progettoPDS/tree/finalVersion
 
 **Requisiti Progetto**
 <br>*Algoritmo scelto* : "Pearl's Belief Propagation Algorithm" , algoritmo esatto  che converge e fornisce sempre un risultato esatto
