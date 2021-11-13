@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="Coma" numsamples="1000" discsamples="10000">
+    <nodes>
+        <cpt id="Asia">
+            <state id="present" />
+            <state id="absent" />
+            <probabilities>0.01 0.99</probabilities>
+        </cpt>
+        <cpt id="Smoker">
+            <state id="present" />
+            <state id="absent" />
+            <probabilities>0.5 0.5</probabilities>
+        </cpt>
+        <cpt id="Tuberculosis">
+            <state id="present" />
+            <state id="absent" />
+            <parents>Asia</parents>
+            <probabilities>0.05 0.95 0.01 0.99</probabilities>
+        </cpt>
+        <cpt id="Cancer">
+            <state id="present" />
+            <state id="absent" />
+            <parents>Smoker</parents>
+            <probabilities>0.1 0.9 0.01 0.99</probabilities>
+        </cpt>
+
+
+        <cpt id="Bronchitis">
+            <state id="present" />
+            <state id="absent" />
+            <parents>Smoker</parents>
+            <probabilities>0.6 0.4 0.3 0.7</probabilities>
+        </cpt>
+
+
+        <cpt id="TuberculosisOrCancer">
+            <state id="present" />
+            <state id="absent" />
+            <parents>Cancer Tuberculosis</parents>
+            <probabilities>1 0 1 0 1 0 0 1</probabilities>
+        </cpt>
+
+
+        <cpt id="XRay">
+            <state id="present" />
+            <state id="absent" />
+            <parents>TuberculosisOrCancer</parents>
+            <probabilities>0.98 0.2 0.05 0.95</probabilities>
+        </cpt>
+
+
+        <cpt id="Dyspnea">
+            <state id="present" />
+            <state id="absent" />
+            <parents>Bronchitis TuberculosisOrCancer</parents>
+            <probabilities>0.9 0.1 0.7 0.3 0.8 0.2 0.1 0.9</probabilities>
+        </cpt>
+
+    </nodes>
+
+</smile>

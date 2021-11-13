@@ -1,3 +1,0 @@
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/CMakeFiles/projectPDS.dir
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/amede/OneDrive/Desktop/Programmazione di Sistema/progettoPDS/projectPDS/cmake-build-debug/CMakeFiles/rebuild_cache.dir
