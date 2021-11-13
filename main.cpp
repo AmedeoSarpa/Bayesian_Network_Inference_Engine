@@ -39,17 +39,22 @@ int main(int argc, char* argv[]) {
           if (selectedNode == node->getLabel())
             nodeInf = node;
         }
-        if (nodeInf == nullptr) {
-          std::cout << "Inference failed: incorrect node or evidence.\n";
-          break;
-        }
-        std::cout << "Select the evidence:\n";
-        std::cout << "yes\tno\n";
-        nodeInf->getBel()->printTest(std::cout);
+            if (nodeInf == nullptr) {
+                std::cout << "Inference failed: incorrect node selected.\n";
+                break;
+            }
+            std::cout << "Select the evidence:\n";
+            std::cout << "yes\tno\n";
+            nodeInf->getBel()->printTest(std::cout);
 
-        std::cin >> selectedEvidence;
-        inferences.emplace_back(selectedNode);
-        evidences.emplace_back(selectedEvidence);
+            std::cin >> selectedEvidence;
+            if(selectedEvidence!="yes" && selectedEvidence!="no"){
+                std::cout << "Inference failed: incorrect evidence selected.\n";
+                break;
+            }
+
+            inferences.emplace_back(selectedNode);
+            evidences.emplace_back(selectedEvidence);
         /*      inferences.emplace_back("MetastCancer");
                 evidences.emplace_back("yes");*/
 

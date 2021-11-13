@@ -29,7 +29,7 @@ class Node {
     std::vector<std::string> valueLabels;
     RealVector<double> bel, pi, lambda;
     std::vector<std::shared_ptr<Node>> parents, children;
-    Matrix<double> _priorTable;
+    Matrix<double> priorTable;
     std::map<int, std::shared_ptr<RealVector<double>>> pi_zi_x;
     std::map<int, std::shared_ptr<RealVector<double>>> lambda_x_wi;
   };

@@ -25,13 +25,12 @@ uno shared pointer a tale struttura. Solo in caso di operazioni di scrittura  vi
 *I/O formato xdsl* : la lettura e il parsing del file xdsl sfruttano i metodi provenienti dalla libreria pugixml. Tutti i nodi e le loro strutture dati vengono inizializzati con le informazioni presenti nel file.
 
 **Utilizzo**
-<br>Tutte le operazioni, quali il calcolo iniziale , inferenza e i/o , sono fornite dalla classe 'BayesianNetwork'.
-Basta istanziare un oggetto di tale classe nel main (costruttore non richiede parametri) ed invocare i seguenti metodi da tale oggetto :
-- input : riceve come parametro il path del file xdsl e ne esegue la lettura
-- compute : una volta eseguito l'input , esegue le propagazioni dei messaggi e calcola per ogni nodo la probababilità distribuita (BEL)
-- inference : invocato dopo 'compute' riceve come parametri due vettori e riesegue il calcolo del BEL a seguito dell'inferenza.<br>
-I due vettori sono di stringhe , il primo indica i nomi dei nodi per i quali voglio fare inferenza ed il secondo indica per ciascuno nodo l'evidenza ('yes' o 'no').
-- output : si può invocare a seguito di inferenze o anche dopo i calcoli iniziali , mostra su console e memorizza in un file txt l'output dei calcoli , cioè il BEL di ogni nodo
+<br>L'algoritmo è  invocato da linea di comando :  aprire col terminale la directory 'cmake-build-debug' , runnare il 
+file eseguibile 'projectPDS' e specificare il path del file input in formato xdsl.<br> 
+Esempio :  .\cmake-build-debug\projectPDS.exe ./IOFiles/Asia.xdsl<br>
+Il programma è interattivo , all'avvio vengono mostrati i calcoli iniziali eseguiti con in dati in input, digitando 1 è possibile specificare il nodo su cui fare inferenza.
+Con il tasto 2 si può stampare su un file di cui il nome viene specificato dall'utente , l'output corrente. Con il tasto 3 si termina.
+
 
 **Esempi**
 <br>Per verificare il funzionamento dell'algoritmo abbiamo utilizzato diversi esempi , alcuni dei quali disponibili ai link seguenti :<br>

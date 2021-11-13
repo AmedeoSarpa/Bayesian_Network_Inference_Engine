@@ -11,8 +11,9 @@ class ThreadPool {
  private :
   std::mutex m;
   bool end = false;
-  std::deque<std::packaged_task<void()> > coda;
+  std::deque<std::packaged_task<void()>> coda;
   std::condition_variable cv;
+
 
  public :
   void quit();

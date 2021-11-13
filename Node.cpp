@@ -18,7 +18,7 @@ Node::Node(std::string label, int id, int states) {
   for (int i = 0; i < states; i++) {
     nData->valueLabels.push_back(labels.at(i));
   }
-  nData->_priorTable();
+  nData->priorTable();
   nData->bel.setLabels(label, labels);
   nData->pi.setLabels(label, labels);
   nData->lambda.setLabels(label, labels);
@@ -39,7 +39,7 @@ Node &Node::operator=(const Node &source) {
     pi = source.pi;
     parents = source.parents;
     children = source.children;
-    _priorTable = source._priorTable;
+    priorTable = source.priorTable;
     pi_zi_x = source.pi_zi_x;
     lambda_x_wi = source.lambda_x_wi;
      */
@@ -72,11 +72,11 @@ std::vector<std::shared_ptr<Node>> Node::getParents() {
 }
 
 std::shared_ptr<Matrix<double>> Node::getMx_wAll() {
-  return std::make_shared<Matrix<double>>(nData->_priorTable);
+  return std::make_shared<Matrix<double>>(nData->priorTable);
 }
 
 void Node::setMx_wAll(Matrix<double> m) {
-  nData->_priorTable = m;
+  nData->priorTable = m;
 }
 
 bool Node::isParent(const Node &node) {
@@ -134,7 +134,7 @@ void Node::addParent(std::shared_ptr<Node> node) {
       nData->pi = source->pi;
       nData->parents = source->parents;
       nData->children = source->children;
-      nData->_priorTable = source->_priorTable;
+      nData->priorTable = source->priorTable;
       nData->pi_zi_x = source->pi_zi_x;
       nData->lambda_x_wi = source->lambda_x_wi;
 
@@ -157,7 +157,7 @@ void Node::addChild(std::shared_ptr<Node> node) {
       nData->pi = source->pi;
       nData->parents = source->parents;
       nData->children = source->children;
-      nData->_priorTable = source->_priorTable;
+      nData->priorTable = source->priorTable;
       nData->pi_zi_x = source->pi_zi_x;
       nData->lambda_x_wi = source->lambda_x_wi;
 
@@ -178,7 +178,7 @@ void Node::updateBEL() { //prodotto con normalizzazione
     nData->pi = source->pi;
     nData->parents = source->parents;
     nData->children = source->children;
-    nData->_priorTable = source->_priorTable;
+    nData->priorTable = source->priorTable;
     nData->pi_zi_x = source->pi_zi_x;
     nData->lambda_x_wi = source->lambda_x_wi;
 
@@ -205,7 +205,7 @@ void Node::updatePi() {
     nData->pi = source->pi;
     nData->parents = source->parents;
     nData->children = source->children;
-    nData->_priorTable = source->_priorTable;
+    nData->priorTable = source->priorTable;
     nData->pi_zi_x = source->pi_zi_x;
     nData->lambda_x_wi = source->lambda_x_wi;
 
@@ -217,10 +217,10 @@ void Node::updatePi() {
   //std::shared_ptr<Node> parent ;
   std::shared_ptr<RealVector<double>> pi_z;
   try {
-    for (int j = 0; j < nData->_priorTable.getRowDimension(); j++) {
-      std::shared_ptr<double[]> tmp = std::shared_ptr<double[]>(new double[nData->_priorTable.getColDimension()]);
-      for (int m = 0; m < nData->_priorTable.getColDimension(); m++) {
-        tmp[m] = nData->_priorTable.getValue(j, m);
+    for (int j = 0; j < nData->priorTable.getRowDimension(); j++) {
+      std::shared_ptr<double[]> tmp = std::shared_ptr<double[]>(new double[nData->priorTable.getColDimension()]);
+      for (int m = 0; m < nData->priorTable.getColDimension(); m++) {
+        tmp[m] = nData->priorTable.getValue(j, m);
       }
 
       //fin qui mi sono calcolato P(x|w)
@@ -229,8 +229,8 @@ void Node::updatePi() {
         pi_z = nData->parents.at(i)->getPi_zi_x(*this);
         for (int k = 0; k < pi_z->getDimension(); k++) {
 
-          if (nData->_priorTable.partOf(pi_z->getLabel(k), nData->_priorTable.getRowLabels(j))) {
-            for (int m = 0; m < nData->_priorTable.getColDimension(); m++) {
+          if (nData->priorTable.partOf(pi_z->getLabel(k), nData->priorTable.getRowLabels(j))) {
+            for (int m = 0; m < nData->priorTable.getColDimension(); m++) {
               tmp[m] *= pi_z->getValue(k);
             }
 
@@ -238,7 +238,7 @@ void Node::updatePi() {
 
         }
       }
-      for (int m = 0; m < nData->_priorTable.getColDimension(); m++) {
+      for (int m = 0; m < nData->priorTable.getColDimension(); m++) {
         nData->pi.setValue(m, nData->pi.getValue(m) + tmp[m]);
       }
       //aggiornameto del pi
@@ -265,7 +265,7 @@ void Node::updateLambda() { //produttoria dei lamda_z_j (formula 1 del sito)
     nData->pi = source->pi;
     nData->parents = source->parents;
     nData->children = source->children;
-    nData->_priorTable = source->_priorTable;
+    nData->priorTable = source->priorTable;
     nData->pi_zi_x = source->pi_zi_x;
     nData->lambda_x_wi = source->lambda_x_wi;
 
@@ -299,7 +299,7 @@ void Node::updatePiZ(Node &child) {
     nData->pi = source->pi;
     nData->parents = source->parents;
     nData->children = source->children;
-    nData->_priorTable = source->_priorTable;
+    nData->priorTable = source->priorTable;
     nData->pi_zi_x = source->pi_zi_x;
     nData->lambda_x_wi = source->lambda_x_wi;
 
@@ -356,14 +356,14 @@ void Node::printValues(std::ostream &outputTarget) {
     nData->pi = source->pi;
     nData->parents = source->parents;
     nData->children = source->children;
-    nData->_priorTable = source->_priorTable;
+    nData->priorTable = source->priorTable;
     nData->pi_zi_x = source->pi_zi_x;
     nData->lambda_x_wi = source->lambda_x_wi;
 
   }
 
   //outputTarget << this->nData->label << std::string((20-this->nData->label.size())," ");
-    outputTarget << this->nData->label <<  std::setw(20-this->nData->label.size());
+    outputTarget << this->nData->label <<  std::setw(30-this->nData->label.size());
 
   this->nData->bel.printTest(outputTarget);
 
@@ -388,7 +388,7 @@ void Node::updateLambdaX(Node &parent) {
     nData->pi = source->pi;
     nData->parents = source->parents;
     nData->children = source->children;
-    nData->_priorTable = source->_priorTable;
+    nData->priorTable = source->priorTable;
     nData->pi_zi_x = source->pi_zi_x;
     nData->lambda_x_wi = source->lambda_x_wi;
 
@@ -422,10 +422,10 @@ void Node::updateLambdaX(Node &parent) {
 
   lambda_wi->toAllZeros();
 
-  for (int i = 0; i < nData->_priorTable.getRowDimension(); i++) {
+  for (int i = 0; i < nData->priorTable.getRowDimension(); i++) {
     double tmp = 0;
-    for (int k = 0; k < nData->_priorTable.getColDimension(); k++) {
-      tmp += this->nData->_priorTable.getValue(i, k) * nData->lambda.getValue(k); //prima modifica
+    for (int k = 0; k < nData->priorTable.getColDimension(); k++) {
+      tmp += this->nData->priorTable.getValue(i, k) * nData->lambda.getValue(k); //prima modifica
     }
     for (int j = 0; j < nData->parents.size(); j++) //sommatoria Wk con k diverso da i
     {
@@ -434,7 +434,7 @@ void Node::updateLambdaX(Node &parent) {
         try {
           std::shared_ptr<RealVector<double>> pi_z = parent2->getPi_zi_x(*this);
           for (int m = 0; m < pi_z->getDimension(); m++) {
-            if (nData->_priorTable.partOf(pi_z->getLabel(m), nData->_priorTable.getRowLabels(i)))
+            if (nData->priorTable.partOf(pi_z->getLabel(m), nData->priorTable.getRowLabels(i)))
               tmp *= pi_z->getValue(m);
           }
         } catch (std::exception &e) {
@@ -446,7 +446,7 @@ void Node::updateLambdaX(Node &parent) {
     }
 
     for (int n = 0; n < lambda_wi->getDimension(); n++) {
-      if (nData->_priorTable.partOf(lambda_wi->getLabel(n), nData->_priorTable.getRowLabels(i))) {
+      if (nData->priorTable.partOf(lambda_wi->getLabel(n), nData->priorTable.getRowLabels(i))) {
         lambda_wi->setValue(n, lambda_wi->getValue(n) + tmp);
         break;
       }

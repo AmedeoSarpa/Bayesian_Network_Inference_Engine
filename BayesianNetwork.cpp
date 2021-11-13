@@ -91,7 +91,7 @@ bool BayesianNetwork::input(const char *path) {
 }
 
 void BayesianNetwork::output(std::ostream& outputTarget) {
-  outputTarget << "node" << std::setw(28) << "BEL(yes)\tBEL(no)\n";
+  outputTarget << "node" << std::setw(36) << "BEL(yes)\tBEL(no)\n";
   std::for_each_n(vertex_array.begin(), vertex_array.size(), [&outputTarget](const std::shared_ptr<Node> &n) {
     n->printValues(outputTarget);
   });
@@ -144,7 +144,6 @@ void BayesianNetwork::compute() {
     }
     listaThread.clear();
 
-    //versione parallelizzata updatePiZ
 
     for (int i = 0; i < numThreads; i++) {
       listaThread.emplace_back([&]() { piZPool.runThread(); });
@@ -163,7 +162,6 @@ void BayesianNetwork::compute() {
     }
     listaThread.clear();
 
-    //Versione parallelizzata updatePi
 
     for (int i = 0; i < numThreads; i++) {
       listaThread.emplace_back([&]() { piPool.runThread(); });
@@ -181,7 +179,6 @@ void BayesianNetwork::compute() {
     }
     listaThread.clear();
 
-    //Versione parallelizzata updateLAMBDA
 
     for (int i = 0; i < numThreads; i++) {
       listaThread.emplace_back([&]() { lambdaPool.runThread(); });
@@ -198,7 +195,6 @@ void BayesianNetwork::compute() {
     }
     listaThread.clear();
 
-    //Versione parallelizzata updateBEL
 
     for (int i = 0; i < numThreads; i++) {
       listaThread.emplace_back([&]() { belPool.runThread(); });
@@ -293,6 +289,7 @@ void BayesianNetwork::inference(std::vector<std::string> inferences, std::vector
         nodeInf = n;
 
     }
+
     //nodeInf = std::find_if(vertex_array.begin(),vertex_array.end(),[&](std::shared_ptr<Node> n){return n->getLabel()== inferences.at(i); });
 
     evidence = evidences.at(i) == "yes" ? 0 : 1;
