@@ -5,15 +5,14 @@ BayesianNetwork::BayesianNetwork() {
   numThreads = 3;
 }
 
-void BayesianNetwork::input(const char *path) {
+bool BayesianNetwork::input(const char *path) {
   //INIZIO PARTE INPUT AUTOMATICO
   int num_vertices = 0;
   const char *inputXdslPath = path;
   pugi::xml_parse_result parse_result = inputXdsl.load_file(inputXdslPath); // parsing del file xdsl
 
   if (!parse_result) {
-
-    return;
+    return false;
   }
 
   xdsl_nodes = inputXdsl.child("smile").child("nodes"); //prende i nodi tramite il tag 'nodes'
@@ -66,9 +65,7 @@ void BayesianNetwork::input(const char *path) {
     colLabel.clear();
     colLabel.push_back(node_to_insert->getLabel() + "=y");
     node_to_insert->setMx_wAll(*M);
-
   }
-
   //FINE PARTE INPUT AUTOMATICO
 
   //ordinamento nei nodi in modo che i nodi foglia vengano prima
@@ -88,10 +85,11 @@ void BayesianNetwork::input(const char *path) {
     if (n->getParents().empty()) {
       n->getPi().setValue(0, n->getMx_wAll()->getValue(0, 0));
       n->getPi().setValue(1, n->getMx_wAll()->getValue(0, 1));
-
     }
   }
+  return true;
 }
+
 void BayesianNetwork::output(std::ostream& outputTarget) {
   outputTarget << "node" << std::setw(28) << "BEL(yes)\tBEL(no)\n";
   std::for_each_n(vertex_array.begin(), vertex_array.size(), [&outputTarget](const std::shared_ptr<Node> &n) {

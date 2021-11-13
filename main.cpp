@@ -1,9 +1,18 @@
 #include <fstream>
 #include "BayesianNetwork.h"
 
-int main() {
+int main(int argc, char* argv[]) {
   BayesianNetwork bn;
-  bn.input("./../IOFiles/Coma.xdsl");
+  if (argc > 1) {
+    if (!bn.input(argv[1])) {
+      std::cout << "Path do not exist\n";
+      return -1;
+    }
+  }
+  else{
+    std::cout << "Usage: ./projectPDS <xdsl_file_path>\n";
+    return 0;
+  }
   bn.compute();
   bn.output(std::cout);
 
