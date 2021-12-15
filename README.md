@@ -25,8 +25,8 @@ uno shared pointer a tale struttura. Solo in caso di operazioni di scrittura  vi
 *I/O formato xdsl* : la lettura e il parsing del file xdsl sfruttano i metodi provenienti dalla libreria pugixml. Tutti i nodi e le loro strutture dati vengono inizializzati con le informazioni presenti nel file.
 
 **Utilizzo**
-<br>L'algoritmo è  invocato da linea di comando :  aprire col terminale la directory 'cmake-build-debug' , runnare il 
-file eseguibile 'projectPDS' e specificare il path del file input in formato xdsl.<br> 
+<br>L'algoritmo è  invocato da linea di comando : Dopo aver 'buildato' il programma, aprire col terminale la directory 'cmake-build-debug' , runnare il 
+file eseguibile 'projectPDS' specificando il path del file input in formato xdsl.<br> 
 Esempio :  .\cmake-build-debug\projectPDS.exe ./IOFiles/Asia.xdsl<br>
 Il programma è interattivo , all'avvio vengono mostrati i calcoli iniziali eseguiti con in dati in input, digitando 1 è possibile specificare il nodo su cui fare inferenza.
 Con il tasto 2 si può stampare su un file di cui il nome viene specificato dall'utente , l'output corrente. Con il tasto 3 si termina.
