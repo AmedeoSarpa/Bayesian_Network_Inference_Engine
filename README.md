@@ -7,7 +7,7 @@ Protopapa Andrea 286302
 
 **Requisiti Progetto**
 <br>*Algoritmo scelto* : "Pearl's Belief Propagation Algorithm" , algoritmo esatto  che converge e fornisce sempre un risultato esatto
-per reti singly connected. In caso di grafi con cicli , questo algoritmo fornisce un risultato approssimato.
+per reti singly connected. In caso di grafi multiply connected, questo algoritmo fornisce un risultato approssimato.
 Tale algoritmo è basato sullo scambio di messaggi tra padri e figli , una volta che un nodo riceve tali valori è in grado di calcolare
 il 'belief' cioè la probabilità a posteriori.
 Una limitazione nel nostro algoritmo è che funziona solo per nodi con due stati.
